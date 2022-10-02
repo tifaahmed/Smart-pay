@@ -11,7 +11,7 @@ Route::get( '/dashboard' , function () {
 });
 
 Route::get( '/dashboard/{any}' , fn( ) => view( 'admin-panel' ) )-> where( 'any' , '.*' )   -> name( 'admin' ) ;
-// Route::get( '/dashboard' , fn( ) => view( 'admin-panel' ) ) ;
+Route::get( '/dashboard' , fn( ) => view( 'admin-panel' ) ) ;
 
 
 

@@ -16,8 +16,9 @@ class ProductCategory extends Model
 
     protected $table = 'product_categories';
     protected $primaryKey = 'id';
+    
     protected $fillable = [
-        'title',            //text 
+        'title',            //text  / translatable
     ];
     public $translatable = [
         'title',            

@@ -5,8 +5,9 @@ import CreatePage from '../Components/Pages/ProductCategory/Create';
 import ShowPage from '../Components/Pages/ProductCategory/Show';
 import EditPage from '../Components/Pages/ProductCategory/Edit';
 
-import AllTrashPage  from '../Components/Pages/ProductCategory/AllTrash' ;
-import ShowTrashPage  from '../Components/Pages/ProductCategory/ShowTrash' ;
+import AllTrashPage from '../Components/Pages/ProductCategory/AllTrash';
+import ShowTrashPage from '../Components/Pages/ProductCategory/ShowTrash';
+console.log('ProductCategoryRoutes');
 
 export default {
     path: 'product-category',
@@ -18,7 +19,7 @@ export default {
         { path: 'show/:id', component: ShowPage, name: 'ProductCategory.Show' },
         { path: 'edit/:id', component: EditPage, name: 'ProductCategory.Edit' },
 
-        { path: 'all-trash'      , component : AllTrashPage  , name : 'ProductCategory.AllTrash'  } ,
-        { path: 'trash-show/:id' , component : ShowTrashPage  , name : 'ProductCategory.ShowTrash'     } ,
+        { path: 'all-trash', component: AllTrashPage, name: 'ProductCategory.AllTrash' },
+        { path: 'trash-show/:id', component: ShowTrashPage, name: 'ProductCategory.ShowTrash' },
     ]
 };

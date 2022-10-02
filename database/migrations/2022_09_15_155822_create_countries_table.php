@@ -14,8 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name')->unique(); // [note: "translatable"]
+            $table->integer('phone_code')->unique(); // [note: "02"]
+            $table->string('image')->nullable(); 
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
