@@ -1,5 +1,4 @@
-import Vue from 'vue'
-
+ 
 export default class DataService {
 	static RequestData = {}  ;
 	static ErrorsData  = {}  ;
@@ -9,13 +8,16 @@ export default class DataService {
 
     static  handleColumns(Columns,Languages){
         for (var key in Columns) {
-            Vue.set( DataService.RequestData,  Columns[key].name ,1); 
+            // this.$set( DataService.RequestData,  Columns[key].name ,1); 
+            DataService.RequestData[Columns[key].name] = 1;
+
             if (Columns[key].translatable) {
                 DataService.RequestData[Columns[key].name] = [];
                 // [ Column : [] ]
                 for (var lang_key in Languages) {
-                    Vue.set( DataService.RequestData[ Columns[key].name ]   , Languages[lang_key],1 ); 
-                    DataService.RequestData[ Columns[key].name ][Languages[lang_key]] = 
+                    // this.$set( DataService.RequestData[ Columns[key].name ]   , Languages[lang_key],1 ); 
+                    DataService.RequestData[ Columns[key].name ][Languages[lang_key]] =  1 ;
+
                     Columns[key].data_value ? Columns[key].data_value[Languages[lang_key]] : null 
                     ;
                     // [Column : [ ar : null en : null]]
@@ -32,12 +34,16 @@ export default class DataService {
         for (var key in Columns) {
             if (Columns[key].translatable) {
                 for (var lang_key in Languages) {
-                    Vue.set( DataService.ErrorsData, Columns[key].name+'.'+Languages[lang_key] , 1);  
+                    // this.$set( DataService.ErrorsData, Columns[key].name+'.'+Languages[lang_key] , 1);
+                    DataService.ErrorsData[ Columns[key].name+'.'+Languages[lang_key]] =  1 ;
+  
                     DataService.ErrorsData[Columns[key].name+'.'+Languages[lang_key]] = [];
                     // [ Column.ar : [] ]
                 }
             }else{
-                Vue.set( DataService.ErrorsData, Columns[key].name , 1);  
+                // this.$set( DataService.ErrorsData, Columns[key].name , 1); 
+                DataService.ErrorsData[ Columns[key].name ]  =  1 ;
+ 
                 DataService.ErrorsData[Columns[key].name] = null;
             }
         }

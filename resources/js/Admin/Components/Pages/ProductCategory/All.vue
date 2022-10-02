@@ -10,8 +10,8 @@
                                     <!-- eslint-disable -->
                                     <th 
                                         v-for="( column , key    ) in Columns    " 
+                                        v-if="column && !column.invisible"
                                         :key="key   " 
-                                        v-if="!column.invisible"
                                         v-text="column.header" 
                                     /> 
                                     <!-- eslint-disable -->
@@ -21,7 +21,7 @@
                             <tbody>
                                 <tr v-for="( row    , rowkey ) in TableRows.data " :key="rowkey" >
                                     <td  v-for="( column , key    )  in Columns" :key="key" class="teeee" 
-                                        v-if="!column.invisible"
+                                        v-if="column && !column.invisible"
                                     >
                                         <ColumsIndex  
                                             :ValueColumn="row[column.name] ? row[column.name] : column.default "   
@@ -34,6 +34,7 @@
                                     </td>
                                     <td>
                                         <TableControllers 
+                                            :controller_buttons = "controller_buttons"
                                             :RowId="row.id" 
                                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page : 1" 
                                             @SendRowData="SendRowData(row)"
@@ -88,12 +89,16 @@ export default {
 
         TableRows  : {},
         Columns :  [],
+        controller_buttons   : [ 'edit','delete','show' ] ,
+
         PerPage  : 10
     } },
 
     mounted() {
-        this.initial( this.$route.query.CurrentPage );
-        this.tableColumns();
+                console.log('kk');
+
+        // this.initial( this.$route.query.CurrentPage );
+        // this.tableColumns();
     },
 
     methods : {
@@ -113,30 +118,6 @@ export default {
                 { 
                     type: 'Forloop'   ,header : 'title'             , name : 'title'            , 
                     loopOnColumn:this.Languages ,  default : null
-                } ,
-                { 
-                    type: 'ForloopImage'   ,header : 'image'        , name : 'image'              ,
-                    loopOnColumn:this.Languages , default : null
-                } ,
-                { 
-                    type: 'Forloop'   ,header : 'page url'          , name : 'page_url'           ,
-                    loopOnColumn:this.Languages , default : null
-                } ,
-                { 
-                    type: 'Forloop'   ,header : 'page tab title'    , name : 'page_tab_title'     ,
-                    invisible : true , loopOnColumn:this.Languages , default : null
-                } ,
-                { 
-                    type: 'Forloop'   ,header : 'page title'        , name : 'page_title'         ,
-                    invisible : true , loopOnColumn:this.Languages , default : null
-                } ,
-                { 
-                    type: 'Forloop'   ,header : 'page description'  , name : 'page_description'   ,
-                    invisible : true , loopOnColumn:this.Languages , default : null
-                } ,
-                { 
-                    type: 'Forloop'   ,header : 'page_keywords'     , name : 'page_keywords'      ,
-                    invisible : true , loopOnColumn:this.Languages , default : null
                 } ,
                 { 
                     type: 'Date'      ,header : 'created'            , name : 'created_at'        ,
@@ -165,8 +146,8 @@ export default {
 
         // modal
             AllLanguages(){
-                    return  (new LanguageModel).all()  ;
-                },
+                return  (new LanguageModel).all()  ;
+            },
             SendRowData(row){
                 this.Columns.forEach(function (SingleRow) {
                     SingleRow.value = row[SingleRow.name] ;
