@@ -2,5 +2,9 @@
 
 npm run watch & php artisan serve
   npx mix watch
+  
+  
 php artisan vendor:publish --tag=laravel-notifications
+
+
 php artisan vendor:publish --tag=laravel-mail
