@@ -4,7 +4,7 @@ import Router    from './Routers/SliderRouter' ;
 
 export default class SliderModel extends Model {
    
-   public async handleData(RequestData) : Promise<any>  {  
+   public async handleData(RequestData:any) : Promise<any>  {  
       let formData = new FormData();
       await Model.getformDataTranslatedOrNot(formData,RequestData) ;
       return formData;

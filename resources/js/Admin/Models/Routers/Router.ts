@@ -16,9 +16,9 @@ export default class Router   {
       responseType : any = 'json' ;
       routerPrefix : string = '/api/dashboard/' ;    
 
-      page : number = null ;
-      PerPage : number = null ;
-      filter : object = {} ;
+      page : any = null ;
+      PerPage : any = null ;
+      filter : any = {} ;
 
    // async IfAuth() : Promise<any>  { 
    //    if ( jwt.Authorization != null+ ' ' +null && !jwt.if_accessToken_expire && jwt.User) {
@@ -28,7 +28,7 @@ export default class Router   {
    //    }
    // } 
    async createParamsArray() { 
-      var params_array = {};
+      var params_array : any = [];
       params_array['page'] = this.page;
       params_array['PerPage'] =this.PerPage
 
@@ -116,7 +116,7 @@ export default class Router   {
          this.routerPrefix+this.name+'/'+id+'/update', 
          formData ,
          { headers : this.headers , responseType : this.responseType}
-      ) 
+      ); 
    }
    async RstoreRowAxios(id : number) : Promise<any>  {
       return await Axios.get( 

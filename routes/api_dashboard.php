@@ -46,13 +46,23 @@ Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']]
     // ]),
     // ExtraCategory
     Route::name('extra-category.')->prefix('/extra-category')->group( fn ( ) : array => [
-        Route::get('/'                          ,   'ExtrasCategoryController@all'                 )->name('all'),
-        Route::post(''                          ,   'ExtrasCategoryController@store'               )->name('store'),
-        Route::get('/{id}/show'                 ,   'ExtrasCategoryController@show'                )->name('show'),
-        Route::get('/collection'                ,   'ExtrasCategoryController@collection'          )->name('collection'),
-        Route::DELETE('/{id}'                   ,   'ExtrasCategoryController@destroy'             )->name('destroy'),
-        Route::post('/{id}/update'              ,   'ExtrasCategoryController@update'              )->name('update'),
+        Route::get('/'                          ,   'ExtraCategoryController@all'                 )->name('all'),
+        Route::post(''                          ,   'ExtraCategoryController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'ExtraCategoryController@show'                )->name('show'),
+        Route::get('/collection'                ,   'ExtraCategoryController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'ExtraCategoryController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'ExtraCategoryController@update'              )->name('update'),
     ]),
+    // extra
+    Route::name('extra.')->prefix('/extra')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'ExtraController@all'                 )->name('all'),
+        Route::post(''                          ,   'ExtraController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'ExtraController@show'                )->name('show'),
+        Route::get('/collection'                ,   'ExtraController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'ExtraController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'ExtraController@update'              )->name('update'),
+    ]),
+    
     // country
     Route::name('country.')->prefix('/country')->group( fn ( ) : array => [
         Route::get('/'                          ,   'CountryController@all'                 )->name('all'),
