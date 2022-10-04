@@ -21,13 +21,13 @@ class ProductItem extends Model
         'description', // text
         'image', // string
 
-        'discount', // float / default : 0
+        'discount', // int ,  enum  5 10 15 20 
         'price',   // float / default : 0
 
         'store_id',  // integer , unsigned
         'product_category_id',  // integer , unsigned
 
-        'status', // enum  request_as_new request_as_edit active  deactivate out_of_stock
+        'status', // string , enum  request_as_new request_as_edit active  deactivate out_of_stock
     ];
    
     public $translatable = [

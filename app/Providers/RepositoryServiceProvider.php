@@ -35,9 +35,11 @@ use App\Repository\GovernmentRepositoryInterface;
 use App\Repository\Eloquent\CityRepository;
 use App\Repository\CityRepositoryInterface;
 
-use App\Repository\Eloquent\ExtrasCategoryRepository;
-use App\Repository\ExtrasCategoryRepositoryInterface;
+use App\Repository\Eloquent\ExtraCategoryRepository;
+use App\Repository\ExtraCategoryRepositoryInterface;
 
+use App\Repository\Eloquent\ExtraRepository;
+use App\Repository\ExtraRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -63,7 +65,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(GovernmentRepositoryInterface::class,GovernmentRepository::class);
         $this->app->bind(CityRepositoryInterface::class,CityRepository::class);
 
-        $this->app->bind(ExtrasCategoryRepositoryInterface::class,ExtrasCategoryRepository::class);
+        $this->app->bind(ExtraCategoryRepositoryInterface::class,ExtraCategoryRepository::class);
+        $this->app->bind(ExtraRepositoryInterface::class,ExtraRepository::class);
 
     }
 

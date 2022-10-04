@@ -29,8 +29,8 @@ return new class extends Migration
             $table->enum('status', [ 'request_as_new','request_as_edit','active','deactivate','out_of_stock'])->default('request_as_new');
 
             $table->float('price')->default(0);
-            $table->integer('discount')->default(0);
-            
+            $table->enum('discount', [ 0, 5,10,15,20])->default('0');
+
             $table->timestamps();
             $table->softDeletes();
 
