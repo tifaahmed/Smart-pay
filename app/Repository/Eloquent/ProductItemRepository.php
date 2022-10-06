@@ -21,4 +21,11 @@ class ProductItemRepository extends BaseRepository implements ProductItemReposit
 	{
 		$this->model =  $model;
 	}
+
+	public function sync_product_extra(int $id,array $product_extra_ids = []) 
+    {
+		$result = $this->findById($id); 
+		$result->product_extras()->sync($product_extra_ids);
+		return 'success';
+	}
 }

@@ -1,15 +1,10 @@
 <?php
 
-namespace App\Http\Resources\dashboard\ProductItem;
+namespace App\Http\Resources\dashboard\Coupon;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
-
-use App\Http\Resources\dashboard\ProductItem\StoreResource;
-use App\Http\Resources\dashboard\ProductItem\ProductCategoryResource;
-use App\Http\Resources\dashboard\ProductItem\ExtraResource;
-
-class ProductItemResource extends JsonResource
+class StoreResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,14 +14,16 @@ class ProductItemResource extends JsonResource
      */
     public function toArray($request)
     {
-        
+
+
+
+
         $model = $this;
         $lang_array = config('app.lang_array') ;
 
-        $string_fields = ['status','price','discount'];
+        $string_fields = ['status','phone','latitude','longitude'];
         $translated_string_fields = [
             'title','description', 
-
         ];
 
         $image_fields  = ['image'];
@@ -38,9 +35,7 @@ class ProductItemResource extends JsonResource
         $all=[];
 
         $all += [ 'id' =>   $this->id ]  ;
-        $all += [ 'store' =>   new StoreResource ($this->store) ]  ;
-        $all += [ 'product_category' => new  ProductCategoryResource($this->product_category) ]  ;
-        $all += [ 'product_extras' => ExtraResource::collection($this->product_extras) ]  ;
+
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);
         // $all += resource_translated_image($model,$lang_array,$translated_image_fields);

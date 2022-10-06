@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
-use App\Models\ProductCategory;              // belongsTo
+
+use App\Models\ProductCategory;     // belongsTo
 use App\Models\Store;              // belongsTo
+
+use App\Models\Extra;              // belongsToMany
 
 class ProductItem extends Model
 {
@@ -34,6 +37,7 @@ class ProductItem extends Model
         'title',            
         'description',            
     ];
+
     // belongsTo
         public function product_category(){
             return $this->belongsTo(ProductCategory::class,'product_category_id');
@@ -41,4 +45,9 @@ class ProductItem extends Model
         public function store(){
             return $this->belongsTo(Store::class,'store_id');
         }
+
+    // belongsToMany    
+        public function product_extras(){
+            return $this->belongsToMany(Extra::class, 'product_extras', 'product_id', 'extra_id')->using(ProductExtra::class);
+        }    
 }

@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('extras', function (Blueprint $table) {
+        Schema::create('product_extras', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('extra_category_id')->unsigned();
-            $table->foreign('extra_category_id')->references('id')->on('extra_categories')->onDelete('cascade');
-
-            $table->string('title'); // [note: "translatable"]
-            $table->float('price')->default(0);
-
+            $table->integer('product_id')->nullable()->unsigned();
+            $table->foreign('product_id')->references('id')->on('product_items')->onDelete('cascade');
+            
+            $table->integer('extra_id')->nullable()->unsigned();
+            $table->foreign('extra_id')->references('id')->on('extras')->onDelete('cascade');
+           
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('extras');
+        Schema::dropIfExists('product_extras');
     }
 };

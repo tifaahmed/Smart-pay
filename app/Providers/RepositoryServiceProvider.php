@@ -41,6 +41,9 @@ use App\Repository\ExtraCategoryRepositoryInterface;
 use App\Repository\Eloquent\ExtraRepository;
 use App\Repository\ExtraRepositoryInterface;
 
+use App\Repository\Eloquent\CouponRepository;
+use App\Repository\CouponRepositoryInterface;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -68,6 +71,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ExtraCategoryRepositoryInterface::class,ExtraCategoryRepository::class);
         $this->app->bind(ExtraRepositoryInterface::class,ExtraRepository::class);
 
+        $this->app->bind(CouponRepositoryInterface::class,CouponRepository::class);
+
+        
     }
 
     /**
