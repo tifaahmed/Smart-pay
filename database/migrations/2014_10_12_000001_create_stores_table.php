@@ -28,7 +28,9 @@ return new class extends Migration
             $table->text('description'); // [note: "translatable"]
 
             $table->string('phone'); 
-
+            $table->float('rate')->default(5);
+            $table->float('delevery_fee')->default(0);
+            
             $table->string('latitude')->nullable() ;
             $table->string('longitude')->nullable();
 

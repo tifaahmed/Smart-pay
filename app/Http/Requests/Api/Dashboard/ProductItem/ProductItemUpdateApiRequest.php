@@ -34,6 +34,8 @@ class ProductItemUpdateApiRequest extends FormRequest
         $all += [ 'product_category_id'   =>  [ 'required' ,'integer','exists:product_categories,id'] ] ;
 
         $all += [ 'price'                  =>  [ 'sometimes' ,'numeric'] ]  ;
+        $all += [ 'rate'                  =>  [ 'sometimes' ,'between:1,5'] ]  ;
+
         $all += [ 'discount'                  =>  [ 'sometimes' ,'numeric','between:0,100.00'] ]  ;
 
         $all += [ 'status'     =>  [ 'sometimes' ,Rule::in([

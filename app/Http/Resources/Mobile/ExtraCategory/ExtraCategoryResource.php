@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Resources\Mobile\ProductCategory;
+namespace App\Http\Resources\Mobile\ExtraCategory;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\Mobile\ProductCategory\ProductItemResource;
-class ProductCategoryResource extends JsonResource
+
+use App\Http\Resources\Mobile\ExtraCategory\ExtraResource;
+use Illuminate\Database\Eloquent\Builder;
+
+class ExtraCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,16 +18,17 @@ class ProductCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        
         $all=[];
 
         $all += [ 'id' =>   $this->id ]  ;
+        $all += [ 'type' =>   $this->type ]  ;
         $all += [ 'title' =>   $this->title ]  ;
 
-        $product_items = $this->product_items()->StoreFilter($request->filter)->get();
+        $product_id = $request->product_id;
 
-        $all += [ 'product_items' =>   ProductItemResource::collection($product_items) ]  ;
+        $extras = $this->extras()->ProductFilter($request->filter)->get();
 
+        $all += [ 'extras' =>  ExtraResource::collection($extras) ]  ;
 
         return $all;
     }

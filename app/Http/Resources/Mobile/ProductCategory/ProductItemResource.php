@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Mobile\ProductItem;
+namespace App\Http\Resources\Mobile\ProductCategory;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;

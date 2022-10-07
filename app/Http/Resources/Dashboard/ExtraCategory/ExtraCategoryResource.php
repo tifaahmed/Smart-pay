@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\dashboard\ExtraCategory;
+namespace App\Http\Resources\Dashboard\ExtraCategory;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;

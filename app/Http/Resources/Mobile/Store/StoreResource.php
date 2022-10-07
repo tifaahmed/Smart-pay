@@ -14,7 +14,8 @@ class StoreResource extends JsonResource
      */
     public function toArray($request)
     {
-
+        // $user_id =  Auth::user() ? Auth::user()->id : $request->user_id;
+        $user_id =  $request->user_id;
         $all=[];
         $all += [ 'id' =>   $this->id ]  ;
 
@@ -22,16 +23,12 @@ class StoreResource extends JsonResource
         $all += [ 'latitude' =>   $this->latitude ]  ;
         $all += [ 'longitude' =>   $this->longitude ]  ;
 
-        $all += [ 'image' =>  
-        $this->image && Storage::disk('public')->exists( $this->image)
-        ? 
-        asset(Storage::url( $this->image ) )  
-        : 
-        null
-        ]  ;
+        $all += [ 'image' =>   check_image($this->image)]  ;
+
+        $all += [ 'fav' =>    $this->fav_stores()->RelateUser($user_id)->first() ? 1 : 0 ]  ;
+        $all += [ 'rate' =>   $this->rate ]  ;
+        $all += [ 'delevery_fee' =>   $this->delevery_fee ]  ;
         
-
-
 
         return $all;
     }

@@ -19,9 +19,13 @@ use App\Notifications\ActiveEmailNotification;
 
 use Auth;
 
-use App\Models\Store;              // HasOne
+use App\Models\Store;                // HasOne , belongsToMany
+use App\Models\ProductItem;         //  belongsToMany
 
-
+use App\Models\UserFavStore;            // belongsToMany
+use App\Models\UserFavProduct;          // belongsToMany
+use App\Models\UserRateStore;           // belongsToMany
+    
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable , SoftDeletes;
@@ -75,14 +79,31 @@ class User extends Authenticatable
             $model->pin_code = rand(111111,999999);
         });
     }
-
-
+    //scope
+        public function scopeRelateUser($query,$user_id){
+            return $query->where('user_id',$user_id);
+        }
 
     //relations
         // HasOne
             public function store(){
                 return $this->hasOne(Store::class);
             }
+        // belongsToMany    
+            public function fav_stores(){
+                return $this->belongsToMany(Store::class, UserFavStore::class, 'user_id', 'store_id')
+                ->using(UserFavStore::class);
+            }
+            public function fav_products(){
+                return $this->belongsToMany(ProductItem::class, UserFavProduct::class, 'user_id', 'product_id')
+                ->using(UserFavProduct::class);
+            } 
+            public function rate_stores(){
+                return $this->belongsToMany(Store::class, UserRateStore::class, 'user_id', 'store_id')
+                ->using(UserRateStore::class)
+                ->withPivot('rate');
+            }
+  
     //relations
 
 

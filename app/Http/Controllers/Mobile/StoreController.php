@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response ;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 // Resource
 use App\Http\Resources\Mobile\Collections\StoreCollection as ModelCollection;
@@ -13,6 +14,10 @@ use App\Http\Resources\Mobile\Store\StoreResource as ModelResource;
 
 // lInterfaces
 use App\Repository\StoreRepositoryInterface as ModelInterface;
+
+// Requests
+use App\Http\Requests\Api\Mobile\Store\StoreRateApiRequest ;
+use App\Http\Requests\Api\Mobile\Store\StoreFavApiRequest ;
 
 class StoreController extends Controller
 {
@@ -24,10 +29,10 @@ class StoreController extends Controller
     }
 
     
-    public function all(){
+    public function all(Request $request){
         try {
-            $modal =    $this->ModelRepository->all()    ;
-            return new ModelCollection($modal);
+            $model =  $this->ModelRepository->filterAll($request->filter) ;
+            return new ModelCollection($model);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
                 [$e->getMessage()  ] ,
@@ -39,8 +44,8 @@ class StoreController extends Controller
 
     public function collection(Request $request){
         try {
-            $modal = $this->ModelRepository->collection( $request->per_page ? $request->per_page : $this->default_per_page);
-            return new ModelCollection($modal);
+            $model = $this->ModelRepository->filterPaginate($request->filter, $request->prepage ?? 10);
+            return new ModelCollection($model);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
                 [$e->getMessage()  ] ,
@@ -67,5 +72,51 @@ class StoreController extends Controller
             );
         }
     }
+    public function fav_toggle(StoreFavApiRequest $request) {
+        try {
+            $model = $this->ModelRepository->findById($request->store_id);
+            $fav_roducts = $model->fav_stores();
 
+            if (!$fav_roducts->RelateUser(Auth::user()->id)->first()) {
+                $fav_roducts ->syncWithoutDetaching(Auth::user()->id);
+            }else{
+                $fav_roducts ->detach(Auth::user()->id);
+            }
+           
+            return $this -> MakeResponseSuccessful( 
+                [ 'Successful' ],
+                'Successful',
+                Response::HTTP_OK
+            ) ;
+        } catch (\Exception $e) {
+            return $this -> MakeResponseErrors(  
+                [$e->getMessage()  ] ,
+                'Errors',
+                Response::HTTP_NOT_FOUND
+            );
+        }
+    }
+    public function rate(StoreRateApiRequest $request) {
+        try {
+            $model = $this->ModelRepository->findById($request->store_id);
+            $rate_stores = $model->rate_stores();
+            $rate_stores->syncWithoutDetaching([Auth::user()->id =>['rate' =>$request->rate] ]);
+
+            $sum =   $rate_stores->sum('rate');
+            $count =   $rate_stores->count();
+            $model->update(['rate' => $sum / $count]);
+
+            return $this -> MakeResponseSuccessful( 
+                [ 'Successful' ],
+                'Successful',
+                Response::HTTP_OK
+            ) ;
+        } catch (\Exception $e) {
+            return $this -> MakeResponseErrors(  
+                [$e->getMessage()  ] ,
+                'Errors',
+                Response::HTTP_NOT_FOUND
+            );
+        }
+    }
 }

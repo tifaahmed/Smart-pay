@@ -6,19 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response ;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 
 // Resource
-use App\Http\Resources\Mobile\Collections\ProductItemCollection as ModelCollection;
-use App\Http\Resources\Mobile\ProductItem\ProductItemResource as ModelResource;
+use App\Http\Resources\Mobile\Collections\ExtraCategoryCollection as ModelCollection;
+use App\Http\Resources\Mobile\ExtraCategory\ExtraCategoryResource as ModelResource;
 
 // lInterfaces
-use App\Repository\ProductItemRepositoryInterface as ModelInterface;
+use App\Repository\ExtraCategoryRepositoryInterface as ModelInterface;
 
-// Requests
-use App\Http\Requests\Api\Mobile\ProductItem\ProductItemFavApiRequest ;
-
-class ProductItemsController extends Controller
+class ExtraCategoryController extends Controller
 {
     private $Repository;
     public function __construct(ModelInterface $Repository)
@@ -26,11 +22,10 @@ class ProductItemsController extends Controller
         $this->ModelRepository = $Repository;
         $this->default_per_page = 10;
     }
-
     
     public function all(){
         try {
-            $modal =    $this->ModelRepository->all()    ;
+            $modal =    $this->ModelRepository->filterAll()    ;
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -40,10 +35,10 @@ class ProductItemsController extends Controller
             );
         }
     }
-
+    
     public function collection(Request $request){
         try {
-            $modal = $this->ModelRepository->collection( $request->per_page ? $request->per_page : $this->default_per_page);
+            $modal = $this->ModelRepository->filterPaginate( $request->per_page ?? $this->default_per_page);
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -71,24 +66,6 @@ class ProductItemsController extends Controller
             );
         }
     }
-    public function fav_toggle(ProductItemFavApiRequest $request) {
-        try {
-            $model = $this->ModelRepository->findById($request->product_id);
-            $model->fav_products()->toggle(Auth::user()->id);
 
-            return $this -> MakeResponseSuccessful( 
-                [ 'Successful' ],
-                'Successful',
-                Response::HTTP_OK
-            ) ;
-        } catch (\Exception $e) {
-            return $this -> MakeResponseErrors(  
-                [$e->getMessage()  ] ,
-                'Errors',
-                Response::HTTP_NOT_FOUND
-            );
-        }
-    }
-    
 
 }
