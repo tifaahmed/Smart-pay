@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('extras', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
 
             $table->integer('extra_category_id')->unsigned();
             $table->foreign('extra_category_id')->references('id')->on('extra_categories')->onDelete('cascade');

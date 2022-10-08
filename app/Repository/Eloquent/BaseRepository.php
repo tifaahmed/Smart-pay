@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Torann\LaravelRepository\Repositories\AbstractRepository;
 use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class BaseRepository implements EloquentRepositoryInterface 
 {
@@ -36,9 +37,9 @@ class BaseRepository implements EloquentRepositoryInterface
 		$fillable= $this->model->getFillable() ;
 
 		array_push($fillable,$keyName);
-
+ 		
 		return QueryBuilder::for($this->model->with($relations))
-		->allowedFilters($fillable)
+		->allowedFilters($fillable )		
 		->get($columns);
 	}
 

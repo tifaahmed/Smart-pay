@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Resources\dashboard\ProductItem;
+namespace App\Http\Resources\Dashboard\ProductItem;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Resources\dashboard\ProductItem\StoreResource;
 use App\Http\Resources\dashboard\ProductItem\ProductCategoryResource;
+use App\Http\Resources\dashboard\ProductItem\ExtraResource;
 
 class ProductItemResource extends JsonResource
 {
@@ -39,6 +40,7 @@ class ProductItemResource extends JsonResource
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'store' =>   new StoreResource ($this->store) ]  ;
         $all += [ 'product_category' => new  ProductCategoryResource($this->product_category) ]  ;
+        $all += [ 'product_extras' => ExtraResource::collection($this->product_extras) ]  ;
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);
         // $all += resource_translated_image($model,$lang_array,$translated_image_fields);

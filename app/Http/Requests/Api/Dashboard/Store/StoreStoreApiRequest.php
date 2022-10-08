@@ -35,9 +35,9 @@ class StoreStoreApiRequest extends FormRequest
         ]), ] ] ;
         $all += [ 'image'                  =>  [ 'required' ,'max:50000'] ]  ;
         $all += [ 'phone'                 =>  [ 'required'  ] ]  ;
-        $all += [ 'latitude'                 =>  [ 'required'  ] ]  ;
-        $all += [ 'latitude'                 =>  [ 'required'  ] ]  ;
-
+        $all += [ 'latitude'                 =>  [ 'sometimes'  ] ]  ;
+        $all += [ 'longitude'                 =>  [ 'sometimes'  ] ]  ;
+        $all += [ 'delevery_fee'                 =>  [ 'required','numeric'  ] ]  ;
         foreach ($lang_array as $key => $value) {
             $all += [ 'title.'.$value                 =>  [ 'required'  ] ]  ;
             $all += [ 'description.'.$value                 =>  [ 'required'  ] ]  ;

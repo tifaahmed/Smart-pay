@@ -44,9 +44,9 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
         ]),
         // product-category
         Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
-            Route::get('/'                          ,   'ProductItemsController@all'                 )->name('all'),
-            Route::get('/{id}/show'                 ,   'ProductItemsController@show'                )->name('show'),
-            Route::get('/collection'                ,   'ProductItemsController@collection'          )->name('collection'),
+            Route::get('/'                          ,   'ProductItemsController@all'         )->name('all'),
+            Route::get('/{id}/show'                 ,   'ProductItemsController@show'        )->name('show'),
+            Route::get('/collection'                ,   'ProductItemsController@collection'  )->name('collection'),
         ]),
         // store
         Route::name('store.')->prefix('store')->group( fn ( ) : array => [
@@ -54,8 +54,15 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::get('/{id}/show'                 ,   'StoreController@show'                )->name('show'),
             Route::get('/collection'                ,   'StoreController@collection'          )->name('collection'),
         ]),
-
+        // store
+        Route::name('extra-category.')->prefix('extra-category')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'ExtraCategoryController@all'                 )->name('all'),
+            Route::get('/{id}/show'                 ,   'ExtraCategoryController@show'                )->name('show'),
+            Route::get('/collection'                ,   'ExtraCategoryController@collection'          )->name('collection'),
+        ]),
     ]),
+
+
     // auth:sanctum // auth:sanctum
     // auth:api // passport
     Route::group(['middleware' => ['auth:sanctum']], fn ( ) : array => [
@@ -71,6 +78,15 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::post('/update'              ,   'UserController@update'              )->name('update'),
             Route::post('/apdate-password'     ,   'UserController@apdatePassword'      )->name('apdate_password'),
         ]), 
+        // product-category
+        Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
+            Route::post('/fav-toggle'         ,   'ProductItemsController@fav_toggle'  )->name('fav'),
+        ]),
+        // store
+        Route::name('store.')->prefix('store')->group( fn ( ) : array => [
+            Route::post('/fav-toggle'         ,   'StoreController@fav_toggle'  )->name('fav'),
+            Route::post('/rate'               ,   'StoreController@rate'        )->name('rate'),
+        ]),
     ])
 
 ]);

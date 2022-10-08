@@ -44,6 +44,16 @@ Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']]
     //     Route::DELETE('/{id}'                   ,   'SliderController@destroy'             )->name('destroy'),
     //     Route::post('/{id}/update'              ,   'SliderController@update'              )->name('update')
     // ]),
+    // coupon
+    Route::name('coupon.')->prefix('/coupon')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'CouponController@all'                 )->name('all'),
+        Route::post(''                          ,   'CouponController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'CouponController@show'                )->name('show'),
+        Route::get('/collection'                ,   'CouponController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'CouponController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'CouponController@update'              )->name('update'),
+    ]),
+
     // ExtraCategory
     Route::name('extra-category.')->prefix('/extra-category')->group( fn ( ) : array => [
         Route::get('/'                          ,   'ExtraCategoryController@all'                 )->name('all'),

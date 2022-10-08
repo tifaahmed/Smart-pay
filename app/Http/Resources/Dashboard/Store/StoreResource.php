@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\dashboard\Store;
+namespace App\Http\Resources\Dashboard\Store;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Resources\dashboard\Store\UserResource;
+use App\Http\Resources\Dashboard\Store\UserResource;
 class StoreResource extends JsonResource
 {
     /**
@@ -22,7 +22,7 @@ class StoreResource extends JsonResource
         $model = $this;
         $lang_array = config('app.lang_array') ;
 
-        $string_fields = ['status','phone','latitude','longitude'];
+        $string_fields = ['status','phone','latitude','longitude','delevery_fee'];
         $translated_string_fields = [
             'title','description', 
         ];

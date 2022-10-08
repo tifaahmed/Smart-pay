@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\dashboard\Store;
+namespace App\Http\Resources\Dashboard\Store;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;

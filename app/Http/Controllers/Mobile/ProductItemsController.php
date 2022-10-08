@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response ;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 // Resource
 use App\Http\Resources\Mobile\Collections\ProductItemCollection as ModelCollection;
@@ -13,6 +14,9 @@ use App\Http\Resources\Mobile\ProductItem\ProductItemResource as ModelResource;
 
 // lInterfaces
 use App\Repository\ProductItemRepositoryInterface as ModelInterface;
+
+// Requests
+use App\Http\Requests\Api\Mobile\ProductItem\ProductItemFavApiRequest ;
 
 class ProductItemsController extends Controller
 {
@@ -67,5 +71,24 @@ class ProductItemsController extends Controller
             );
         }
     }
+    public function fav_toggle(ProductItemFavApiRequest $request) {
+        try {
+            $model = $this->ModelRepository->findById($request->product_id);
+            $model->fav_products()->toggle(Auth::user()->id);
+
+            return $this -> MakeResponseSuccessful( 
+                [ 'Successful' ],
+                'Successful',
+                Response::HTTP_OK
+            ) ;
+        } catch (\Exception $e) {
+            return $this -> MakeResponseErrors(  
+                [$e->getMessage()  ] ,
+                'Errors',
+                Response::HTTP_NOT_FOUND
+            );
+        }
+    }
+    
 
 }

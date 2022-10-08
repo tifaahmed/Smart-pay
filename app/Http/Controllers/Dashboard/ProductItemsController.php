@@ -24,7 +24,7 @@ class ProductItemsController extends Controller
     public function __construct(ModelInterface $Repository)
     {
         $this->ModelRepository = $Repository;
-        $this->folder_name = 'Product-item/'.date('Y-m-d-h-i-s');
+        $this->folder_name = 'product-item/'.date('Y-m-d-h-i-s');
         $this->file_columns = ['image'];
         $this->translated_file_columns = [];
         $this->default_per_page = 10;
@@ -66,6 +66,10 @@ class ProductItemsController extends Controller
             );
 
             $model = $this->ModelRepository->create( Request()->except($this->file_columns)+$all ) ;
+            
+            // product_extras
+            $this->ModelRepository->sync_product_extra($model->id,$request->product_extra_ids ?? []);
+
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
                 'Successful'               ,
@@ -91,6 +95,9 @@ class ProductItemsController extends Controller
 
             $this->ModelRepository->update( $id,Request()->except($this->file_columns)+$all) ;
             $model =  $this->ModelRepository->findById($id) ;
+            
+            // product_extras
+            $this->ModelRepository->sync_product_extra($model->id,$request->product_extra_ids ?? []);
 
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
