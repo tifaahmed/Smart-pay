@@ -132,6 +132,10 @@ export default {
                     loopOnColumn:this.Languages ,  default : null
                 } ,
                 { 
+                    type: 'String'   ,header : 'delevery fee'    , name : 'delevery_fee'     ,
+                    default : null
+                } ,
+                { 
                     type: 'Forloop'   ,header : 'description'        , name : 'description'            , 
                     loopOnColumn:this.Languages ,  default : null
                 } ,

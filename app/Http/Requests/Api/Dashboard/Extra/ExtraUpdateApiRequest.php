@@ -5,7 +5,6 @@ namespace App\Http\Requests\Api\Dashboard\Extra;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-use App\Rules\SpatieUniqueRule;
 use App\Models\ExtraCategory;
 class ExtraUpdateApiRequest extends FormRequest
 {
@@ -31,7 +30,7 @@ class ExtraUpdateApiRequest extends FormRequest
         $all=[];
 
         $all += [ 'price'             =>  [ 'sometimes' ,'numeric'] ]  ;
-        $all += [ 'extra_category_id'=>  [ 'required' ,'integer','exists:extra_categories,id'] ] ;
+        $all += [ 'extra_category_id'=>  [ 'required' ,'integer','exists:'.ExtraCategory::class.',id'] ] ;
 
 
         foreach ($lang_array as $key => $value) {

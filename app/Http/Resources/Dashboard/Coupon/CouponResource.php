@@ -4,7 +4,8 @@ namespace App\Http\Resources\Dashboard\Coupon;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
-
+use App\Http\Resources\Dashboard\Coupon\UserResource;
+use App\Http\Resources\Dashboard\Coupon\StoreResource;
 class CouponResource extends JsonResource
 {
     /**
@@ -27,7 +28,7 @@ class CouponResource extends JsonResource
         $image_fields  = [];
         $translated_image_fields  = [];
 
-        $date_fields   = ['start_date','end_date','created_at','updated_at','deleted_at'];
+        $date_fields   = ['created_at','updated_at','deleted_at'];
 
 
         $all=[];
@@ -35,6 +36,8 @@ class CouponResource extends JsonResource
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'user' => new  UserResource($this->user) ]  ;
         $all += [ 'store' => new  StoreResource($this->store) ]  ;
+        $all += [ 'start_date' => $this->start_date ]  ;
+        $all += [ 'end_date' => $this->end_date ]  ;
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);
         $all += resource_translated_image($model,$lang_array,$translated_image_fields);

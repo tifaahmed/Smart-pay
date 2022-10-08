@@ -9,7 +9,7 @@
                                 <tr> 
                                     <!-- eslint-disable -->
                                     <th 
-                                        v-for="( column , key    ) in Columns    " 
+                                        v-for="( column , key    ) in Columns" 
                                         v-if="column && !column.invisible"
                                         :key="key   " 
                                         v-text="column.header" 
@@ -95,10 +95,8 @@ export default {
     } },
 
     mounted() {
-                console.log('kk');
-
-        // this.initial( this.$route.query.CurrentPage );
-        // this.tableColumns();
+        this.initial( this.$route.query.CurrentPage );
+        this.tableColumns();
     },
 
     methods : {

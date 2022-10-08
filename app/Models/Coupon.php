@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use App\Models\Order;           // HasMany
 
 class Coupon extends Model
 {
@@ -35,4 +36,8 @@ class Coupon extends Model
         'title'
     ];
 
+    // HasMany
+        public function orders(){
+            return $this->HasMany(Order::class);
+        }
 }

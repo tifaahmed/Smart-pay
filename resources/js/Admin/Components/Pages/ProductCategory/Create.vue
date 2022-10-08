@@ -20,12 +20,12 @@
                                     <div class="">
 
                                         <span v-for="( column_val , column_key ) in Columns" :key="column_key" >
-                                                <InputsFactory 
-                                                    v-if="column_val.translatable"
-                                                    :Factorylable="column_val.header + ' ('+ lang_val +') '+( column_val.validation.required ? '*' : ''  )"  :FactoryPlaceholder="column_val.placeholder"         
-                                                    :FactoryType="column_val.type" :FactoryName="column_val.name+'['+lang_val+']'"  v-model ="RequestData[column_val.name][lang_val]"  
-                                                    :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name+'.'+lang_val]  )  ) ?  ServerReaponse.errors[column_val.name+'.'+lang_val] : null" 
-                                                />
+                                            <InputsFactory 
+                                                v-if="column_val.translatable"
+                                                :Factorylable="column_val.header + ' ('+ lang_val +') '+( column_val.validation.required ? '*' : ''  )"  :FactoryPlaceholder="column_val.placeholder"         
+                                                :FactoryType="column_val.type" :FactoryName="column_val.name+'['+lang_val+']'"  v-model ="RequestData[column_val.name][lang_val]"  
+                                                :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name+'.'+lang_val]  )  ) ?  ServerReaponse.errors[column_val.name+'.'+lang_val] : null" 
+                                            />
                                         </span> 
 
                                     </div>
@@ -108,7 +108,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
             Columns : [
                 { 
-                    type: 'string',placeholder:'title',header :'title', name : 'title' ,translatable : true ,
+                    type:'string',placeholder:'title',header:'title',name:'title',translatable:true ,
                     validation:{required : true } 
                 },
             ],

@@ -147,18 +147,25 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : true } 
                     },
                     { 
+                        type: 'string',placeholder:'description',header : 'description', name : 'description' ,
+                        translatable : true ,
+                        data_value : receivedData.description  ,
+                        validation:{required : true } 
+                    },
+                    { 
+                        type: 'number',placeholder:'delevery_fee',header : 'delevery_fee', name : 'delevery_fee' ,
+                        translatable : true ,
+                        data_value : receivedData.delevery_fee  ,
+                        validation:{required : true } 
+                    },
+                    { 
                         type: 'Radio',placeholder:'status',header : 'status', name : 'status' ,
                         translatable : false , SelectOptions :['pending','accepted','rejected','canceled'],
                         data_value : receivedData.status  ,
                         validation:{required : true } 
                     },
                     
-                    { 
-                        type: 'string',placeholder:'description',header : 'description', name : 'description' ,
-                        translatable : true ,
-                        data_value : receivedData.description  ,
-                        validation:{required : true } 
-                    },
+                    
                     { 
                         type: 'file',placeholder:receivedData.image,header :'image', name : 'image' ,
                         translatable : false ,

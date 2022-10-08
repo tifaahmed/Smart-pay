@@ -44,6 +44,15 @@ use App\Repository\ExtraRepositoryInterface;
 use App\Repository\Eloquent\CouponRepository;
 use App\Repository\CouponRepositoryInterface;
 
+use App\Repository\Eloquent\OrderRepository;
+use App\Repository\OrderRepositoryInterface;
+
+use App\Repository\Eloquent\AddressRepository;
+use App\Repository\AddressRepositoryInterface;
+
+use App\Repository\Eloquent\OrderItemRepository;
+use App\Repository\OrderItemRepositoryInterface;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -72,7 +81,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ExtraRepositoryInterface::class,ExtraRepository::class);
 
         $this->app->bind(CouponRepositoryInterface::class,CouponRepository::class);
-
+        $this->app->bind(OrderRepositoryInterface::class,OrderRepository::class);
+        $this->app->bind(AddressRepositoryInterface::class,AddressRepository::class);
+        $this->app->bind(OrderItemRepositoryInterface::class,OrderItemRepository::class);
         
     }
 

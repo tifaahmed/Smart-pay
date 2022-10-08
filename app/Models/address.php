@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\User;              // belongsTo
 use App\Models\City;              // belongsTo
+use App\Models\Order;           // HasMany
 
 class address extends Model
 {
@@ -29,14 +30,17 @@ class address extends Model
         'longitude',  // string  ,nullable
 
     ];
-
+    // HasMany
+        public function orders(){
+            return $this->HasMany(Order::class);
+        }
     // belongsTo
-    public function user(){
-        return $this->belongsTo(User::class,'user_id');
-    }
-    public function city(){
-        return $this->belongsTo(City::class,'city_id');
-    }
+        public function user(){
+            return $this->belongsTo(User::class,'user_id');
+        }
+        public function city(){
+            return $this->belongsTo(City::class,'city_id');
+        }
 }
 
  

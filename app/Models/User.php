@@ -26,6 +26,8 @@ use App\Models\UserFavStore;            // belongsToMany
 use App\Models\UserFavProduct;          // belongsToMany
 use App\Models\UserRateStore;           // belongsToMany
     
+use App\Models\Order;           // HasMany
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable , SoftDeletes;
@@ -85,6 +87,10 @@ class User extends Authenticatable
         }
 
     //relations
+        // HasMany
+            public function orders(){
+                return $this->HasMany(Order::class);
+            }
         // HasOne
             public function store(){
                 return $this->hasOne(Store::class);

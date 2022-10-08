@@ -12,6 +12,9 @@ use App\Models\User;              // HasOne / belongsToMany
 use App\Models\UserFavStore;      // belongsToMany
 use App\Models\UserRateStore;      // belongsToMany
 
+use App\Models\ProductItem;          // HasMany
+use App\Models\OrderItem;          // HasMany
+
 class Store extends Model
 {
     use HasFactory , HasTranslations , SoftDeletes;
@@ -21,15 +24,21 @@ class Store extends Model
     protected $primaryKey = 'id';
     
     protected $fillable = [
+        'user_id',  // int / unsigned
+
         'title',       //text  [note: "store name"]
         'description', //text  [note: "store information"]
+        
         'delevery_fee', // float , default : 0
-        'user_id',  // int / unsigned
+        
         'status',   // enum / 'pending', 'accepted', 'rejected' ,'canceled'
+        
         'image',   // string / [note: "store logo  pizza"]
         'phone',    // string
+        
         'latitude', // string
         'longitude', // string
+        
         'rate',  // float / default : 5
 
     ];
@@ -74,6 +83,9 @@ class Store extends Model
     // HasMany
         public function product_item(){
             return $this->HasMany(ProductItem::class);
+        }
+        public function order_item(){
+            return $this->HasMany(OrderItem::class);
         }
     // belongsTo
         public function user(){

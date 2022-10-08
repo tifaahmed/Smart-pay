@@ -180,5 +180,47 @@ Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']]
         Route::get('/collection-trash'          ,   'UserController@collection_trash'    )->name('collection_trash'),
         Route::get('/{id}/show-trash'           ,   'UserController@show_trash'          )->name('show_trash'),
     ]),
+    // order
+    Route::name('order.')->prefix('/order')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'OrderController@all'                 )->name('all'),
+        Route::post(''                          ,   'OrderController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'OrderController@show'                )->name('show'),
+        Route::get('/collection'                ,   'OrderController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'OrderController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'OrderController@update'              )->name('update'),
+        
+        Route::get('/{id}/restore'              ,   'OrderController@restore'             )->name('restore'),
+        Route::DELETE('premanently-delete/{id}' ,   'OrderController@premanently_delete'  )->name('premanently_delete'),
+        Route::get('/collection-trash'          ,   'OrderController@collection_trash'    )->name('collection_trash'),
+        Route::get('/{id}/show-trash'           ,   'OrderController@show_trash'          )->name('show_trash'),
+    ]),
+    // order_item
+        Route::name('order_item.')->prefix('/order_item')->group( fn ( ) : array => [
+            Route::get('/'                 ,   'OrderItemController@all'                 )->name('all'),
+            Route::post(''                 ,   'OrderItemController@store'               )->name('store'),
+            Route::get('/{id}/show'        ,   'OrderItemController@show'                )->name('show'),
+            Route::get('/collection'       ,   'OrderItemController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'          ,   'OrderItemController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'     ,   'OrderItemController@update'              )->name('update'),
+        ]),
+    // order_item
+        Route::name('order_item_extra.')->prefix('/order_item_extra')->group( fn ( ) : array => [
+            Route::get('/'                  ,   'OrderItemExtraController@all'          )->name('all'),
+            Route::post(''                  ,   'OrderItemExtraController@store'        )->name('store'),
+            Route::get('/{id}/show'         ,   'OrderItemExtraController@show'         )->name('show'),
+            Route::get('/collection'        ,   'OrderItemExtraController@collection'   )->name('collection'),
+            Route::DELETE('/{id}'           ,   'OrderItemExtraController@destroy'      )->name('destroy'),
+            Route::post('/{id}/update'      ,   'OrderItemExtraController@update'       )->name('update'),
+        ]),    
+    // address
+    Route::name('address.')->prefix('/address')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'AddressController@all'                 )->name('all'),
+        Route::post(''                          ,   'AddressController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'AddressController@show'                )->name('show'),
+        Route::get('/collection'                ,   'AddressController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
+    ]),
+    
 ]);
     
