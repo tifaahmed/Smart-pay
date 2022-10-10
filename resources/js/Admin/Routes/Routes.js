@@ -8,6 +8,7 @@ import UserRoutes from './UserRoutes';
 import StoreRoutes from './StoreRoutes';
 import ProductItemRoutes from './ProductItemRoutes';
 import SiteSettingRoutes from './SiteSettingRoutes';
+import CouponRoutes from './CouponRoutes';
 
 console.log('admin rout');
 
@@ -26,5 +27,6 @@ export default {
         StoreRoutes,
         ProductItemRoutes,
         SiteSettingRoutes,
+        CouponRoutes,
     ]
 }

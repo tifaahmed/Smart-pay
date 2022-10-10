@@ -3,6 +3,7 @@
 		 <InputString
 		 	v-if= "
 				FactoryType === 'string' || 
+				FactoryType === 'datetime-local' || 
 				FactoryType === 'number' || 
 				FactoryType === 'email' || 
 				FactoryType === 'password'

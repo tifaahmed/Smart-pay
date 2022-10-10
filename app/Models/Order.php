@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\User;               // belongsTo
-use App\Models\Coupon;             // belongsTo
-use App\Models\Address;            // belongsTo
 
 use App\Models\OrderItem;          // HasMany
+use App\Models\OrderInformations;          // HasMany
 
 class Order extends Model
 {
@@ -24,29 +23,31 @@ class Order extends Model
         'payment_type' ,  // string , [ 'visa','cash'] , default('cash')
     
         'user_id', // integer , unsigned
-        'coupon_id', // integer , nullable ,unsigned
-        'address_id', // integer  ,unsigned
 
-        'discount', // float  , default 0 //[note: "50 pound"] 
-        'delevery_fee', // float  , default 0 // [note: 'delevery price'] 
-        'subtotal', // float  , default 0  // [note: "sum products prices [before] "]
-        'total', // float  , default 0   // [note: "after discount "]
+        'coupon_title', // string,nullable
+        'coupon_code',// string,nullable
+        'coupon_store_name',// string,nullable
+        
+        'delevery_fee_sub_total', // float  , default 0 // delevery price from many stores
+        'product_sub_total', // float  , default 0 // collect price of table order_items 
+        'extras_sub_total', // float  , default 0 // collect price of table order_item_extras 
+        'coupon_discount', // float  , default 0 //discount from single store
+        'total', // float  , default 0 //product_sub_total + extras_sub_total + delevery_fee_sub_total) - coupon_discount 
+       
+        
     ];
 
     // HasMany
         public function order_item(){
             return $this->HasMany(OrderItem::class);
         }
+        public function order_informations(){
+            return $this->HasMany(OrderInformations::class);
+        }
         
     // belongsTo
         public function user(){
             return $this->belongsTo(User::class,'user_id');
-        }
-        public function coupon(){
-            return $this->belongsTo(Coupon::class,'coupon_id');
-        }
-        public function address(){
-            return $this->belongsTo(Address::class,'address_id');
         }
 }
  

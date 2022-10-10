@@ -20,21 +20,20 @@ return new class extends Migration
             $table->enum('payment_card_status', [ 'paid','pindding'])->default('pindding');
             $table->enum('payment_type', [ 'visa','cash'])->default('cash');
 
-            $table->integer('user_id')->unsigned(); // customer
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_id')->unsigned()->comment('will not delete if user deleted');
 
-            $table->integer('coupon_id')->nullable()->unsigned();
-
-            $table->integer('address_id')->unsigned();
-
-            $table->float('discount')->default(0); //[note: "50 pound"] 
-            $table->float('delevery_fee')->default(0); // [note: 'delevery price'] 
-            $table->float('subtotal')->default(0); // [note: "sum products prices [before] "]
-            $table->float('total')->default(0); // [note: "after discount "]
+            $table->string('coupon_title')->nullable();
+            $table->string('coupon_code')->nullable();
+            $table->string('coupon_store_name')->nullable();
+            
+            $table->float('delevery_fee_sub_total')->default(0)->comment('delevery price from many stores');
+            $table->float('product_sub_total')->default(0)->comment('collect price of table order_items');
+            $table->float('extras_sub_total')->default(0)->comment('collect price of table order_item_extras');
+            $table->float('coupon_discount')->default(0)->comment('discount from single store');
+            $table->float('total')->default(0)->comment('(product_sub_total + extras_sub_total + delevery_fee_sub_total) - coupon_discount ');
 
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

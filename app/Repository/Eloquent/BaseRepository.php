@@ -71,7 +71,14 @@ class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function collection_trash(int $modelId, array $relations = []) 
 	{
-		return $this->model->onlyTrashed()->latest()->with($relations)->paginate($modelId);
+		$keyName= $this->model->getKeyName() ;
+		$fillable= $this->model->getFillable() ;
+
+		array_push($fillable,$keyName);
+
+		return QueryBuilder::for($this->model->with($relations))
+		->allowedFilters($fillable)
+		->onlyTrashed()->latest('id')->paginate($modelId)->appends(request()->query());
 	}
 	/**
 	 * get all trashed models

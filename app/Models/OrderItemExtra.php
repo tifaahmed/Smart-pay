@@ -14,19 +14,15 @@ class OrderItemExtra extends Model
     protected $table = 'order_item_extras';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'order_item_id', // integer , unsigned
-        'extra_id', // integer , nullable , unsigned 
+        'order_item_id', // integer , unsigned , cascade
 
         'extra_name', // string , nullable , 
-        'price', // float , default(0) 
+        'sub_total', // float , default(0)  ,one extra price * product quantity
     ];
 
     // belongsTo
         public function order_item(){
             return $this->belongsTo(OrderItem::class,'order_item_id');
-        }
-        public function extra(){
-            return $this->belongsTo(Extra::class,'extra_id');
         }
 }
 

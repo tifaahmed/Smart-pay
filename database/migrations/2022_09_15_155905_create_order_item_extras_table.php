@@ -14,18 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('order_item_extras', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
 
             $table->integer('order_item_id')->unsigned(); 
             $table->foreign('order_item_id')->references('id')->on('order_items')->onDelete('cascade');
 
-            $table->integer('extra_id')->nullable()->unsigned();
-            $table->string('extra_name')->nullable();
+            $table->string('extra_name');
 
-            $table->float('price')->default(0);
+            $table->float('sub_total')->default(0)->comment('one extra price * product quantity');
 
             $table->timestamps();
-
         });
     }
 

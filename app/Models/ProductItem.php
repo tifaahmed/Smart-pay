@@ -51,10 +51,6 @@ class ProductItem extends Model
         return $store_id ? $query->where('store_id',$store_id) : $query;
     }
 
-    // HasMany
-        public function order_item(){
-            return $this->HasMany(OrderItem::class);
-        }
     // belongsTo
         public function product_category(){
             return $this->belongsTo(ProductCategory::class,'product_category_id');

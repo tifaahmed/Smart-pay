@@ -16,13 +16,14 @@ class OrderItem extends Model
     protected $table = 'order_items';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'order_id', // integer , unsigned
-        'store_id', // integer , nullable , unsigned 
-        'product_id', // integer , nullable , unsigned 
+        'order_id', // integer , unsigned , cascade
+        'store_id', // integer , unsigned ,will not delete if store deleted
+        // 'product_id', // integer , nullable , unsigned 
 
-        'product_name', // string , nullable , 
-        'price', // float , default(0) 
-        'quantity', // float , default(0) 
+        'product_title', // string , nullable , 
+        'offer', // 10%,5%,15%,20% product offer
+        'quantity', // float , default(1) 
+        'sub_total', // float , default(0) ,one product price after offer * product quantity
     ];
 
 
@@ -32,9 +33,6 @@ class OrderItem extends Model
         }
         public function store(){
             return $this->belongsTo(Store::class,'store_id');
-        }
-        public function product(){
-            return $this->belongsTo(OrderItem::class,'product_id');
         }
 }
  

@@ -19,14 +19,14 @@ return new class extends Migration
             $table->integer('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
-            $table->integer('store_id')->nullable()->unsigned();
-            $table->string('store_name')->nullable();
+            $table->integer('store_id')->unsigned()->comment('will not delete if store deleted');
 
-            $table->integer('product_id')->nullable()->unsigned();
-            $table->string('product_name')->nullable();
+            $table->string('product_title');
 
-            $table->float('price')->default(0); //[note: "50 pound"] 
+            $table->float('offer')->default(0)->comment('10%,5%,15%,20% product offer');
             $table->integer('quantity')->default(1); 
+
+            $table->float('sub_total')->default(0)->comment('one product price after offer * product quantity');
 
             $table->timestamps();
         });

@@ -30,10 +30,7 @@ class address extends Model
         'longitude',  // string  ,nullable
 
     ];
-    // HasMany
-        public function orders(){
-            return $this->HasMany(Order::class);
-        }
+
     // belongsTo
         public function user(){
             return $this->belongsTo(User::class,'user_id');

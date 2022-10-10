@@ -44,16 +44,18 @@
                             </tbody>
                         </table>
                         <pagination 
-                         v-if="TableRows" 
-                         :size="'large'" 
-                         :show-disabled="true" 
-                         :limit="5" 
-                         :data="TableRows" 
-                         @pagination-change-page="initial"
-                       
+                            v-if="TableRows" 
+                            :size="'default'" 
+                            :align="'center'" 
+                            :show-disabled="true" 
+                            :limit="5" 
+                            :data="TableRows" 
+                            @pagination-change-page="initial"
                          >
-                            <span slot="prev-nav" >  Prev </span>
-                            <span slot="next-nav" > Next  </span>
+                            <!-- eslint-disable -->
+                            <span slot="prev-nav" >  < </span>
+                            <span slot="next-nav" >  > </span>
+                            <!-- eslint-disable -->
                         </pagination>
                         <ModalIndex  
                             :Columns="Columns" 

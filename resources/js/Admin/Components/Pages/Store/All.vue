@@ -1,14 +1,19 @@
 <template>
     <div class="row row-sm">
 
-        <div class="container-fluid row" >
-            <b-row align-v="stretch" align-h="around">
+        <div class="container-fluid row" > 
+            <a href="#">
+                 <i v-on:click="seen = !seen" class="fa fa-filter" aria-hidden="true"></i>
+            </a>
+
+            <b-row v-if="seen" align-v="stretch" align-h="around">
                 <b-col  xs="12" sm="6" md="5" lg="4" xl="3">
                     <b-input-group prepend="id"   class="">
                         <b-form-input   @change="initial()"  v-model="filter.id"  ></b-form-input>
                     </b-input-group>
                 </b-col>
             </b-row>
+
         </div>
 
         <div class="col-xl-12">
@@ -54,14 +59,17 @@
                         </table>
                         <pagination 
                             v-if="TableRows" 
-                            :size="'large'" 
+                            :size="'default'" 
+                            :align="'center'" 
                             :show-disabled="true" 
                             :limit="5" 
                             :data="TableRows" 
                             @pagination-change-page="initial"
                          >
-                            <span slot="prev-nav" >  Prev </span>
-                            <span slot="next-nav" > Next  </span>
+                            <!-- eslint-disable -->
+                            <span slot="prev-nav" >  < </span>
+                            <span slot="next-nav" >  > </span>
+                            <!-- eslint-disable -->
                         </pagination>
                         <ModalIndex  
                             :Columns="Columns" 
@@ -92,8 +100,8 @@ export default {
     },
 
     data( ) { return {
+        seen: false,   
         filter :{  id : null  },
-
 
         TableName :'Store',
         Languages : [],
@@ -102,8 +110,9 @@ export default {
         Columns :  [],       
         controller_buttons   : [ 'edit','delete','show' ] ,
 
-        PerPage  : 10
+        PerPage  : 2
     } },
+    
     mounted() {
         this.initial( this.$route.query.CurrentPage );
         this.tableColumns();

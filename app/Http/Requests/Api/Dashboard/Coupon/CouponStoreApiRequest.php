@@ -34,8 +34,8 @@ class CouponStoreApiRequest extends FormRequest
         $all += [ 'type'     =>  [ 'sometimes' ,Rule::in(['fixed','percent']), ] ] ;
         $all += [ 'percent_limit'          =>  [ 'required_if:type,percent','numeric',] ]  ;
 
-        $all += [ 'start_date'          =>  [ 'sometimes','date_format:Y-m-d H:i:s',] ]  ;
-        $all += [ 'end_date'             =>  [ 'sometimes','date_format:Y-m-d H:i:s',] ]  ;
+        $all += [ 'start_date'          =>  [ 'sometimes'] ]  ;
+        $all += [ 'end_date'             =>  [ 'sometimes'] ]  ;
 
         $all += [ 'user_id'   =>  [ 'sometimes' ,'integer','exists:users,id'] ] ;
         $all += [ 'store_id'   =>  [ 'required' ,'integer','exists:stores,id'] ] ;
