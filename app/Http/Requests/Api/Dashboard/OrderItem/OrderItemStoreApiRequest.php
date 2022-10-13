@@ -32,11 +32,11 @@ class OrderItemStoreApiRequest extends FormRequest
  
         $all += [ 'order_id'=>  [ 'required' ,'integer','exists:'.Order::class.',id'] ] ;
         $all += [ 'store_id'=>  [ 'sometimes' ,'integer','exists:'.Store::class.',id'] ] ;
-        $all += [ 'product_id'=>  [ 'required' ,'integer','exists:'.OrderItem::class.',id'] ] ;
 
-        $all += [ 'product_name'       =>  [ 'sometimes'  ] ]  ;       // default 0
-        $all += [ 'price'       =>  [ 'sometimes' ,'numeric'] ]  ;   // default 0
-        $all += [ 'quantity'       =>  [ 'sometimes' ,'numeric'] ]  ;       // default 0
+        $all += [ 'product_title'       =>  [ 'sometimes'  ] ]  ;   
+        $all += [ 'offer'       =>  [ 'sometimes' ,'numeric'] ]  ;  // 0%, 10%,5%,15%,20% product offer
+        $all += [ 'quantity'       =>  [ 'sometimes' ,'numeric'] ]  ;       // default 1
+        $all += [ 'sub_total'       =>  [ 'sometimes' ,'numeric'] ]  ;       // default 0
 
         return $all;
     }

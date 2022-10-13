@@ -14,27 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+ 
+
+// no middleware
+Route::name( 'auth.') -> prefix( 'auth' ) -> group( fn ( ) => [
+    Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
+    // Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
+    Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
+]);
+Route::name('language.')->prefix('/language')->group( fn ( ) : array => [
+    Route::get('/'                          ,   'LanguageController@all'                 )->name('all'),
+]);
 
 
-Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']], fn ( ) : array => [
-
-
-    Route::name('language.')->prefix('/language')->group( fn ( ) : array => [
-        Route::get('/'                          ,   'LanguageController@all'                 )->name('all'),
-    ]),
-
-
-    // no middleware
-    Route::name( 'auth.') -> prefix( 'auth' ) -> group( fn ( ) => [
-        Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
-        // Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
-        Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
-    ]),
-
-
+Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:admin']], fn ( ) : array => [
     // slider
     // Route::name('slider.')->prefix('/slider')->group( fn ( ) : array => [
     //     Route::get('/'                          ,   'SliderController@all'                 )->name('all'),

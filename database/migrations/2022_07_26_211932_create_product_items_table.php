@@ -30,7 +30,7 @@ return new class extends Migration
 
             $table->float('price')->default(0);
             
-            $table->enum('discount', [ 0, 5,10,15,20])->default('0');
+            $table->enum('discount', [0,5,10,15,20])->default('0');
 
             $table->timestamps();
             $table->softDeletes();

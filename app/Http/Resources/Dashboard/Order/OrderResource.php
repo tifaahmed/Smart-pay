@@ -6,8 +6,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Resources\Dashboard\Order\UserResource;
-use App\Http\Resources\Dashboard\Order\CouponResource;
-use App\Http\Resources\Dashboard\Order\AddressResource;
 
 class OrderResource extends JsonResource
 {
@@ -25,14 +23,23 @@ class OrderResource extends JsonResource
  
          
         $string_fields = [
-            'order_status',
-            'payment_card_status',
-            'payment_type',
-            'discount',
-            'delevery_fee',
-            'delevery_fee',
-            'subtotal',
-            'total'
+
+            'order_status', //string , [ 'not_confirmed','confirmed','shipping','delevered','canceled','ask_to_retrieve'] , default('not_confirmed')
+            'payment_card_status' , //string ,  [ 'paid','pindding'] , default('pindding')
+            'payment_type' ,  // string , [ 'visa','cash'] , default('cash')
+        
+
+            'coupon_title', // string,nullable
+            'coupon_code',// string,nullable
+            'coupon_store_name',// string,nullable
+            
+
+            'delevery_fee_sub_total', // float  , default 0 // delevery price from many stores
+            'product_sub_total', // float  , default 0 // collect price of table order_items 
+            'extras_sub_total', // float  , default 0 // collect price of table order_item_extras 
+            'coupon_discount', // float  , default 0 //discount from single store
+            'total', // float  , default 0 //product_sub_total + extras_sub_total + delevery_fee_sub_total) - coupon_discount 
+           
         ];
         $translated_string_fields = [];
 
@@ -46,9 +53,6 @@ class OrderResource extends JsonResource
 
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'user' => new  UserResource($this->user) ]  ;
-        $all += [ 'coupon' => new  CouponResource($this->coupon) ]  ;
-        $all += [ 'address' => new  AddressResource($this->address) ]  ;
-        
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);
         $all += resource_translated_image($model,$lang_array,$translated_image_fields);

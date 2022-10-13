@@ -15,19 +15,26 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], fn ( ) : array => [
 
-    // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    //     return $request->user();
-    // }),
 
-    Route::group(['middleware' => []], fn ( ) : array => [
 
-        // auth
-        Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
-            Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
-            Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
-            Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
-            Route::post( '/forget-password' ,  'AuthController@forget_password' )  -> name( 'forget_password' ) ,  
-            Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) ,  
+    // auth
+    Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
+        Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
+        Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
+        Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
+        Route::post( '/forget-password' ,  'AuthController@forget_password' )  -> name( 'forget_password' ) ,  
+        Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) ,  
+    ]),
+    Route::group(['middleware' => ['auth:sanctum','role:customer']], fn ( ) : array => [
+
+        // address
+        Route::name('address.')->prefix('/address')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'AddressController@all'                 )->name('all'),
+            Route::post(''                          ,   'AddressController@store'               )->name('store'),
+            Route::get('/{id}/show'                 ,   'AddressController@show'                )->name('show'),
+            Route::get('/collection'                ,   'AddressController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
         ]),
         // country
         Route::name('country.')->prefix('/country')->group( fn ( ) : array => [

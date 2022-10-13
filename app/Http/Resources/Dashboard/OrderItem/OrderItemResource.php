@@ -17,17 +17,20 @@ class OrderItemResource extends JsonResource
      */
     public function toArray($request)
     {
-        // 'order_id', // integer , unsigned
-        // 'store_id', // integer , nullable , unsigned 
-        // 'product_id', // integer , nullable , unsigned 
-
+    
         $model = $this;
         $lang_array = config('app.lang_array') ;
 
-        $string_fields = ['product_name','price','quantity'];
+        $string_fields = [
+            'product_title', // string , nullable , 
+            'offer', // 10%,5%,15%,20% product offer
+            'quantity', // float , default(1) 
+            'sub_total', // float , default(0) ,one product price after offer * product quantity
+        
+        ];
         $translated_string_fields = [];
 
-        $image_fields  = ['image'];
+        $image_fields  = [];
         $translated_image_fields  = [];
 
         $date_fields   = ['created_at','updated_at'];
@@ -38,7 +41,6 @@ class OrderItemResource extends JsonResource
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'order' => new  OrderResource($this->order) ]  ;
         $all += [ 'store' => $this->store ]  ;
-        $all += [ 'product' =>  $this->product ]  ;
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);
         $all += resource_translated_image($model,$lang_array,$translated_image_fields);

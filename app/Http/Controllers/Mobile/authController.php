@@ -39,7 +39,7 @@ class AuthController extends Controller {
         
         // get the user password wrong
         if ( ! Hash::check( $request -> password , $user -> password ) ) {
-            // get the user sign by google
+            // if user sign by google
             if( $user->login_type ){
                 return $this -> MakeResponseErrors( 
                     [$user->login_type ],  
@@ -47,7 +47,7 @@ class AuthController extends Controller {
                     Response::HTTP_UNAUTHORIZED
                 ) ;
             }
-            // get the user sign normal
+            // if user sign normal
             else{
                 return $this -> MakeResponseErrors( 
                     [ 'InvalidCredentials' ],  
@@ -56,7 +56,7 @@ class AuthController extends Controller {
                 ) ; 
             }
         }
-        // login if correct
+        // get the user not verified
         else if( $this->email_verified($user) ){
             return $this -> MakeResponseErrors( 
                 [ 'pincode sent to email' ],  
@@ -64,8 +64,8 @@ class AuthController extends Controller {
                 Response::HTTP_UNAUTHORIZED
             ) ;
         }
+        // login user
         else {
-            // login user
             return $this->loginUser($user);
         }
     }
@@ -220,7 +220,11 @@ class AuthController extends Controller {
                 array( 'longitude' => $request ->longitude )
                 :
                 [];
-            return  User::create($all);
+            $user =   User::create($all);  
+            // gave customer role
+            $user->assignRole('customer');
+  
+            return  $user;
         }
 
         public function loginUser($user)

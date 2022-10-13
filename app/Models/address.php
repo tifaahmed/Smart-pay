@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Auth ;
 use App\Models\User;              // belongsTo
 use App\Models\City;              // belongsTo
 use App\Models\Order;           // HasMany
@@ -28,8 +28,12 @@ class address extends Model
 
         'latitude',  // string  ,nullable
         'longitude',  // string  ,nullable
-
     ];
+
+    //scope
+        public function scopeRelateAuthUser($query){
+            return $query->where('user_id',Auth::user()->id);
+        }
 
     // belongsTo
         public function user(){

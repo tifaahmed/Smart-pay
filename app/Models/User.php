@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
 use Illuminate\Auth\Notifications\ResetPassword;
+
 use App\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,8 +30,13 @@ use App\Models\Order;           // HasMany
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable , SoftDeletes;
-
+    use
+        HasApiTokens ,
+        HasFactory   ,
+        HasRoles     ,
+        SoftDeletes ,
+        Notifiable
+    ;
     /**
      * The attributes that are mass assignable.
      *
@@ -85,7 +90,9 @@ class User extends Authenticatable
         public function scopeRelateUser($query,$user_id){
             return $query->where('user_id',$user_id);
         }
-
+        public function scopeRelateAuth($query){
+            return $query->where('user_id',Auth::user()->id);
+        }
     //relations
         // HasMany
             public function orders(){

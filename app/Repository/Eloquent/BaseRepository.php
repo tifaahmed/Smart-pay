@@ -39,7 +39,10 @@ class BaseRepository implements EloquentRepositoryInterface
 		array_push($fillable,$keyName);
  		
 		return QueryBuilder::for($this->model->with($relations))
-		->allowedFilters($fillable )		
+		->allowedFilters($fillable )	
+			
+		->allowedFilters(AllowedFilter::scope('RelateAuthUser') )	
+
 		->get($columns);
 	}
 
@@ -56,6 +59,7 @@ class BaseRepository implements EloquentRepositoryInterface
 
 		return QueryBuilder::for($this->model->with($relations))
 		->allowedFilters($fillable)
+		->allowedFilters(AllowedFilter::scope('RelateAuthUser') )	
 		->latest('id')->paginate($modelId)->appends(request()->query());
 	}
 
