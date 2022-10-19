@@ -16,9 +16,15 @@ class OrderItemExtra extends Model
     protected $fillable = [
         'order_item_id', // integer , unsigned , cascade
 
-        'extra_name', // string , nullable , 
-        'sub_total', // float , default(0)  ,one extra price * product quantity
+        'extra_id', // integer , unsigned , will not delete if extra deleted
+
+        'extra_title', // string , nullable ,
+
+        'extra_price', // float , default(0)  ,
+        'sub_total', // float , default(0)  ,extra_price
     ];
+
+
 
     // belongsTo
         public function order_item(){

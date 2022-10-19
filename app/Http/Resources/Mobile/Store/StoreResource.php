@@ -4,6 +4,7 @@ namespace App\Http\Resources\Mobile\Store;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use Auth;
 class StoreResource extends JsonResource
 {
     /**
@@ -14,8 +15,9 @@ class StoreResource extends JsonResource
      */
     public function toArray($request)
     {
-        // $user_id =  Auth::user() ? Auth::user()->id : $request->user_id;
-        $user_id =  $request->user_id;
+        $user_id =  Auth::user() ? Auth::user()->id : $request->user_id;
+        // $user_id =  $request->user_id;
+
         $all=[];
         $all += [ 'id' =>   $this->id ]  ;
 

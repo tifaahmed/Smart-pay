@@ -8,13 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 use Illuminate\Database\Eloquent\Builder;
 
-use App\Models\User;              // HasOne / belongsToMany
-use App\Models\UserFavStore;      // belongsToMany
-use App\Models\UserRateStore;      // belongsToMany
+use App\Models\User;              // belongsTo / belongsToMany
+use App\Models\FoodSection; // belongsToMany
+
+use App\Models\UserFavStore;      // pivot
+use App\Models\UserRateStore;      // pivot
+use App\Models\FoodSectionsStore; // pivot
 
 use App\Models\ProductItem;          // HasMany
 use App\Models\OrderItem;          // HasMany
 
+
+use Auth;
 class Store extends Model
 {
     use HasFactory , HasTranslations , SoftDeletes;
@@ -48,20 +53,37 @@ class Store extends Model
     ];
 
     //scope
+        public function scopeFoodSection($query,$filter){
+            return $query->whereHas('food_sections',function (Builder $query) use($filter) {
+                $filter ? $query->where('food_section_id',$filter) : $query ;
+            });
+        }
         public function scopeFreeDelevery($query){
             return $query->where('delevery_fee',0)->orWhere('delevery_fee',null);
         }
-
         public function scopeOffer($query,$filter){
-            return $query->whereHas('product_item',function (Builder $query) use($filter) {
+            return $query->whereHas('product_items',function (Builder $query) use($filter) {
                 $query->where('discount',$filter);
             });
         }
         public function scopeNearest($query,...$nearest)
         {
-            $latitude = $nearest[0];
-            $longitude  = $nearest[1];
-            $distance = $nearest[2];
+            // if sent the location
+            if ( is_array($nearest) && count($nearest) == 3 && $nearest[0] && $nearest[1] && $nearest[2]) {
+                $latitude = $nearest[0];
+                $longitude  = $nearest[1];
+                $distance = $nearest[2];
+            }
+            // else get old location
+            else if (Auth::user() &&  Auth::user()->latitude &&  Auth::user()->longitude) {
+                $latitude = Auth::user()->latitude ;
+                $longitude  = Auth::user()->longitude;
+                $distance = 500;
+            }
+            // do nothing
+            else{
+                return $query;
+            }
 
             $unit = "km";
             
@@ -77,11 +99,10 @@ class Store extends Model
         
             return $query->select("*")->selectRaw("$haversine AS distance")
                 ->having("distance", "<=", $distance);
-                
         }
 
     // HasMany
-        public function product_item(){
+        public function product_items(){
             return $this->HasMany(ProductItem::class);
         }
         public function order_item(){
@@ -100,5 +121,10 @@ class Store extends Model
             return $this->belongsToMany(User::class, UserRateStore::class, 'store_id', 'user_id')
             ->using(UserRateStore::class)
             ->withPivot('rate');
-        } 
+        }
+        public function food_sections(){
+            return $this->belongsToMany(FoodSection::class, FoodSectionsStore::class, 'store_id', 'food_section_id')
+            ->using(FoodSectionsStore::class);
+        }  
+
 }

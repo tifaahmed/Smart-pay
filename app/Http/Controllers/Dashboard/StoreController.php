@@ -34,7 +34,7 @@ class StoreController extends Controller
     
     public function all(){
         try {
-            $modal =    $this->ModelRepository->all()    ;
+            $modal =    $this->ModelRepository->filterAll($request->filter)    ;
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -47,7 +47,7 @@ class StoreController extends Controller
     
     public function collection(Request $request){
         try {
-            $modal = $this->ModelRepository->collection( $request->per_page ? $request->per_page : $this->default_per_page);
+            $modal = $this->ModelRepository->filterPaginate($request->filter,$request->per_page ? $request->per_page : $this->default_per_page);
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -66,6 +66,10 @@ class StoreController extends Controller
                 $this->file_columns
             );
             $model = $this->ModelRepository->create( Request()->except($this->file_columns)+$all ) ;
+            $model->user->assignRole('store');
+
+            $this->ModelRepository->sync_food_section($model->id,$request->food_section_ids ?? []);
+
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
                 'Successful'               ,

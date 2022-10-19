@@ -57,8 +57,9 @@ class OrderItemController extends Controller
 
     public function store(modelInsertRequest $request) {
         try {
+            $all = $request->all();
             $except = [];
-            $all = [];
+
             if ($this->file_columns) {
                 $all += $this->store_files(
                     $request,
@@ -75,6 +76,7 @@ class OrderItemController extends Controller
                 );
                 $except += $this->translated_file_columns;
             }
+            
             $model = $this->ModelRepository->create( Request()->except($except)+$all ) ;
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],

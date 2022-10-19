@@ -9,7 +9,7 @@ use App\Models\User;              // belongsTo
 use App\Models\City;              // belongsTo
 use App\Models\Order;           // HasMany
 
-class address extends Model
+class Address extends Model
 {
     use HasFactory;
 

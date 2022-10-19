@@ -21,7 +21,8 @@ class Coupon extends Model
         'code',           // string , unique 
         'type',           // enum   ,  [ 'fixed','percent'] , default('fixed')
         'usage_limit',    // integer , default(1) , // how many will use it
-
+        'discount',// integer , default(1)
+        
         // if type is percent percent_limit will work
         //  if type is fixed  percent_limit will be null
         'percent_limit',    // float , nullable , 

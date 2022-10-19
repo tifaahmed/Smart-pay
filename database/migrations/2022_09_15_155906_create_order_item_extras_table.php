@@ -17,11 +17,13 @@ return new class extends Migration
             $table->increments('id');
 
             $table->integer('order_item_id')->unsigned(); 
-            $table->foreign('order_item_id')->references('id')->on('order_items')->onDelete('cascade');
+                $table->foreign('order_item_id')->references('id')->on('order_items')->onDelete('cascade');
+            
+            $table->integer('extra_id')->unsigned()->comment('will not delete if extra deleted');
+            $table->string('extra_title')->nullable();
+            $table->float('extra_price')->default(0);
 
-            $table->string('extra_name');
-
-            $table->float('sub_total')->default(0)->comment('one extra price * product quantity');
+            $table->float('sub_total')->default(0)->comment('extra_price');
 
             $table->timestamps();
         });

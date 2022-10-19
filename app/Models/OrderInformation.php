@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order; // belongsTo
 
-class OrderInformations extends Model
+class OrderInformation extends Model
 {
     use HasFactory;
 
@@ -26,7 +26,7 @@ class OrderInformations extends Model
         'type', // enum , ['home', 'work', 'rest' ,'mosque'] , default('home')
 
         'city_name', // string , 
-
+        
         'latitude', // string , 
         'longitude', // string , 
     ];

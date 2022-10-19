@@ -16,6 +16,9 @@ return new class extends Migration
             $table->increments('id');
             $table->string('title')->nullable()->comment('translatable');
             $table->string('code')-> unique( ) ;
+            $table->float('discount')->default(1);
+
+            
             $table->enum('type', [ 'fixed','percent'])->default('fixed');
             $table->integer('usage_limit')->default(1)->comment(' how many will use it');
             $table->float('percent_limit')->nullable()->comment('work when type is percent'); 

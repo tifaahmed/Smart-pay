@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 use App\Http\Controllers\ControllerTraits\ResponsesTrait;
 use App\Http\Controllers\ControllerTraits\FileTrait;
+use App\Http\Controllers\ControllerTraits\OrderTrait;
 
 class Controller extends BaseController
 {
@@ -17,7 +18,8 @@ class Controller extends BaseController
     ValidatesRequests,
     
     ResponsesTrait,
-    FileTrait;
+    FileTrait,
+    OrderTrait;
     public function __construct()
     {
         $this->languages = config('app.lang_array'); // ex [ar , en ]
@@ -39,7 +41,6 @@ class Controller extends BaseController
     }
     
     public function store_files($request,$folder_name,$file_columns){
-
         $all = [ ];
         if (count($this->file_columns)) {
             foreach ($this->file_columns as $file_column) {
@@ -49,6 +50,7 @@ class Controller extends BaseController
                 }
             }        
         }
+
         return $all;
 
     }

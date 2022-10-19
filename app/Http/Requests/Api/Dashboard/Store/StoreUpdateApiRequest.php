@@ -29,7 +29,7 @@ class StoreUpdateApiRequest extends FormRequest
         $all=[];
 
         $all += [ 'title'                 =>  [ 'required'  ] ]  ;
-        $all += [ 'user_id'   =>  [ 'required' ,'integer','exists:users,id'] ] ;
+        $all += [ 'user_id'   =>  [ 'required' ,'integer','exists:users,id','unique:stores,user_id,'.$this->id] ] ;
         $all += [ 'status'     =>  [ 'sometimes' ,Rule::in([
             'pending','accepted','rejected','canceled'
         ]), ] ] ;
@@ -38,6 +38,7 @@ class StoreUpdateApiRequest extends FormRequest
         $all += [ 'latitude'                 =>  [ 'sometimes'  ] ]  ;
         $all += [ 'longitude'                 =>  [ 'required'  ] ]  ;
         $all += [ 'delevery_fee'                 =>  [ 'required','numeric'  ] ]  ;
+        $all += [ 'food_section_ids'   =>  [ 'required','array','exists:'.FoodSection::class.',id'  ] ]  ;
 
         foreach ($lang_array as $key => $value) {
             $all += [ 'title.'.$value                 =>  [ 'required'  ] ]  ;

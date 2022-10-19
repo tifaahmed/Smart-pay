@@ -36,6 +36,7 @@ class StoreRepository extends BaseRepository implements StoreRepositoryInterface
 		$result = $result->allowedFilters(AllowedFilter::scope('FreeDelevery') )	;
 		$result = $result->allowedFilters(AllowedFilter::scope('Offer') )	;
 		$result = $result->allowedFilters(AllowedFilter::scope("Nearest") )		;
+		$result = $result->allowedFilters(AllowedFilter::scope("food_section") )		;
 
 		if ( isset($filter) && $filter['Nearest'] ) {
 			$result = $result->orderby("distance", "desc") ;
@@ -57,6 +58,12 @@ class StoreRepository extends BaseRepository implements StoreRepositoryInterface
 	}
 
 
+	public function sync_food_section(int $id,array $food_section_ids = []) 
+    {
+		$result = $this->findById($id); 
+		$result->food_sections()->sync($food_section_ids);
+		return 'success';
+	}
 	
 
 }

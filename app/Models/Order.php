@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\User;               // belongsTo
 
-use App\Models\OrderItem;          // HasMany
-use App\Models\OrderInformations;          // HasMany
+use App\Models\OrderStore;          // HasMany
+use App\Models\OrderInformation;          // HasMany
 
 class Order extends Model
 {
@@ -24,25 +24,20 @@ class Order extends Model
     
         'user_id', // integer , unsigned
 
-        'coupon_title', // string,nullable
-        'coupon_code',// string,nullable
-        'coupon_store_name',// string,nullable
+ 
+        'order_store_sub_totals', // float  , default 0 // collect price of table order_stores
         
-        'delevery_fee_sub_total', // float  , default 0 // delevery price from many stores
-        'product_sub_total', // float  , default 0 // collect price of table order_items 
-        'extras_sub_total', // float  , default 0 // collect price of table order_item_extras 
-        'coupon_discount', // float  , default 0 //discount from single store
-        'total', // float  , default 0 //product_sub_total + extras_sub_total + delevery_fee_sub_total) - coupon_discount 
-       
-        
+        'site_fee', // float  , default 0  
+        'total', // float  , default 0 //(order_store_sub_totals + site_fee'
+    
     ];
 
     // HasMany
-        public function order_item(){
-            return $this->HasMany(OrderItem::class);
+        public function order_stores(){
+            return $this->HasMany(OrderStore::class);
         }
         public function order_informations(){
-            return $this->HasMany(OrderInformations::class);
+            return $this->HasMany(OrderInformation::class,'order_id');
         }
         
     // belongsTo

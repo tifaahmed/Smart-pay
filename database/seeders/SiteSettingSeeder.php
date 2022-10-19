@@ -15,6 +15,13 @@ class SiteSettingSeeder extends Seeder
      */
     public function run()
     {
+        try {
+            SiteSetting::all()->delete();
+        } catch (\Exception $e) {
+            SiteSetting::query()->forceDelete();
+        }
+
+
         SiteSetting::create( [
             'item_key' => 'logo',
             'item' => 'admin@admin.com',
@@ -30,6 +37,10 @@ class SiteSettingSeeder extends Seeder
         SiteSetting::create( [
             'item_key' => 'sit_name_ar',
             'item' => 'ادفع بذكاء',
+        ]);
+        SiteSetting::create( [
+            'item_key' => 'subscription',
+            'item' => 10,
         ]);
     }
 }
