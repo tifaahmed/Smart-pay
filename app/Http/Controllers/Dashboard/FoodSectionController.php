@@ -75,6 +75,7 @@ class FoodSectionController extends Controller
                 );
                 $except += $this->translated_file_columns;
             }
+ 
             $model = $this->ModelRepository->create( Request()->except($except)+$all ) ;
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],

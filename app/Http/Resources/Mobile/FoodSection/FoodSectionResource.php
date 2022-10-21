@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Mobile\Country;
+namespace App\Http\Resources\Mobile\FoodSection;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -18,8 +18,8 @@ class FoodSectionResource extends JsonResource
         $all=[];
 
         $all += [ 'id' =>   $this->id ]  ;
-        $all += [ 'name' =>   $this->name ]  ;
-        $all += [ 'description' =>   $this->name ]  ;
+        $all += [ 'title' =>   $this->title ]  ;
+        $all += [ 'description' =>   $this->description ]  ;
         $all += [ 'image' =>   check_image($this->image)]  ;
 
  

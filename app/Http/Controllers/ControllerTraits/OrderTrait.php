@@ -4,6 +4,11 @@ namespace App\Http\Controllers\ControllerTraits;
 
 use Illuminate\Http\JsonResponse ;
 use App\Models\Store;
+use App\Models\Coupon;
+use App\Models\ProductItem;
+use App\Models\Extra;
+use App\Models\Address;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 trait OrderTrait {
@@ -24,7 +29,23 @@ trait OrderTrait {
             }
         })->get();    
     }
-
+    // must return  the model (ProductItem data)
+    public function get_product_item($product_id) {
+        return ProductItem::find($product_id);
+    }
+    // must return the model (Coupon data)
+    public function get_store_coupon($store_id,$coupon_code) {
+        return Coupon::where('code',$coupon_code)->where('store_id',$store_id)->first();
+    }
+    // return null model (Extra data)
+    public function get_extra($extra_id) {
+        return Extra::find($extra_id);    
+    }
+    // must return the model (address data)
+    public function get_order_address($address_id) {
+        return  Address::find($address_id);
+    }
+    
     public function get_calculated_discount($coupon_model,$number) {
         $discount_number = 0 ;
         if ($coupon_model && $coupon_model->discount > 0 ) {

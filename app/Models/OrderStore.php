@@ -20,7 +20,7 @@ class OrderStore extends Model
 
         'coupon_title', // string , nullable ,
         'coupon_code', // string , nullable ,
-
+        'coupon_discount_type',
         'coupon_discount', // float , default(0)  ,order_item_sub_totals - discount
         'delevery_fee', // float , default(0)  ,delevery fee from single stores
         'order_item_sub_totals', // float , default(0)  ,collect sub_total of table order_items

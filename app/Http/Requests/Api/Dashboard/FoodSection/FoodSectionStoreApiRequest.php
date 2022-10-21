@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\Dashboard\Extra;
+namespace App\Http\Requests\Api\Dashboard\FoodSection;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Dashboard\Country;
+namespace App\Http\Resources\Dashboard\FoodSection;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;

@@ -144,8 +144,16 @@ Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:adm
         Route::get('/collection-trash'          ,   'ProductItemsController@collection_trash'    )->name('collection_trash'),
         Route::get('/{id}/show-trash'           ,   'ProductItemsController@show_trash'          )->name('show_trash'),
     ]),
-
-    // product-category
+    // food-section
+    Route::name('food-section.')->prefix('/food-section')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'FoodSectionController@all'                 )->name('all'),
+        Route::post(''                          ,   'FoodSectionController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'FoodSectionController@show'                )->name('show'),
+        Route::get('/collection'                ,   'FoodSectionController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'FoodSectionController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'FoodSectionController@update'              )->name('update'),
+    ]),
+    // store
     Route::name('store.')->prefix('/store')->group( fn ( ) : array => [
         Route::get('/'                          ,   'StoreController@all'                 )->name('all'),
         Route::post(''                          ,   'StoreController@store'               )->name('store'),

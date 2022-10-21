@@ -29,7 +29,9 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
 
     
     Route::group(['middleware' => ['auth:sanctum','role:customer']], fn ( ) : array => [
-
+        Route::name('coupon.')->prefix('/coupon')->group( fn ( ) : array => [
+            Route::post('/check_coupon', 'CouponController@check_coupon')->name('check_coupon'),
+        ]),
         // address
         Route::name('address.')->prefix('/address')->group( fn ( ) : array => [
             Route::get('/'                          ,   'AddressController@all'                 )->name('all'),
@@ -57,6 +59,12 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::get('/'                          ,   'ProductItemsController@all'         )->name('all'),
             Route::get('/{id}/show'                 ,   'ProductItemsController@show'        )->name('show'),
             Route::get('/collection'                ,   'ProductItemsController@collection'  )->name('collection'),
+        ]),
+        // store
+        Route::name('food-section.')->prefix('food-section')->group( fn ( ) : array => [
+            Route::get('/'           ,   'FoodSectionController@all'          )->name('all'),
+            Route::get('/{id}/show'  ,   'FoodSectionController@show'         )->name('show'),
+            Route::get('/collection' ,   'FoodSectionController@collection'   )->name('collection'),
         ]),
         // store
         Route::name('store.')->prefix('store')->group( fn ( ) : array => [

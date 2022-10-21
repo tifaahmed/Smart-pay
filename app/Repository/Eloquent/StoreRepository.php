@@ -33,12 +33,12 @@ class StoreRepository extends BaseRepository implements StoreRepositoryInterface
 		$result = QueryBuilder::for($this->model);
 
 		$result = $result->allowedFilters($fillable);
-		$result = $result->allowedFilters(AllowedFilter::scope('FreeDelevery') )	;
-		$result = $result->allowedFilters(AllowedFilter::scope('Offer') )	;
-		$result = $result->allowedFilters(AllowedFilter::scope("Nearest") )		;
+		$result = $result->allowedFilters(AllowedFilter::scope('free_delevery') )	;
+		$result = $result->allowedFilters(AllowedFilter::scope('offer') )	;
+		$result = $result->allowedFilters(AllowedFilter::scope("nearest") )		;
 		$result = $result->allowedFilters(AllowedFilter::scope("food_section") )		;
 
-		if ( isset($filter) && $filter['Nearest'] ) {
+		if ( isset($filter) && isset($filter['nearest'])  ) {
 			$result = $result->orderby("distance", "desc") ;
 		}else{
 			$result = $result->latest('id');

@@ -13,7 +13,7 @@ use App\Models\FoodSection; // belongsToMany
 
 use App\Models\UserFavStore;      // pivot
 use App\Models\UserRateStore;      // pivot
-use App\Models\FoodSectionsStore; // pivot
+use App\Models\FoodSectionStore; // pivot
 
 use App\Models\ProductItem;          // HasMany
 use App\Models\OrderItem;          // HasMany
@@ -51,15 +51,22 @@ class Store extends Model
         'title', 
         'description'           
     ];
-
+    public $append = [
+        'distance', 
+    ];
+    
     //scope
         public function scopeFoodSection($query,$filter){
             return $query->whereHas('food_sections',function (Builder $query) use($filter) {
-                $filter ? $query->where('food_section_id',$filter) : $query ;
+                $filter && is_numeric($filter) ? $query->where('food_section_id',$filter) : null ;
             });
         }
-        public function scopeFreeDelevery($query){
-            return $query->where('delevery_fee',0)->orWhere('delevery_fee',null);
+        public function scopeFreeDelevery($query,$filter){
+            if ($filter == 0 || $filter == false) {
+                return $query->where('delevery_fee',0)->orWhere('delevery_fee',null);
+            }else{
+                return $query->where('delevery_fee',$filter);
+            }
         }
         public function scopeOffer($query,$filter){
             return $query->whereHas('product_items',function (Builder $query) use($filter) {
@@ -82,7 +89,7 @@ class Store extends Model
             }
             // do nothing
             else{
-                return $query;
+                return $query->select("*")->selectRaw("0 AS distance");
             }
 
             $unit = "km";
@@ -123,8 +130,8 @@ class Store extends Model
             ->withPivot('rate');
         }
         public function food_sections(){
-            return $this->belongsToMany(FoodSection::class, FoodSectionsStore::class, 'store_id', 'food_section_id')
-            ->using(FoodSectionsStore::class);
+            return $this->belongsToMany(FoodSection::class, FoodSectionStore::class, 'store_id', 'food_section_id')
+            ->using(FoodSectionStore::class);
         }  
 
 }

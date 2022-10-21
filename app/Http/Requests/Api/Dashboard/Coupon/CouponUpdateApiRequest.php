@@ -29,10 +29,15 @@ class CouponUpdateApiRequest extends FormRequest
         
         $all=[];
         $all += [ 'code'                =>  [ 'required','unique:coupons,code,'.$this->id ] ]  ;
-        $all += [ 'usage_limit'         =>  [ 'sometimes','integer'] ]  ;
+        $all += [ 'discount'             =>  [ 'sometimes','min:1' ] ]  ;
+
+        $all += [ 'working'             =>  [ 'sometimes','boolean' ] ]  ;
+
+        $all += [ 'usage_limit'         =>  [ 'sometimes','integer','min:0'] ]  ;
+        $all += [ 'usage_counter'        =>  [ 'sometimes','integer','min:0'] ]  ;
 
         $all += [ 'type'                =>  [ 'sometimes' ,Rule::in(['fixed','percent']), ] ] ;
-        $all += [ 'percent_limit'       =>  [ 'required_if:type,percent','numeric',] ]  ;
+        $all += [ 'percent_limit'       =>  [ 'required_if:type,percent','numeric','min:1'] ]  ;
 
         $all += [ 'start_date'          =>  [ 'sometimes' ] ]  ;
         $all += [ 'end_date'            =>  [ 'sometimes' ] ]  ;

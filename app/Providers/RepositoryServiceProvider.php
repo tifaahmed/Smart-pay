@@ -23,6 +23,7 @@ use App\Repository\Eloquent\OrderItemRepository;use App\Repository\OrderItemRepo
 use App\Repository\Eloquent\OrderInformationRepository;use App\Repository\OrderInformationRepositoryInterface;
 use App\Repository\Eloquent\OrderItemExtraRepository;use App\Repository\OrderItemExtraRepositoryInterface;
 use App\Repository\Eloquent\OrderStoreRepository;use App\Repository\OrderStoreRepositoryInterface;
+use App\Repository\Eloquent\FoodSectionRepository;use App\Repository\FoodSectionRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -58,7 +59,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(OrderInformationRepositoryInterface::class,OrderInformationRepository::class);
         $this->app->bind(OrderItemExtraRepositoryInterface::class,OrderItemExtraRepository::class);
         $this->app->bind(OrderStoreRepositoryInterface::class,OrderStoreRepository::class);
-
+        $this->app->bind(FoodSectionRepositoryInterface::class,FoodSectionRepository::class);
+        
     }
 
     /**

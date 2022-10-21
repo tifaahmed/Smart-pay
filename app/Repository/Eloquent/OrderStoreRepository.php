@@ -13,9 +13,22 @@ class  OrderStoreRepository extends BaseRepository implements OrderStoreReposito
 	{
 		$this->model =  $model;
 	}
+    public function custome_update($order_store_model,$discount_number){
+		$order_item_sub_totals = $order_store_model->order_items->sum('sub_total');
+		
+		$after_discount  = $order_item_sub_totals - $discount_number ;
+
+		$order_item_sub_totals = $after_discount < 0 ? 0 : $after_discount;
+		$sub_total = $order_item_sub_totals + $order_store_model->delevery_fee  ;
+
+		$this->update($order_store_model->id ,[
+			'coupon_discount'=>$discount_number ,
+			'order_item_sub_totals'=>$order_item_sub_totals ,
+			'sub_total'=>  $sub_total
+		]);
+	}
 
 	public function custome_create($order_id,$store_model,$coupon_model){
-
 		$coupon_discount = 0;
 		$order_item_sub_totals = 0;
 		$sub_total = 0 ;

@@ -34,7 +34,7 @@ class OrderStoreApiRequest extends FormRequest
             'visa','cash'
         ]), ] ] ; //default('cash')
        
-        $all += [ 'coupon_id'=>  [ 'sometimes' ,'integer','exists:'.Coupon::class.',id'] ] ;
+        $all += [ 'coupon_code'=>  [ 'sometimes' ,'integer','exists:'.Coupon::class.',code'] ] ;
         $all += [ 'address_id'=>  [ 'required' ,'integer','exists:'.Address::class.',id'] ] ;
         
         foreach ($this->order_items as $key => $value) {

@@ -7,20 +7,19 @@ use App\Repository\OrderItemRepositoryInterface;
 
 class  OrderItemRepository extends BaseRepository implements OrderItemRepositoryInterface
 {
-
-	/**
-	 * @var Model
-	 */
-	protected $model;
-
-	/**
-	 * BaseRepository  constructor
-	 * @param  Model $model
-	 */
 	public function __construct(ModelName $model)
 	{
 		$this->model =  $model;
 	}
+    public function custome_update($order_item_model){
+		$order_item_extra_sub_totals = $order_item_model->order_item_extras->sum('sub_total');
+		$sub_total = $order_item_model->sub_total + $order_item_model->order_item_extras->sum('sub_total');
+		$this->update($order_item_model->id , [
+			'order_item_extra_sub_totals'=>$order_item_extra_sub_totals,
+			'sub_total'=> $sub_total
+		]);
+	}
+
 
 	public function custome_create($store_id,$product_model,$quantity){
 		
@@ -34,7 +33,6 @@ class  OrderItemRepository extends BaseRepository implements OrderItemRepository
 		$quantity = $quantity ;
 
 		$order_item_extra_sub_totals = 0;
-		
 		
 		$product_price_after_offer =  - ( ($product_price * $product_offer/100) ) + $product_price ;
 		$sub_total = $product_price_after_offer * $quantity;

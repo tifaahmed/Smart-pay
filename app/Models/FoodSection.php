@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 use App\Models\Store; // belongsToMany
-use App\Models\FoodSectionsStore; // pivot
+use App\Models\FoodSectionStore; // pivot
 
 class FoodSection extends Model
 {
-    use HasFactory;
+    use HasFactory , HasTranslations  ;
 
     protected $table = 'food_sections';
     protected $primaryKey = 'id';
@@ -19,9 +20,13 @@ class FoodSection extends Model
         'description', // text ,nullable translatable
         'image', // string
     ];
+    public $translatable = [
+        'title', // text  translatable
+        'description', // text ,nullable translatable    
+    ];
     public function fav_products(){
-        return $this->belongsToMany(Store::class, FoodSectionsStore::class, 'food_section_id', 'store_id')
-        ->using(FoodSectionsStore::class);
+        return $this->belongsToMany(Store::class, FoodSectionStore::class, 'food_section_id', 'store_id')
+        ->using(FoodSectionStore::class);
     } 
 }
  

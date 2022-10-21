@@ -19,8 +19,11 @@ class Coupon extends Model
     protected $fillable = [
         'title',          // string , nullable , [note: "translatable"]
         'code',           // string , unique 
+        
+        'working',          // boolean default('1');
         'type',           // enum   ,  [ 'fixed','percent'] , default('fixed')
         'usage_limit',    // integer , default(1) , // how many will use it
+        'usage_counter',   // integer , default(0), //comment(' How many times have it used');
         'discount',// integer , default(1)
         
         // if type is percent percent_limit will work
@@ -46,6 +49,7 @@ class Coupon extends Model
         public function user(){
             return $this->belongsTo(User::class,'user_id');
         }
+        
         public function store(){
             return $this->belongsTo(Store::class,'store_id');
         }

@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('code')-> unique( ) ;
             $table->float('discount')->default(1);
 
-            
+            $table->boolean('working')->default('1');
+            $table->enum('status', [ 'fixed','percent'])->default('fixed');
             $table->enum('type', [ 'fixed','percent'])->default('fixed');
             $table->integer('usage_limit')->default(1)->comment(' how many will use it');
+            $table->integer('usage_counter')->default(0)->comment(' How many times have it used');
             $table->float('percent_limit')->nullable()->comment('work when type is percent'); 
 
             $table->timestamp('start_date')->useCurrent()->comment('when will start'); 
