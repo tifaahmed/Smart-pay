@@ -89,13 +89,13 @@ export default class StoreModel extends Model {
 
 
    // trash
-      protected async CollectionTrash(page : number , PerPage :number)  : Promise<Model> {  
+      protected async CollectionTrash(page : number , PerPage :number , filter:object)  : Promise<Model> {  
          let result : any = '';
          try {
-            result   = await (new Router).PaginateTrashAxios(page,PerPage) ;
+            result   = await (new Router).PaginateTrashAxios(page,PerPage,filter) ;
             if(result.data.meta.to == null){
                var page = page-1;
-               result = await (new Router).PaginateTrashAxios(page,PerPage) ;
+               result = await (new Router).PaginateTrashAxios(page,PerPage,filter) ;
             }  
             Model.SuccessNotification(result.data.message) ;
          } catch (error) {

@@ -46,16 +46,16 @@
                                         :FactoryType="column_val.type" :FactoryName="column_val.name"  v-model ="RequestData[column_val.name]"  
                                         :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name]  )  ) ?  ServerReaponse.errors[column_val.name] : null" 
                                     
-                                        :FactorySelectOptions="column_val.type  === 'select' || column_val.type === 'Radio' ?
+                                        :FactorySelectOptions="column_val.type  === 'select' || column_val.type  === 'multiSelect' || column_val.type === 'Radio' ?
                                          column_val.SelectOptions : [] "  
 
-                                        :FactorySelectStrings="column_val.type === 'select'? column_val.SelectStrings : []"   
-                                        :FactorySelectForloopStrings="column_val.type === 'select'? column_val.SelectForloopStrings : []"   
-                                        :FactorySelectForloopStringKeys="column_val.type === 'select'? column_val.SelectForloopStringKeys : []"  
+                                        :FactorySelectStrings="column_val.type === 'select'  || column_val.type  === 'multiSelect'? column_val.SelectStrings : []"   
+                                        :FactorySelectForloopStrings="column_val.type === 'select'  || column_val.type  === 'multiSelect'? column_val.SelectForloopStrings : []"   
+                                        :FactorySelectForloopStringKeys="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopStringKeys : []"  
 
-                                        :FactorySelectImages="column_val.type === 'select'? column_val.SelectImages : []"   
-                                        :FactorySelectForloopImages="column_val.type === 'select'? column_val.SelectForloopImages : []"  
-                                        :FactorySelectForloopImageKeys="column_val.type === 'select'? column_val.SelectForloopImageKeys : []" 
+                                        :FactorySelectImages="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectImages : []"   
+                                        :FactorySelectForloopImages="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopImages : []"  
+                                        :FactorySelectForloopImageKeys="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopImageKeys : []" 
                                     />
                             </span> 
                         </div>
@@ -90,6 +90,7 @@
 <script>
 import Model     from 'AdminModels/StoreModel';
 import UserModel            from 'AdminModels/UserModel';
+import FoodSectionModel     from 'AdminModels/FoodSectionModel';
 import LanguageModel    from 'AdminModels/LanguageModel';
 
 import DataService    from '../../DataService';
@@ -111,6 +112,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
             Languages : [],
             all_users : {},
+            all_sood_sections : {},
 
             hasNoneTranslatableFields : 0,
             hasTranslatableFields : 0,
@@ -129,9 +131,17 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             async start(){
                 await this.GetlLanguages();
                 await this.GetlAllUsers();
-
+                await this.GetlAllFoodSections();
                 let receivedData =   await this.show( ) ;
                 this.Columns = [ 
+                    { 
+                        type: 'multiSelect',placeholder:'',header :'Food Sections', name : 'food_section_ids' ,translatable : false ,
+                        data_value :receivedData.food_sections  ,
+                        validation:{required : false } ,
+                        SelectOptions : this.all_sood_sections, 
+                        SelectStrings: ['id'] ,SelectForloopStrings:['title'],SelectForloopStringKeys:['ar','en'],
+                        SelectImages: ['image'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
                     { 
                         type: 'select',placeholder:'',header :'user', name : 'user_id' ,translatable : false ,
                         data_value :receivedData.user  ,
@@ -147,18 +157,25 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : true } 
                     },
                     { 
+                        type: 'string',placeholder:'description',header : 'description', name : 'description' ,
+                        translatable : true ,
+                        data_value : receivedData.description  ,
+                        validation:{required : true } 
+                    },
+                    { 
+                        type: 'number',placeholder:'delevery_fee',header : 'delevery_fee', name : 'delevery_fee' ,
+                        translatable : false ,
+                        data_value : receivedData.delevery_fee  ,
+                        validation:{required : false } 
+                    },
+                    { 
                         type: 'Radio',placeholder:'status',header : 'status', name : 'status' ,
                         translatable : false , SelectOptions :['pending','accepted','rejected','canceled'],
                         data_value : receivedData.status  ,
                         validation:{required : true } 
                     },
                     
-                    { 
-                        type: 'string',placeholder:'description',header : 'description', name : 'description' ,
-                        translatable : true ,
-                        data_value : receivedData.description  ,
-                        validation:{required : true } 
-                    },
+                    
                     { 
                         type: 'file',placeholder:receivedData.image,header :'image', name : 'image' ,
                         translatable : false ,
@@ -227,16 +244,21 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 }
             },
 
-            async GetlAllUsers(){
-                this.all_users = (await this.AllUsers()).data.data;
-            },
-            async GetlLanguages(){
-                this.Languages  = ( await this.AllLanguages() ).data; // all languages
-            },
+
 
 
             HandleData(){
                 this.RequestData.user_id = this.RequestData.user_id ? this.RequestData.user_id.id : null;
+                if (this.RequestData.food_section_ids) {
+                    var arr_hold = [];
+                    for (var food_section_key in this.RequestData.food_section_ids) {
+                       arr_hold[food_section_key] = this.RequestData.food_section_ids[food_section_key].id  ;
+                }
+                this.RequestData.food_section_ids  =arr_hold;
+                }
+
+                console.log(this.RequestData);
+
             },
 
             async SubmetRowButton(){
@@ -255,10 +277,24 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 })
             },
 
+            // call modal
+            async GetlAllUsers(){
+                this.all_users = (await this.AllUsers()).data.data;
+            },
+            async GetlAllFoodSections(){
+                this.all_sood_sections = (await this.AllFoodSections()).data.data;
+            },
+            async GetlLanguages(){
+                this.Languages  = ( await this.AllLanguages() ).data; // all languages
+            },
+            // call modal
 
             // modal
                 AllUsers(){
                     return  (new UserModel).all()  ;
+                },
+                AllFoodSections(){
+                    return  (new FoodSectionModel).all()  ;
                 },
                 AllLanguages(){
                     return  (new LanguageModel).all()  ;

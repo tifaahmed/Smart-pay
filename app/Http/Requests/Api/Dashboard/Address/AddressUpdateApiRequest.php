@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Api\Dashboard\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
+use  App\Models\User;
+use  App\Models\City;
 class AddressUpdateApiRequest extends FormRequest
 {
     /**
@@ -24,8 +26,8 @@ class AddressUpdateApiRequest extends FormRequest
     public function rules()
     {        
         $all=[];
-        $all += [ 'user_id'   =>  [ 'required' ,'integer','exists:users,id'] ] ;
-        $all += [ 'city_id'   =>  [ 'required' ,'integer','exists:cities,id'] ] ;
+        $all += [ 'user_id'   =>  [ 'required' ,'integer','exists:'.User::class.',id'] ] ;
+        $all += [ 'city_id'   =>  [ 'required' ,'integer','exists:'.City::class.',id'] ] ;
         $all += [ 'address'                 =>  [ 'required'  ] ]  ;
         $all += [ 'department'                 =>  [ 'sometimes'  ] ]  ;
 

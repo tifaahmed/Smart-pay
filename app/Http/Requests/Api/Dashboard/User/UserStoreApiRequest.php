@@ -31,11 +31,11 @@ class UserStoreApiRequest extends FormRequest
         $all += [ 'first_name'               =>  [ 'required'  ] ]  ;
         $all += [ 'last_name'               =>  [  'sometimes'  ] ]  ;
 
-        $all += [ 'email'               =>  [ 'required' ,'unique:users' ,'email' ] ]  ;
+        $all += [ 'email'               =>  [ 'required_without:phone','unique:users' ,'email' ] ]  ;
         $all += [ 'password'               =>  [   'required' ] ]  ;
         $all += [ 'gender'               =>  [   'required' , Rule::in(['girl','boy']) ] ] ;
 
-        $all += [ 'phone'               =>  [  'sometimes'   ] ]  ;
+        $all += [ 'phone'               =>  [  'required_without:email','unique:users','max:15' ] ]  ;
 
         $all += [ 'birthdate'               =>  [   'date'  ] ]  ;
         

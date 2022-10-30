@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Auth ;
 use App\Models\User;              // belongsTo
 use App\Models\City;              // belongsTo
+use App\Models\Order;           // HasMany
 
-class address extends Model
+class Address extends Model
 {
     use HasFactory;
 
@@ -27,16 +28,20 @@ class address extends Model
 
         'latitude',  // string  ,nullable
         'longitude',  // string  ,nullable
-
     ];
 
+    //scope
+        public function scopeRelateAuthUser($query){
+            return $query->where('user_id',Auth::user()->id);
+        }
+
     // belongsTo
-    public function user(){
-        return $this->belongsTo(User::class,'user_id');
-    }
-    public function city(){
-        return $this->belongsTo(City::class,'city_id');
-    }
+        public function user(){
+            return $this->belongsTo(User::class,'user_id');
+        }
+        public function city(){
+            return $this->belongsTo(City::class,'city_id');
+        }
 }
 
  

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Dashboard\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-
+use App\Models\FoodSection;
 class StoreStoreApiRequest extends FormRequest
 {
     /**
@@ -29,15 +29,17 @@ class StoreStoreApiRequest extends FormRequest
         $all=[];
 
         $all += [ 'title'                 =>  [ 'required'  ] ]  ;
-        $all += [ 'user_id'   =>  [ 'required' ,'integer','exists:users,id'] ] ;
-        $all += [ 'status'     =>  [ 'sometimes' ,Rule::in([
-            'pending','accepted','rejected','canceled'
-        ]), ] ] ;
+        $all += [ 'user_id'   =>  [ 'required' ,'integer','exists:users,id','unique:stores'] ] ;
+        $all += [ 'status'     =>  [ 'sometimes' ,Rule::in(['pending','accepted','rejected','canceled']), ] ] ;
         $all += [ 'image'                  =>  [ 'required' ,'max:50000'] ]  ;
         $all += [ 'phone'                 =>  [ 'required'  ] ]  ;
         $all += [ 'latitude'                 =>  [ 'sometimes'  ] ]  ;
-        $all += [ 'longitude'                 =>  [ 'sometimes'  ] ]  ;
-        $all += [ 'delevery_fee'                 =>  [ 'required','numeric'  ] ]  ;
+        $all += [ 'longitude'                =>  [ 'sometimes'  ] ]  ;
+        $all += [ 'delevery_fee'             =>  [ 'required','numeric'  ] ]  ;
+        $all += [ 'food_section_ids'   =>  [ 'required','array','exists:'.FoodSection::class.',id'  ] ]  ;
+
+        
+
         foreach ($lang_array as $key => $value) {
             $all += [ 'title.'.$value                 =>  [ 'required'  ] ]  ;
             $all += [ 'description.'.$value                 =>  [ 'required'  ] ]  ;

@@ -78,6 +78,14 @@ export default {
                     default : null
                 } ,
                 { 
+                    type: 'MultiSelectForloop'   ,header : 'food_sections' , name : 'food_sections'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'title' , type: 'Forloop' ,secondLoopOnColumn:this.Languages  } ,
+                        { name : 'image' , type: 'Image'   } ,
+                    ] ,
+                } ,
+                { 
                     type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
                     loopOnColumn:[
                         { name : 'id' , type: 'String'   } ,
@@ -92,6 +100,10 @@ export default {
                 { 
                     type: 'Forloop'   ,header : 'title'             , name : 'title'            , 
                     loopOnColumn:this.Languages ,  default : null
+                } ,
+                { 
+                    type: 'String'   ,header : 'delevery fee'    , name : 'delevery_fee'     ,
+                    default : null
                 } ,
                 { 
                     type: 'Forloop'   ,header : 'description'        , name : 'description'            , 

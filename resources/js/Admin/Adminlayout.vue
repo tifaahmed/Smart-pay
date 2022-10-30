@@ -1,17 +1,23 @@
 <template>
     <!-- Page -->
     <div class="page">
-
+ 
         <!-- main-sidebar -->
         <SideBarRight
             :PropLogo = logo
+            :PropAvatar = avatar
+            :PropName = user_name
+            :PropRoles = user_roles
         /> 
-        <!-- main-sidebar -->
+         <!-- main-sidebar -->
 
         <!-- main-header opened -->
         <div class="main-content app-content">
             <NavBar
             :PropLogo = logo
+            :PropAvatar = avatar
+            :PropName = user_name
+
             /> 
              
 
@@ -30,7 +36,7 @@ import NavBar from       'AdminPartials/NavBar.vue' ;
 
 import SiteSettingModel     from 'AdminModels/SiteSettingModel';
 
-// import jwt   from 'MainServices/jwt' ;
+import jwt   from 'MainServices/jwt' ;
 // import RolePermision   from 'MainServices/RolePermision' ;
 // import UserModel   from 'AdminModels/User' ;
 
@@ -42,7 +48,10 @@ import SiteSettingModel     from 'AdminModels/SiteSettingModel';
 
         },
         data( ) { return {
-			logo : null
+			logo : null,
+            avatar : null,
+            user_name : null,
+            user_roles : null,
         } } ,
           
         components:{
@@ -53,7 +62,9 @@ import SiteSettingModel     from 'AdminModels/SiteSettingModel';
         methods : {
             async initial( ) {
             	this.logo  = ((await this.Show(1)).data.data[0]).item ;
-				console.log( this.logo );
+                this.avatar = jwt.User.avatar;
+                this.user_name = jwt.User.name;
+                this.user_roles = jwt.User.roles;
 
         	},
         //     show(UserId) {

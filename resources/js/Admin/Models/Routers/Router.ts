@@ -1,17 +1,17 @@
 // import Vue from 'vue'
 
 import Axios from 'axios' ;
-// import jwt   from './../../../Services/jwt' ;
+import jwt   from './../../../Services/jwt' ;
 // import RolePermisionServices   from './../../../Services/RolePermision' ;
 
 export default class Router   {
     name : string = '' ;
     headers  : object = 
-   //  jwt.Authorization
          { 
-                'Authorization':  '',
-                 'Content-Type': 'multipart/form-data',
-                 'localization' : 'en'
+                'Authorization':  jwt.Authorization,
+                'Content-Type': 'multipart/form-data',
+                'Accept': 'application/json',
+                'localization' : 'en'
          };   
       responseType : any = 'json' ;
       routerPrefix : string = '/api/dashboard/' ;    
@@ -28,9 +28,9 @@ export default class Router   {
    //    }
    // } 
    async createParamsArray() { 
-      var params_array : any = [];
+      var params_array : any = {};
       params_array['page'] = this.page;
-      params_array['PerPage'] =this.PerPage
+      params_array['per_page'] =this.PerPage
 
       for (var key in this.filter) {
          if (this.filter[key]) {
@@ -65,7 +65,11 @@ export default class Router   {
             } ,
       ); 
    }
-   async PaginateTrashAxios(page : number , PerPage :number, search:object = {}) : Promise<any>  { 
+   async PaginateTrashAxios(page : number , PerPage :number, filter:object = {}) : Promise<any>  { 
+      this.page = page;
+      this.PerPage = PerPage;
+      this.filter = filter;
+      
       return await Axios.get( 
          this.routerPrefix+this.name+'/collection-trash', 
          { 

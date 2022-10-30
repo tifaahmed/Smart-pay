@@ -1,5 +1,21 @@
 <template>
     <div class="row row-sm">
+        
+        <div class="container-fluid row" > 
+            <a href="#">
+                 <i v-on:click="seen = !seen" class="fa fa-filter" aria-hidden="true"></i>
+            </a>
+
+            <b-row v-if="seen" align-v="stretch" align-h="around">
+                <b-col  xs="12" sm="6" md="5" lg="4" xl="3">
+                    <b-input-group prepend="id"   class="">
+                        <b-form-input   @change="initial()"  v-model="filter.id"  ></b-form-input>
+                    </b-input-group>
+                </b-col>
+            </b-row>
+
+        </div>
+
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
@@ -44,16 +60,18 @@
                             </tbody>
                         </table>
                         <pagination 
-                         v-if="TableRows" 
-                         :size="'large'" 
-                         :show-disabled="true" 
-                         :limit="5" 
-                         :data="TableRows" 
-                         @pagination-change-page="initial"
-                       
+                            v-if="TableRows" 
+                            :size="'default'" 
+                            :align="'center'" 
+                            :show-disabled="true" 
+                            :limit="5" 
+                            :data="TableRows" 
+                            @pagination-change-page="initial"
                          >
-                            <span slot="prev-nav" >  Prev </span>
-                            <span slot="next-nav" > Next  </span>
+                            <!-- eslint-disable -->
+                            <span slot="prev-nav" >  < </span>
+                            <span slot="next-nav" >  > </span>
+                            <!-- eslint-disable -->
                         </pagination>
                         <ModalIndex  
                             :Columns="Columns" 
@@ -84,8 +102,8 @@ export default {
     },
 
     data( ) { return {
+        seen: false,   
         filter :{  id : null  },
-
 
         TableName :'Store',
         Languages : [],
@@ -118,7 +136,14 @@ export default {
                     type: 'Router'    ,header : 'id'                , name : 'id'               ,
                     default : null
                 } ,
-                
+                { 
+                    type: 'MultiSelectForloop'   ,header : 'food_sections' , name : 'food_sections'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'title' , type: 'Forloop' ,secondLoopOnColumn:this.Languages  } ,
+                        { name : 'image' , type: 'Image'   } ,
+                    ] ,
+                } ,
                 { 
                     type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
                     loopOnColumn:[
@@ -130,6 +155,10 @@ export default {
                 { 
                     type: 'Forloop'   ,header : 'title'             , name : 'title'            , 
                     loopOnColumn:this.Languages ,  default : null
+                } ,
+                { 
+                    type: 'String'   ,header : 'delevery fee'    , name : 'delevery_fee'     ,
+                    default : null
                 } ,
                 { 
                     type: 'Forloop'   ,header : 'description'        , name : 'description'            , 
@@ -166,7 +195,7 @@ export default {
                 return  (new LanguageModel).all()  ;
             },
             Collection(page = 1){
-                return  (new Model).CollectionTrash(page,this.PerPage)  ;
+                return  (new Model).CollectionTrash(page,this.PerPage,this.filter)  ;
             },
             Delete(id){
                 return (new Model).premanentlDeleteRow(id)  ;

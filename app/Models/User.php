@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
 use Illuminate\Auth\Notifications\ResetPassword;
+
 use App\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,14 +22,22 @@ use Auth;
 use App\Models\Store;                // HasOne , belongsToMany
 use App\Models\ProductItem;         //  belongsToMany
 
-use App\Models\UserFavStore;            // belongsToMany
-use App\Models\UserFavProduct;          // belongsToMany
-use App\Models\UserRateStore;           // belongsToMany
+use App\Models\UserFavStore;            // pivot
+use App\Models\UserFavProduct;          // pivot
+use App\Models\UserRateStore;           // pivot
     
+use App\Models\Order;           // HasMany
+use App\Models\Address;           // HasMany
+
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable , SoftDeletes;
-
+    use
+        HasApiTokens ,
+        HasFactory   ,
+        HasRoles     ,
+        SoftDeletes ,
+        Notifiable
+    ;
     /**
      * The attributes that are mass assignable.
      *
@@ -39,12 +47,12 @@ class User extends Authenticatable
         'first_name',// string
         'last_name', // string / nullable
 
-        'email', // string / unique
+        'email',  // string  /unique / nullable
         'password', // string
         
         'login_type',   // enum / 'google','facebook','normal; / default: normal
         'gender',   // enum / 'girl','boy' / default: boy
-        'phone',    // string  / nullable
+        'phone',    // string  /unique / nullable
         'birthdate', //  date  / nullable
         'email_verified_at',  // datetime   / nullable
 
@@ -68,7 +76,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    // boot
     protected static function boot()
     {
         parent::boot();
@@ -79,12 +87,29 @@ class User extends Authenticatable
             $model->pin_code = rand(111111,999999);
         });
     }
+
     //scope
+        public function getFullNameAttribute(){
+            return $this->first_name . ' ' .$this->last_name;
+        }
+         
+
         public function scopeRelateUser($query,$user_id){
             return $query->where('user_id',$user_id);
         }
+        public function scopeRelateAuth($query){
+            return $query->where('user_id',Auth::user()->id);
+        }
 
     //relations
+        // HasMany
+            public function orders(){
+                return $this->HasMany(Order::class);
+            }
+            public function address(){
+                return $this->HasMany(Address::class);
+            }
+            
         // HasOne
             public function store(){
                 return $this->hasOne(Store::class);

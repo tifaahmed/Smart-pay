@@ -1,4 +1,5 @@
- 
+import Vue from 'vue'
+
 export default class DataService {
 	static RequestData = {}  ;
 	static ErrorsData  = {}  ;
@@ -9,18 +10,22 @@ export default class DataService {
     static  handleColumns(Columns,Languages){
         for (var key in Columns) {
             // this.$set( DataService.RequestData,  Columns[key].name ,1); 
-            DataService.RequestData[Columns[key].name] = 1;
+            DataService.RequestData[Columns[key].name] = null;
 
             if (Columns[key].translatable) {
                 DataService.RequestData[Columns[key].name] = [];
                 // [ Column : [] ]
                 for (var lang_key in Languages) {
-                    // this.$set( DataService.RequestData[ Columns[key].name ]   , Languages[lang_key],1 ); 
-                    DataService.RequestData[ Columns[key].name ][Languages[lang_key]] =  1 ;
-
-                    Columns[key].data_value ? Columns[key].data_value[Languages[lang_key]] : null 
-                    ;
+                    Vue.set( DataService.RequestData[ Columns[key].name ]   , Languages[lang_key],null ); 
+                    
+                    DataService.RequestData[ Columns[key].name ][Languages[lang_key]] =  
+                    Columns[key].data_value 
+                    ? 
+                    Columns[key].data_value[Languages[lang_key]] 
+                    : 
+                    null ;
                     // [Column : [ ar : null en : null]]
+
                 }
             }else{
                 DataService.RequestData[Columns[key].name] = Columns[key].data_value;
@@ -34,15 +39,15 @@ export default class DataService {
         for (var key in Columns) {
             if (Columns[key].translatable) {
                 for (var lang_key in Languages) {
-                    // this.$set( DataService.ErrorsData, Columns[key].name+'.'+Languages[lang_key] , 1);
-                    DataService.ErrorsData[ Columns[key].name+'.'+Languages[lang_key]] =  1 ;
+                    Vue.set( DataService.ErrorsData, Columns[key].name+'.'+Languages[lang_key] , null);
+                    // DataService.ErrorsData[ Columns[key].name+'.'+Languages[lang_key]] =  null ;
   
                     DataService.ErrorsData[Columns[key].name+'.'+Languages[lang_key]] = [];
                     // [ Column.ar : [] ]
                 }
             }else{
-                // this.$set( DataService.ErrorsData, Columns[key].name , 1); 
-                DataService.ErrorsData[ Columns[key].name ]  =  1 ;
+                Vue.set( DataService.ErrorsData, Columns[key].name ,null); 
+                // DataService.ErrorsData[ Columns[key].name ]  =  null ;
  
                 DataService.ErrorsData[Columns[key].name] = null;
             }

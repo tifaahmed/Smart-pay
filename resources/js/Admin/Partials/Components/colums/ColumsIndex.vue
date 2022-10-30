@@ -32,7 +32,11 @@
 		:ValueColumn= "ValueColumn"
 		:LoopOnColumn =  "LoopOnColumn"
 		/>
-		
+		<MultiSelectForloopColumn
+		v-else-if= "typeColumn == 'MultiSelectForloopModal'"
+		:ValueColumn= "ValueColumn"
+		:LoopOnColumn =  "LoopOnColumn"
+		/>
 		<LinkColumn
 		v-else-if= "typeColumn == 'Link'"
 		:ValueColumn= "ValueColumn"
@@ -52,6 +56,7 @@ import DateColumn     	from 'AdminPartials/Components/colums/DateColumn.vue'    
 import ForloopColumn    from 'AdminPartials/Components/colums/ForloopColumn.vue'     ;
 import ForloopImageColumn    from 'AdminPartials/Components/colums/ForloopImageColumn.vue'     ;
 import SelectForloopColumn    from 'AdminPartials/Components/colums/SelectColumn/SelectForloopColumn.vue'     ;
+import MultiSelectForloopColumn    from 'AdminPartials/Components/colums/MultiSelectForloopColumn/SelectForloopColumn.vue'     ;
 
 import LinkColumn     	from 'AdminPartials/Components/colums/LinkColumn.vue'     ;
 import ObjectColumn     	from 'AdminPartials/Components/colums/ObjectColumn.vue'     ;
@@ -62,7 +67,11 @@ export default {
 
     } } ,
     components : {
-        RouterColumn ,StringColumn,ImageColumn,DateColumn,ForloopColumn,LinkColumn,ObjectColumn,ForloopImageColumn,SelectForloopColumn
+        RouterColumn ,
+		StringColumn,
+		ImageColumn,DateColumn,
+		ForloopColumn,LinkColumn,
+		ObjectColumn,ForloopImageColumn,SelectForloopColumn,MultiSelectForloopColumn
     } ,
     props   : {ValueColumn :null,LoopOnColumn:[],typeColumn :String} ,
     methods : {

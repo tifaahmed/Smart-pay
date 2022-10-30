@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\Dashboard\ProductItem;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Extra;
 
 class ProductItemStoreApiRequest extends FormRequest
 {
@@ -41,6 +42,8 @@ class ProductItemStoreApiRequest extends FormRequest
         $all += [ 'status'     =>  [ 'required' ,Rule::in([
             'request_as_new','request_as_edit','active','deactivate','out_of_stock'
         ]), ] ] ;
+
+        $all += [ 'product_extra_ids' =>  [ 'sometimes' ,'array','exists:'.Extra::class.',id'] ] ;
 
         foreach ($lang_array as $key => $value) {
             $all += [ 'title.'.$value                 =>  [ 'required'  ] ]  ;

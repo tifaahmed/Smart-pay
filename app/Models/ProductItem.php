@@ -15,6 +15,9 @@ use App\Models\User;               // belongsToMany
 use App\Models\UserFavProduct;               // belongsToMany
 use App\Models\UserRateProduct;               // belongsToMany
 
+use App\Models\OrderItem;               // HasMany
+
+
 class ProductItem extends Model
 {
     use HasFactory , HasTranslations , SoftDeletes;
@@ -23,6 +26,9 @@ class ProductItem extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'store_id',  // integer , unsigned
+        'product_category_id',  // integer , unsigned
+        
         'title', // string
         'description', // text
         'image', // string
@@ -30,9 +36,7 @@ class ProductItem extends Model
         'discount', // int ,  enum  5 10 15 20 
         'price',   // float / default : 0
 
-        'store_id',  // integer , unsigned
-        'product_category_id',  // integer , unsigned
-        
+
         'status', // string , enum  request_as_new request_as_edit active  deactivate out_of_stock
     ];
    
@@ -46,7 +50,6 @@ class ProductItem extends Model
         $store_id = $filter && $filter['StoreFilter']  ? $filter['StoreFilter'] : null;
         return $store_id ? $query->where('store_id',$store_id) : $query;
     }
-
 
     // belongsTo
         public function product_category(){

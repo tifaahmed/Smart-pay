@@ -4,12 +4,13 @@
 
 			<multiselect v-model="data" 
 
-			:label="PropLable" 
+			:label="'id'" 
 			:track-by="'id'" 
 			:options="PropSelectOptions ? PropSelectOptions : []" 
 			:option-height="104"   
 			:multiple="false"   
 			:searchable="false"
+			:placeholder="'Pick one'"
 			>
 				<template slot="singleLabel" slot-scope="props" >
 					

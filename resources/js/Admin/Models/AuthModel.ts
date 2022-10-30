@@ -1,5 +1,6 @@
 import Router    from './Routers/AuthRouter' ;
 import Model    from './Model';
+import jwt   from './../../Services/jwt' ;
 
 export default class AuthModel  extends Model {
 
@@ -19,16 +20,16 @@ export default class AuthModel  extends Model {
 	}
 
 
-	// protected async logout()  { 
-	// 	let result : any = '';
-	// 	try {
-	// 		result =await (new RoutersAuth).LogoutAxios() ;
-	// 	} catch (error) {
-	// 	   	result = Model.catch(error) ;
-	// 	}
-	// 	jwt.logout();
+	protected async logout()  { 
+		let result : any = '';
+		try {
+			result =await (new Router).LogoutAxios() ;
+		} catch (error) {
+		   	result = Model.catch(error) ;
+		}
+		jwt.logout();
 
-	// 	return  result;
-	// }
+		return  result;
+	}
 
 }

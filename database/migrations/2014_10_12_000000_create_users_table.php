@@ -18,13 +18,13 @@ return new class extends Migration
             
             $table->string('first_name');
             $table->string('last_name')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->string('password');
 
             
             $table->enum('login_type',['google','facebook','normal'])->default('normal');
             $table->enum('gender',['girl','boy'])->default('boy');
-            $table->string('phone')->nullable();
+            $table->string('phone')->nullable()->unique();
             $table->date('birthdate')->nullable();
             
             $table->timestamp('email_verified_at')->nullable();

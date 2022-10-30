@@ -39,7 +39,10 @@ class BaseRepository implements EloquentRepositoryInterface
 		array_push($fillable,$keyName);
  		
 		return QueryBuilder::for($this->model->with($relations))
-		->allowedFilters($fillable )		
+		->allowedFilters($fillable )	
+			
+		->allowedFilters(AllowedFilter::scope('relate_auth_user') )	
+
 		->get($columns);
 	}
 
@@ -56,6 +59,7 @@ class BaseRepository implements EloquentRepositoryInterface
 
 		return QueryBuilder::for($this->model->with($relations))
 		->allowedFilters($fillable)
+		->allowedFilters(AllowedFilter::scope('relate_auth_user') )	
 		->latest('id')->paginate($modelId)->appends(request()->query());
 	}
 
@@ -71,7 +75,14 @@ class BaseRepository implements EloquentRepositoryInterface
 	 */
 	public function collection_trash(int $modelId, array $relations = []) 
 	{
-		return $this->model->onlyTrashed()->latest()->with($relations)->paginate($modelId);
+		$keyName= $this->model->getKeyName() ;
+		$fillable= $this->model->getFillable() ;
+
+		array_push($fillable,$keyName);
+
+		return QueryBuilder::for($this->model->with($relations))
+		->allowedFilters($fillable)
+		->onlyTrashed()->latest('id')->paginate($modelId)->appends(request()->query());
 	}
 	/**
 	 * get all trashed models

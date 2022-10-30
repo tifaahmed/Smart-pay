@@ -21,18 +21,24 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::query()->forceDelete();
+        try {
+            User::all()->delete();
+        } catch (\Exception $e) {
+            User::query()->forceDelete();
+        }
 
         $admin= User::create( [
             'first_name' => 'super admin',
             'email' => 'admin@admin.com',
-            // 'phone' => '01000011000',
-            'password' => Hash::make('12345678'),
-            // 'token' => Hash::make('123456'),
-            // 'birthdate' => '2022-02-14 15:30:36',
+            'phone' => '01000011000',
+            'password' => Hash::make('123456'),
+            'token' => Hash::make('123456'),
+            'email_verified_at' => '2022-02-14 15:30:36',
             // 'city_id' =>  City::first() ? City::first()->id : null,
         ]);
-        // $admin->assignRole('admin');
+        $all_roles = Role::all()->pluck('name')->toArray();
+        $admin->assignRole($all_roles);
 
+        
     }
 }

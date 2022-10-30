@@ -31,7 +31,7 @@ class  ExtraCategoryRepository extends BaseRepository implements ExtraCategoryRe
 		$result = QueryBuilder::for($this->model);
 
 		$result = $result->allowedFilters($fillable);
-		$result = $result->allowedFilters(AllowedFilter::scope('ProductFilter') )	;
+		$result = $result->allowedFilters(AllowedFilter::scope('product_filter') )	;
 
 		return $result;
 	}

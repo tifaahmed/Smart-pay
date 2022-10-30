@@ -14,17 +14,19 @@ return new class extends Migration
     {
         Schema::create('coupons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title')->nullable(); // [note: "translatable"]
+            $table->string('title')->nullable()->comment('translatable');
             $table->string('code')-> unique( ) ;
-            $table->enum('type', [ 'fixed','percent'])->default('fixed');
-            $table->integer('usage_limit')->default(1); // how many will use it
-            // if type is percent percent_limit will work
-            //  if type is fixed  percent_limit will be null
-            $table->float('percent_limit')->nullable(); 
+            $table->float('discount')->default(1);
 
-            $table->timestamp('start_date')->useCurrent();
-            // if null coupons will never end
-            $table->timestamp('end_date')->nullable();
+            $table->boolean('working')->default('1');
+            $table->enum('status', [ 'fixed','percent'])->default('fixed');
+            $table->enum('type', [ 'fixed','percent'])->default('fixed');
+            $table->integer('usage_limit')->default(1)->comment(' how many will use it');
+            $table->integer('usage_counter')->default(0)->comment(' How many times have it used');
+            $table->float('percent_limit')->nullable()->comment('work when type is percent'); 
+
+            $table->timestamp('start_date')->useCurrent()->comment('when will start'); 
+            $table->timestamp('end_date')->nullable()->comment('if null coupons will never end'); 
 
             $table->integer('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

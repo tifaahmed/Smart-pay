@@ -29,7 +29,7 @@ class Extra extends Model
 
     // scope
         public function scopeProductFilter($query,$filter){
-            $product_id = $filter && $filter['ProductFilter']  ? $filter['ProductFilter'] : null;
+            $product_id = $filter && $filter['product_filter']  ? $filter['product_filter'] : null;
             return $query->whereHas('product_items',function (Builder $query) use($product_id) {
                 $product_id ? $query->where('product_id',$product_id) : $query ;
             });

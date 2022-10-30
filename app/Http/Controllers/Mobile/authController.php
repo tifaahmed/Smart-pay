@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-use App\Http\Resources\Mobile\User\UserResource;
+use App\Http\Resources\Mobile\Auth\AuthResource;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -34,12 +34,13 @@ class AuthController extends Controller {
     }
 
     public function login( loginApiRequest $request ) {
-        // get the user by email 
-        $user = User::where( 'email' , $request ->email ) -> first( ) ;
+
+        // get the user model by email  or phone 
+        $user = $this->get_user($request->email_phone);
         
         // get the user password wrong
         if ( ! Hash::check( $request -> password , $user -> password ) ) {
-            // get the user sign by google
+            // if user sign by google
             if( $user->login_type ){
                 return $this -> MakeResponseErrors( 
                     [$user->login_type ],  
@@ -47,7 +48,7 @@ class AuthController extends Controller {
                     Response::HTTP_UNAUTHORIZED
                 ) ;
             }
-            // get the user sign normal
+            // if user sign normal
             else{
                 return $this -> MakeResponseErrors( 
                     [ 'InvalidCredentials' ],  
@@ -56,7 +57,7 @@ class AuthController extends Controller {
                 ) ; 
             }
         }
-        // login if correct
+        // get the user not verified
         else if( $this->email_verified($user) ){
             return $this -> MakeResponseErrors( 
                 [ 'pincode sent to email' ],  
@@ -64,15 +65,16 @@ class AuthController extends Controller {
                 Response::HTTP_UNAUTHORIZED
             ) ;
         }
+        // login user
         else {
-            // login user
             return $this->loginUser($user);
         }
     }
 
     public function loginSocial( Request $request ) {
-        $user = User:: where( 'email', $request->email ) -> first( ) ;
-
+        // get the user model by email  or phone 
+        $user = $this->get_user($request->email);
+        
         // if not exist create user
         $user = $user ?? $this->store($request) ;
 
@@ -220,7 +222,11 @@ class AuthController extends Controller {
                 array( 'longitude' => $request ->longitude )
                 :
                 [];
-            return  User::create($all);
+            $user =   User::create($all);  
+            // gave customer role
+            $user->assignRole('customer');
+  
+            return  $user;
         }
 
         public function loginUser($user)
@@ -252,12 +258,20 @@ class AuthController extends Controller {
         public function authResponse () {
             return $this -> MakeResponseSuccessful( 
                 [
-                    'user'  =>   new UserResource ( Auth::user()   )   , 
+                    'user'  =>   new AuthResource ( Auth::user()   )   , 
                     'Token' => Auth::user() -> getToken( ) 
                 ],  
                 'Successful' ,
                 Response::HTTP_OK
             ) ; 
+        }
+        public function get_user ($email_phone) {
+            if(is_numeric($email_phone)){
+                $user = User::where( 'phone' , $email_phone ) -> first( ) ;
+            }else {
+                $user = User::where( 'email' , $email_phone ) -> first( ) ;
+            }
+            return  $user;
         }
     // inside functions
 

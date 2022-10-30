@@ -14,26 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+ 
+
+// no middleware
+Route::name( 'auth.') -> prefix( 'auth' ) -> group( fn ( ) => [
+    Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
+    // Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
+    Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
+]);
+Route::name('language.')->prefix('/language')->group( fn ( ) : array => [
+    Route::get('/'                          ,   'LanguageController@all'                 )->name('all'),
+]);
 
 
-Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']], fn ( ) : array => [
-
-
-    Route::name('language.')->prefix('/language')->group( fn ( ) : array => [
-        Route::get('/'                          ,   'LanguageController@all'                 )->name('all'),
-    ]),
-
-
-    // no middleware
+Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:admin']], fn ( ) : array => [
     Route::name( 'auth.') -> prefix( 'auth' ) -> group( fn ( ) => [
-        Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
-        // Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
-        Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
+        Route::post( '/logout' ,   'AuthController@logout'  ) -> name( 'logout' ) ,
     ]),
 
+    
 
     // slider
     // Route::name('slider.')->prefix('/slider')->group( fn ( ) : array => [
@@ -151,8 +150,16 @@ Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']]
         Route::get('/collection-trash'          ,   'ProductItemsController@collection_trash'    )->name('collection_trash'),
         Route::get('/{id}/show-trash'           ,   'ProductItemsController@show_trash'          )->name('show_trash'),
     ]),
-
-    // product-category
+    // food-section
+    Route::name('food-section.')->prefix('/food-section')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'FoodSectionController@all'                 )->name('all'),
+        Route::post(''                          ,   'FoodSectionController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'FoodSectionController@show'                )->name('show'),
+        Route::get('/collection'                ,   'FoodSectionController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'FoodSectionController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'FoodSectionController@update'              )->name('update'),
+    ]),
+    // store
     Route::name('store.')->prefix('/store')->group( fn ( ) : array => [
         Route::get('/'                          ,   'StoreController@all'                 )->name('all'),
         Route::post(''                          ,   'StoreController@store'               )->name('store'),
@@ -180,5 +187,47 @@ Route::group(['prefix' =>'dashboard','middleware' => ['LocalizationMiddleware']]
         Route::get('/collection-trash'          ,   'UserController@collection_trash'    )->name('collection_trash'),
         Route::get('/{id}/show-trash'           ,   'UserController@show_trash'          )->name('show_trash'),
     ]),
+    // order
+    Route::name('order.')->prefix('/order')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'OrderController@all'                 )->name('all'),
+        Route::post(''                          ,   'OrderController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'OrderController@show'                )->name('show'),
+        Route::get('/collection'                ,   'OrderController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'OrderController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'OrderController@update'              )->name('update'),
+        
+        Route::get('/{id}/restore'              ,   'OrderController@restore'             )->name('restore'),
+        Route::DELETE('premanently-delete/{id}' ,   'OrderController@premanently_delete'  )->name('premanently_delete'),
+        Route::get('/collection-trash'          ,   'OrderController@collection_trash'    )->name('collection_trash'),
+        Route::get('/{id}/show-trash'           ,   'OrderController@show_trash'          )->name('show_trash'),
+    ]),
+    // order_item
+        Route::name('order_item.')->prefix('/order_item')->group( fn ( ) : array => [
+            Route::get('/'                 ,   'OrderItemController@all'                 )->name('all'),
+            Route::post(''                 ,   'OrderItemController@store'               )->name('store'),
+            Route::get('/{id}/show'        ,   'OrderItemController@show'                )->name('show'),
+            Route::get('/collection'       ,   'OrderItemController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'          ,   'OrderItemController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'     ,   'OrderItemController@update'              )->name('update'),
+        ]),
+    // order_item
+        Route::name('order_item_extra.')->prefix('/order_item_extra')->group( fn ( ) : array => [
+            Route::get('/'                  ,   'OrderItemExtraController@all'          )->name('all'),
+            Route::post(''                  ,   'OrderItemExtraController@store'        )->name('store'),
+            Route::get('/{id}/show'         ,   'OrderItemExtraController@show'         )->name('show'),
+            Route::get('/collection'        ,   'OrderItemExtraController@collection'   )->name('collection'),
+            Route::DELETE('/{id}'           ,   'OrderItemExtraController@destroy'      )->name('destroy'),
+            Route::post('/{id}/update'      ,   'OrderItemExtraController@update'       )->name('update'),
+        ]),    
+    // address
+    Route::name('address.')->prefix('/address')->group( fn ( ) : array => [
+        Route::get('/'                          ,   'AddressController@all'                 )->name('all'),
+        Route::post(''                          ,   'AddressController@store'               )->name('store'),
+        Route::get('/{id}/show'                 ,   'AddressController@show'                )->name('show'),
+        Route::get('/collection'                ,   'AddressController@collection'          )->name('collection'),
+        Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
+        Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
+    ]),
+    
 ]);
     

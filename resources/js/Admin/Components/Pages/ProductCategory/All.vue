@@ -9,7 +9,7 @@
                                 <tr> 
                                     <!-- eslint-disable -->
                                     <th 
-                                        v-for="( column , key    ) in Columns    " 
+                                        v-for="( column , key    ) in Columns" 
                                         v-if="column && !column.invisible"
                                         :key="key   " 
                                         v-text="column.header" 
@@ -45,16 +45,16 @@
                             </tbody>
                         </table>
                         <pagination 
-                         v-if="TableRows" 
-                         :size="'large'" 
-                         :show-disabled="true" 
-                         :limit="5" 
-                         :data="TableRows" 
-                         @pagination-change-page="initial"
-                       
+                            v-if="TableRows" 
+                            :size="'default'" 
+                            :align="'center'" 
+                            :show-disabled="true" 
+                            :limit="5" 
+                            :data="TableRows" 
+                            @pagination-change-page="initial"
                          >
-                            <span slot="prev-nav" >  Prev </span>
-                            <span slot="next-nav" > Next  </span>
+                            <span slot="prev-nav" >  < </span>
+                            <span slot="next-nav" >  > </span>
                         </pagination>
                         <ModalIndex  
                             :Columns="Columns" 
@@ -88,6 +88,8 @@ export default {
         TableName :'ProductCategory',
 
         TableRows  : {},
+        SingleTableRows : {},
+
         Columns :  [],
         controller_buttons   : [ 'edit','delete','show' ] ,
 
@@ -95,10 +97,8 @@ export default {
     } },
 
     mounted() {
-                console.log('kk');
-
-        // this.initial( this.$route.query.CurrentPage );
-        // this.tableColumns();
+        this.initial( this.$route.query.CurrentPage );
+        this.tableColumns();
     },
 
     methods : {
@@ -149,6 +149,7 @@ export default {
                 return  (new LanguageModel).all()  ;
             },
             SendRowData(row){
+                this.SingleTableRows = row;
                 this.Columns.forEach(function (SingleRow) {
                     SingleRow.value = row[SingleRow.name] ;
                 });

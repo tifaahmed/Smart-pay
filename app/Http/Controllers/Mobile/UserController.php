@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response ;
 use Illuminate\Support\Str;
-
+use Auth;
 
 // Resource
 use App\Http\Resources\Mobile\Collections\UserCollection as ModelCollection;
@@ -24,39 +24,11 @@ class UserController extends Controller
         $this->default_per_page = 10;
     }
 
-    
-    public function all(){
-        try {
-            $modal =    $this->ModelRepository->all()    ;
-            return new ModelCollection($modal);
-        } catch (\Exception $e) {
-            return $this -> MakeResponseErrors(  
-                [$e->getMessage()  ] ,
-                'Errors',
-                Response::HTTP_NOT_FOUND
-            );
-        }
-    }
 
-    public function collection(Request $request){
+    public function show() {
         try {
-            $modal = $this->ModelRepository->collection( $request->per_page ? $request->per_page : $this->default_per_page);
-            return new ModelCollection($modal);
-        } catch (\Exception $e) {
-            return $this -> MakeResponseErrors(  
-                [$e->getMessage()  ] ,
-                'Errors',
-                Response::HTTP_NOT_FOUND
-            );
-        }
-    }
-
-
-    public function show($id) {
-        try {
-            $model = $this->ModelRepository->findById($id);
             return $this -> MakeResponseSuccessful( 
-                [ new ModelResource ( $model ) ],
+                [ new ModelResource ( Auth::user() ) ],
                 'Successful',
                 Response::HTTP_OK
             ) ;

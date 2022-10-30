@@ -149,7 +149,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         type: 'select',placeholder:'',header :'user', name : 'user_id' ,
                         translatable : false ,
                         data_value :null  ,
-                        validation:{required : false } ,
+                        validation:{required : true } ,
                         SelectOptions : this.all_users, 
                         SelectStrings: ['id','first_name'] ,SelectForloopStrings:[],SelectForloopStringKeys:[],
                         SelectImages: ['avatar'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
@@ -161,16 +161,22 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : true } 
                     },
                     { 
-                        type: 'Radio',placeholder:'status',header : 'status', name : 'status' ,
-                        translatable : false , 
-                        SelectOptions :['pending','accepted','rejected','canceled'],
+                        type: 'textarea',placeholder:'description',header : 'description', name : 'description' ,
+                        translatable : true ,
+                        data_value :null  ,
+                        validation:{required : true } 
+                    },
+                    { 
+                        type: 'number',placeholder:'delevery_fee',header : 'delevery_fee', name : 'delevery_fee' ,
+                        translatable : false ,
                         data_value :null  ,
                         validation:{required : true } 
                     },
                     
                     { 
-                        type: 'textarea',placeholder:'description',header : 'description', name : 'description' ,
-                        translatable : true ,
+                        type: 'Radio',placeholder:'status',header : 'status', name : 'status' ,
+                        translatable : false , 
+                        SelectOptions :['pending','accepted','rejected','canceled'],
                         data_value :null  ,
                         validation:{required : true } 
                     },
@@ -178,14 +184,14 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         type: 'file',placeholder:null,header :'image', name : 'image' ,
                         translatable : false ,
                         data_value : null  ,
-                        validation:{required : false } 
+                        validation:{required : true } 
                     },
                 
                     { 
                         type: 'string',placeholder:'phone',header : 'phone', name : 'phone' ,
                         translatable : false ,
                         data_value :null  ,
-                        validation:{required : false } 
+                        validation:{required : true } 
                     },
                     
                     { 

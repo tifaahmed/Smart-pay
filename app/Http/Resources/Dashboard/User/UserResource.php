@@ -48,7 +48,7 @@ class UserResource extends JsonResource
         $all=[];
 
         $all += [ 'id' =>   $this->id ]  ;
-        // $all += [ 'product_sub_categories' =>   ProductSubCategoryResource::collection($this->product_sub_categories) ]  ;
+        $all += [ 'roles' =>  $this->roles->pluck('name') ]  ;
 
         $all += resource_string($model,$string_fields);
         $all += resource_image($model,$image_fields);

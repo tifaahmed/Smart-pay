@@ -28,14 +28,19 @@ class CouponUpdateApiRequest extends FormRequest
         $lang_array = config('app.lang_array') ;
         
         $all=[];
-        $all += [ 'code'                =>  [ 'required','unique:coupons' ] ]  ;
-        $all += [ 'usage_limit'         =>  [ 'sometimes','integer'] ]  ;
+        $all += [ 'code'                =>  [ 'required','unique:coupons,code,'.$this->id ] ]  ;
+        $all += [ 'discount'             =>  [ 'sometimes','min:1' ] ]  ;
+
+        $all += [ 'working'             =>  [ 'sometimes','boolean' ] ]  ;
+
+        $all += [ 'usage_limit'         =>  [ 'sometimes','integer','min:0'] ]  ;
+        $all += [ 'usage_counter'        =>  [ 'sometimes','integer','min:0'] ]  ;
 
         $all += [ 'type'                =>  [ 'sometimes' ,Rule::in(['fixed','percent']), ] ] ;
-        $all += [ 'percent_limit'       =>  [ 'required_if:type,percent','numeric',] ]  ;
+        $all += [ 'percent_limit'       =>  [ 'required_if:type,percent','numeric','min:1'] ]  ;
 
-        $all += [ 'start_date'          =>  [ 'sometimes','date_format:Y-m-d H:i:s',] ]  ;
-        $all += [ 'end_date'            =>  [ 'sometimes','date_format:Y-m-d H:i:s',] ]  ;
+        $all += [ 'start_date'          =>  [ 'sometimes' ] ]  ;
+        $all += [ 'end_date'            =>  [ 'sometimes' ] ]  ;
 
         $all += [ 'user_id'   =>  [ 'sometimes' ,'integer','exists:users,id'] ] ;
         $all += [ 'store_id'   =>  [ 'required' ,'integer','exists:stores,id'] ] ;

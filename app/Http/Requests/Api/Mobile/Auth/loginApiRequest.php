@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class loginApiRequest extends FormRequest
 {
@@ -28,13 +29,16 @@ class loginApiRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'email' => ['required', 'string', 'email',
-            $this->authenticate()
+         
+        $all = [];
+        if(is_numeric($this->email_phone)){
+            $all += [ 'email_phone'=>  [ 'required' ,'integer','exists:'.User::class.',phone'] ] ;
+        } else{
+            $all += [ 'email_phone'=>  [ 'required' ,'string','email','exists:'.User::class.',email'] ] ;
+        }
+        $all += [ 'password'=>  [ 'required' ,'string','min:6'] ] ;
 
-            ],
-            'password' => ['required', 'string'],
-        ];
+        return $all;
     }
 
     /**

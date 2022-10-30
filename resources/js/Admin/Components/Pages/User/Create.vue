@@ -207,7 +207,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : false } 
                     },
                     { 
-                        type: 'date',placeholder:'email_verified_at',header : 'email_verified_at', name : 'email_verified_at' ,
+                        type: 'datetime-local',placeholder:'email_verified_at',header : 'email_verified_at', name : 'email_verified_at' ,
                         translatable : false , 
                         data_value : null  ,
                         validation:{required : false } 
