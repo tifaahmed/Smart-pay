@@ -88,6 +88,8 @@ export default {
         TableName :'ProductCategory',
 
         TableRows  : {},
+        SingleTableRows : {},
+
         Columns :  [],
         controller_buttons   : [ 'edit','delete','show' ] ,
 
@@ -147,6 +149,7 @@ export default {
                 return  (new LanguageModel).all()  ;
             },
             SendRowData(row){
+                this.SingleTableRows = row;
                 this.Columns.forEach(function (SingleRow) {
                     SingleRow.value = row[SingleRow.name] ;
                 });

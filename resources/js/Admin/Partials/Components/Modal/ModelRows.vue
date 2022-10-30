@@ -3,9 +3,9 @@
 			<p class="mg-b-20"   v-for="( columnRow , columnRowkey    ) in Columns" :key="columnRowkey" >  
 			    <span style="color:blue">{{columnRow.header}} :</span>	
 				<ColumsIndex  
-					:ValueColumn="columnRow.value"   
+					:ValueColumn="SingleTableRows[columnRow.name]"   
 					:typeColumn="columnRow.type" 
-					:LoopOnColumn="columnRow.LoopOnColumn"
+					:LoopOnColumn="columnRow.loopOnColumn"
 				/>
 			</p>
 	</div>
@@ -21,7 +21,8 @@ export default {
         ColumsIndex
     } ,
 	props : {
-	    Columns : Array 
+	    Columns : Array ,
+		SingleTableRows: Object
 	},
 
 }

@@ -28,6 +28,8 @@ class  OrderRepository extends BaseRepository implements OrderRepositoryInterfac
 		$payment_type = $payment_type;
 		$payment_card_status  = $payment_type == 'visa' ? 'pindding' : null;
 		$user_id = Auth::user()->id;
+		$order_code =  rand(1111, 9999).'-'.rand(1111, 9999).'-'.rand(1111, 9999).'-'.rand(1111, 9999);
+
 
 		$order_data = [];
 		$order_data['user_id'] = $user_id;
@@ -36,7 +38,8 @@ class  OrderRepository extends BaseRepository implements OrderRepositoryInterfac
 		$order_data['payment_type'] =  $payment_type;
 		$order_data['payment_card_status'] = $payment_card_status;
 
-
+		
+		$order_data['order_code'] = $order_code;
 		$order_data['order_store_sub_totals'] = 0;
 		$order_data['site_fee'] = 0;
 		$order_data['total'] = 0;

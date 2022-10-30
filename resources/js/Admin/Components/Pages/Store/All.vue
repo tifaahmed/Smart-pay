@@ -73,9 +73,11 @@
                         </pagination>
                         <ModalIndex  
                             :Columns="Columns" 
+                            :SingleTableRows="SingleTableRows" 
                             :TableRows="TableRows" 
                             @DeleteRowButton="DeleteRowButton"
                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
+                            :controller_buttons = "controller_buttons"
                         />
                     </div>
                 </div>
@@ -107,6 +109,8 @@ export default {
         Languages : [],
 
         TableRows  : {},
+        SingleTableRows : {},
+
         Columns :  [],       
         controller_buttons   : [ 'edit','delete','show' ] ,
 
@@ -133,6 +137,14 @@ export default {
                     default : null
                 } ,
                 
+                { 
+                    type: 'MultiSelectForloopModal'   ,header : 'food_sections' , name : 'food_sections'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'title' , type: 'Forloop' ,secondLoopOnColumn:this.Languages  } ,
+                        { name : 'image' , type: 'Image'   } ,
+                    ] ,
+                } ,
                 { 
                     type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
                     loopOnColumn:[
@@ -207,6 +219,7 @@ export default {
 
         // modal
             SendRowData(row){
+                this.SingleTableRows = row;
                 this.Columns.forEach(function (SingleRow) {
                     SingleRow.value = row[SingleRow.name] ;
                 });

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\Api\dashboard\Auth\LoginApiRequest ;
+use App\Http\Requests\Api\Dashboard\Auth\LoginApiRequest ;
 
 use App\Models\User ;
 use Illuminate\Http\Response ;
@@ -39,7 +39,18 @@ class AuthController extends Controller {
                 Response::HTTP_OK
             ) ; 
         }
-        
-    }
 
+    
+    }
+    public function logout( Request $request ) {
+        Auth::user()->tokens()->delete(); // Sanctum
+        // Auth::user()->token()->revoke();// passport
+        // Auth::user()->currentAccessToken()->delete(); // passport
+        return $this -> MakeResponseSuccessful( 
+            ['Successful' ],
+            'Successful' ,
+            Response::HTTP_OK
+         ) ;
+    }
+     
 }

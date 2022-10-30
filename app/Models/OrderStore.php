@@ -17,7 +17,8 @@ class OrderStore extends Model
         'store_id', // integer , unsigned , will not delete if store deleted
 
         'store_title', // string , nullable ,
-
+        'store_note',
+        
         'coupon_title', // string , nullable ,
         'coupon_code', // string , nullable ,
         'coupon_discount_type',

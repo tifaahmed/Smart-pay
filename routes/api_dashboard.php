@@ -28,6 +28,12 @@ Route::name('language.')->prefix('/language')->group( fn ( ) : array => [
 
 
 Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:admin']], fn ( ) : array => [
+    Route::name( 'auth.') -> prefix( 'auth' ) -> group( fn ( ) => [
+        Route::post( '/logout' ,   'AuthController@logout'  ) -> name( 'logout' ) ,
+    ]),
+
+    
+
     // slider
     // Route::name('slider.')->prefix('/slider')->group( fn ( ) : array => [
     //     Route::get('/'                          ,   'SliderController@all'                 )->name('all'),

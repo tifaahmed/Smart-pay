@@ -29,7 +29,8 @@ class  OrderInformationRepository extends BaseRepository implements OrderInforma
 
 		$user_full_name = $user_modal->full_name; // get Attribute
 		$phone = $user_modal->phone; 
-
+		$email = $user_modal->email; 
+		
 		$address = $address_modal->address;  
 		$department = $address_modal->department;  
 		$house = $address_modal->house;  
@@ -45,8 +46,11 @@ class  OrderInformationRepository extends BaseRepository implements OrderInforma
 
 		$order_information_data = [];
 		$order_information_data['order_id'] = $order_id;
+
 		$order_information_data['user_full_name'] = $user_full_name;
 		$order_information_data['phone'] = $phone;
+		$order_information_data['email'] = $email;
+		
 		$order_information_data['address'] = $address;
 		$order_information_data['department'] = $department;
 		$order_information_data['house'] = $house;

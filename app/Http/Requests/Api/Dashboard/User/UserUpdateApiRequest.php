@@ -35,7 +35,7 @@ class UserUpdateApiRequest extends FormRequest
         $all += [ 'password'               =>  [   'required' ] ]  ;
         $all += [ 'gender'               =>  [   'required' , Rule::in(['girl','boy']) ] ] ;
 
-        $all += [ 'phone'               =>  [  'required_without:email','unique:users,phone'.$this->id ,'max:15'] ]  ;
+        $all += [ 'phone'               =>  [  'required_without:email','unique:users,phone,'.$this->id ,'max:15'] ]  ;
 
         $all += [ 'birthdate'               =>  [   'date'  ] ]  ;
         

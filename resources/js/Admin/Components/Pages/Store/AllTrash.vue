@@ -136,7 +136,14 @@ export default {
                     type: 'Router'    ,header : 'id'                , name : 'id'               ,
                     default : null
                 } ,
-                
+                { 
+                    type: 'MultiSelectForloop'   ,header : 'food_sections' , name : 'food_sections'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'title' , type: 'Forloop' ,secondLoopOnColumn:this.Languages  } ,
+                        { name : 'image' , type: 'Image'   } ,
+                    ] ,
+                } ,
                 { 
                     type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
                     loopOnColumn:[

@@ -208,28 +208,36 @@
 					</div>
 					<div class="dropdown main-profile-menu nav nav-item nav-link" :class="showMenu ? 'show' : ''">
 						<a class="profile-user d-flex" @click="toggleShow()">
-							<img alt="" src=" ">
+							<img alt="" :src="PropAvatar">
 						</a>
 						<div class="dropdown-menu" style="">
-							<div class="main-header-profile bg-primary p-3">
-								<div class="d-flex wd-100p">
-									<div class="main-img-user"><img alt="" src=" " class=""></div>
-									<div class="mr-3 my-auto">
-										<h6>Petey Cruiser</h6><span>Premium Member</span>
-									</div>
-								</div>
-							</div>
-							<a class="dropdown-item" href="profile.php"><i class="bx bx-user-circle"></i>Profile</a>
-							<a class="dropdown-item" href="profile_edit.php"><i class="bx bx-cog"></i> Edit Profile</a>
+							<!-- <div class="main-header-profile bg-primary p-3"> -->
+								<!-- <div class="d-flex wd-100p"> -->
+									<!-- <div class="main-img-user">
+										<img alt="" ::src="PropAvatar" class="">
+									</div> -->
+									<!-- <div class="mr-3 my-auto">
+										<h6>{{PropName}} </h6>
+ 
+										<span
+											v-for="( role    , role_key ) in PropRoles " :key="role_key.id"
+										>
+											{{role}}
+										</span>
+									</div> -->
+								<!-- </div> -->
+							<!-- </div> -->
+							<!-- <a class="dropdown-item" href="profile.php"><i class="bx bx-user-circle"></i>log out</a> -->
+							<!-- <a class="dropdown-item" href="profile_edit.php"><i class="bx bx-cog"></i> Edit Profile</a> -->
 							<!-- <a class="dropdown-item" href=""><i class="bx bxs-inbox"></i>Inbox</a> -->
 							<!-- <a class="dropdown-item" href=""><i class="bx bx-envelope"></i>Messages</a> -->
 							<!-- <a class="dropdown-item" href=""><i class="bx bx-slider-alt"></i> Account Settings</a> -->
 
 							<!-- <router-link class="dropdown-item"  :to = "{ name : 'Auth.Login'  }"><i class="bx bx-log-out"></i> Sign Out</router-link> -->
-							<!-- <a class="dropdown-item"   @click="logout()" href="#">
+							<a class="dropdown-item"   @click="logout()" href="#">
 								<i class="bx bx-slider-alt"></i> 
 								Sign Out
-							</a> -->
+							</a>
                             <!-- <a class="dropdown-item" href="login.php"><i class="bx bx-log-out"></i> Sign Out</a> -->
 
 						</div>
@@ -245,28 +253,34 @@
 	</div>
 </template>
 <script>
-	// import AuthModel     from 'AdminModels/Auth';
+	import AuthModel     from 'AdminModels/AuthModel';
 	// import jwt   from 'MainServices/jwt' ;
 
     export default {
         mounted() {
-            console.log( 'nav_bar ' )
+            console.log( 'nav_bar' )
         },
         data( ) { return {
             showMenu: false
         } } ,
 		props : {
 			PropLogo : null,
+			PropAvatar : null,
+			PropName : null,
+			PropRoles : null,
+			
 		},  
-        // methods : {
-        // 	toggleShow: function() {
-		// 		this.showMenu = !this.showMenu;
-		// 	},
-        // 	async logout(){
-        // 		let data = await (new AuthModel).logout();
-        // 		this.$router.push({ name: 'Auth.Login' })
-        // 	}
-        // }
+        methods : {
+        	toggleShow: function() {
+				this.showMenu = !this.showMenu;
+			},
+        	async logout(){
+        		let data = await (new AuthModel).logout();
+				if (data.status  == 200) {
+					this.$router.push({ name: 'Auth.Login' })
+				}
+        	}
+        }
 
     }
 

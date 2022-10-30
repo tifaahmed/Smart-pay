@@ -12,6 +12,8 @@ use App\Http\Resources\Mobile\Coupon\CouponResource as ModelResource;
 // lInterfaces
 use App\Repository\CouponRepositoryInterface as ModelInterface;
 
+use App\Http\Requests\Api\Mobile\Coupon\CheckCouponRequest;
+
 
 class CouponController extends Controller
 {
@@ -21,56 +23,10 @@ class CouponController extends Controller
         $this->ModelRepository = $Repository;
         $this->default_per_page = 10;
     }
-    public function check_coupon(Request $request)
+    public function check_coupon(CheckCouponRequest $request)
     {
         try {
             $coupon = $this->ModelRepository->findByCode($request->code);
-
-            if(empty($coupon)){
-                return $this -> MakeResponseSuccessful( 
-                    [ 'code exceeded the limit' ],
-                    'Error',
-                    Response::HTTP_NOT_FOUND  
-                ) ;
-            }
-            if($coupon->usage_counter  >= $coupon->usage_limit){
-                return $this -> MakeResponseSuccessful( 
-                    [ 'code exceeded the limit' ],
-                    'Error',
-                    Response::HTTP_METHOD_NOT_ALLOWED  
-                ) ;
-            }
-            if($coupon->user_id && $coupon->user_id == Auth::user()->id){
-                return $this -> MakeResponseSuccessful( 
-                    [ 'code can not be used by you' ],
-                    'Error',
-                    Response::HTTP_METHOD_NOT_ALLOWED  
-                ) ;
-            }
-            
-            if(!$coupon->working){
-                return $this -> MakeResponseSuccessful( 
-                    [ 'code disabled' ],
-                    'Error',
-                    Response::HTTP_NOT_ACCEPTABLE  
-                ) ;
-            }
-            
-            if($coupon->start_date > now()){
-                return $this -> MakeResponseSuccessful( 
-                    [ 'not available yet' ],
-                    'Error',
-                    Response::HTTP_METHOD_NOT_ALLOWED 
-                ) ;
-            }
-            if($coupon->end_date < now()){
-                return $this -> MakeResponseSuccessful( 
-                    [ 'code expired' ],
-                    'Error',
-                    Response::HTTP_METHOD_NOT_ALLOWED 
-                ) ;
-            }
-
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $coupon ) ],
                 'Successful',

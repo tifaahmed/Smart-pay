@@ -21,10 +21,11 @@ return new class extends Migration
                 $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
             $table->string('store_title')->nullable();
-
+            $table->text('store_note')->nullable();
+            
             $table->string('coupon_title')->nullable();
             $table->string('coupon_code')->nullable();
-            $table->enum('coupon_discount_type', [ 'fixed','percent'])->default('fixed');
+            $table->enum('coupon_discount_type', [ 'fixed','percent'])->nullable();
 
             $table->float('coupon_discount')->default(0)->comment(' order_item_sub_totals - discount ');
             $table->float('delevery_fee')->default(0)->comment('delevery fee from single stores');

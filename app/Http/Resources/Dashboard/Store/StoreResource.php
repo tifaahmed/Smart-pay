@@ -5,6 +5,7 @@ namespace App\Http\Resources\Dashboard\Store;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\Dashboard\Store\UserResource;
+use App\Http\Resources\Dashboard\Store\FoodSectionResource;
 class StoreResource extends JsonResource
 {
     /**
@@ -37,6 +38,7 @@ class StoreResource extends JsonResource
 
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'user' =>  new UserResource($this->user) ]  ;
+        $all += [ 'food_sections' =>  FoodSectionResource::collection($this->food_sections) ]  ;
 
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);

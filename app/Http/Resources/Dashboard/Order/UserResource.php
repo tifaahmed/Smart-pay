@@ -29,7 +29,7 @@ class UserResource extends JsonResource
             'avatar'
         ];
 
-        $date_fields   = ['created_at','updated_at','deleted_at'];
+        $date_fields   = [ ];
 
 
         $all=[];

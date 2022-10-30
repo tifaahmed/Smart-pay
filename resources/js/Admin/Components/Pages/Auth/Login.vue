@@ -32,7 +32,7 @@
 <script>
 
     import Model     from '../../../Models/AuthModel';
-    // import jwt   from 'MainServices/jwt' ;
+    import jwt   from 'MainServices/jwt' ;
 
     import InputsFactory  from 'AdminPartials/Components/Inputs/InputsFactory.vue'     ;
     import validation     from 'AdminValidations/AuthValidation';
@@ -84,14 +84,14 @@
 
             async SubmetRowButton(){
                 this.ServerReaponse = null;         // empty  Server Reaponse
-                let data = await this.login()  ;    // call the  Server
-                if(data && data.errors)             //if error from server  
+                let login_response = await this.login()  ;    // call the  Server
+                if(login_response && login_response.errors)             //if error from server  
                 {          
-                    this.ServerReaponse = data ;    //print the  errors from server  
-                }else
+                    this.ServerReaponse = login_response ;    //print the  errors from server  
+                }else if (login_response.data.data) 
                 {
-                    // console.log(jwt.login(data.data.data))    ;
-                    this.redirectPage();             // redirect to onther page
+                    jwt.login(login_response.data.data) ;
+                    this.redirectPage(); // redirect to onther page
                 }
             },
 

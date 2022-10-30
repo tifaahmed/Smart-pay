@@ -17,7 +17,8 @@ class OrderInformation extends Model
 
         'user_full_name', // string , 
         'phone', // string , 
-
+        'email', // string , 
+        
         'address', // text , 
         'department', // string , 
         'house', // string , 

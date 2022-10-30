@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;               // belongsTo
 
 use App\Models\OrderStore;          // HasMany
-use App\Models\OrderInformation;          // HasMany
+use App\Models\OrderInformation;    // HasOne
 
 class Order extends Model
 {
@@ -23,8 +23,8 @@ class Order extends Model
         'payment_type' ,  // string , [ 'visa','cash'] , default('cash')
     
         'user_id', // integer , unsigned
-
- 
+        'order_code', // random string
+        'order_note',
         'order_store_sub_totals', // float  , default 0 // collect price of table order_stores
         
         'site_fee', // float  , default 0  
@@ -36,13 +36,16 @@ class Order extends Model
         public function order_stores(){
             return $this->HasMany(OrderStore::class);
         }
-        public function order_informations(){
-            return $this->HasMany(OrderInformation::class,'order_id');
-        }
+
         
     // belongsTo
         public function user(){
             return $this->belongsTo(User::class,'user_id');
         }
+
+    // HasOne
+        public function order_information(){
+            return $this->HasOne(OrderInformation::class,'order_id');
+        }    
 }
  

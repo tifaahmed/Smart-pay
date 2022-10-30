@@ -17,9 +17,10 @@ class AuthResource extends JsonResource
     {
         return [
             'id'             => $this->id,
-            'name'           => $this->name,
+            'name'           => $this->full_name,
             'email'          => $this->email,
             'roles'           => $this->roles->pluck('name')  ,
+            'avatar'            =>   check_image($this->avatar),
 
             'created_at'    => $this->created_at ?   $this->created_at->format('d/m/Y') : null,
             'updated_at'    => $this->updated_at ?   $this->updated_at->format('d/m/Y') : null,

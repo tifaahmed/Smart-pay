@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\Dashboard\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\FoodSection;
 
 class StoreUpdateApiRequest extends FormRequest
 {

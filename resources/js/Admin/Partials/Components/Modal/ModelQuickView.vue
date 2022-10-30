@@ -4,16 +4,16 @@
 	        <div class="modal-content">
 	            <div class="modal-body pd-20 pd-sm-40 text-center" >
 
-	            		<ModelRows :Columns="Columns" />
-
-
-	                    <div class="text-center" v-for="( column , key    )  in Columns" :key="key">
-                			<TableControllers 
-                				v-if="column.name == 'id'" 
-                				:RowId="column.value"  
-                				:CurrentPage="CurrentPage" 
-            				/>
-	                    </div>
+	            		<ModelRows 
+							:Columns="Columns" 
+							:SingleTableRows="SingleTableRows" 
+						/>
+						<TableControllers 
+							:controller_buttons = "controller_buttons"
+							:RowId="SingleTableRows &&  SingleTableRows['id'] ? SingleTableRows['id'] : null" 
+							:CurrentPage="CurrentPage" 
+							@SendRowData="SendRowData(SingleTableRows)"
+						/>
 
 	                
 	            </div><!-- body -->
@@ -35,7 +35,9 @@ export default {
 	} } ,
 	props : {
 	    Columns : Array,
-	    CurrentPage : Number
+	    CurrentPage : Number,
+		SingleTableRows : Object ,
+		controller_buttons: Array
 	},
 }
 </script>

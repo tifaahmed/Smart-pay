@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Resources\Mobile\Order\OrderStoreResource;
+use App\Http\Resources\Mobile\Order\OrderInformationResource;
 
 class OrderResource extends JsonResource
 {
@@ -25,6 +26,10 @@ class OrderResource extends JsonResource
         $all += [ 'total' =>   $this->total ]  ;//  default 0 //(order_store_sub_totals + site_fee'
         $all += [ 'created_at' =>   $this->created_at ]  ; 
 
+        
+        $all += [ 'order_code' =>   $this->order_code ]  ; 
+
+        $all += [ 'order_information' =>   new OrderInformationResource ($this->order_information) ]  ; 
         $all += [ 'order_stores' =>   OrderStoreResource::collection($this->order_stores) ]  ;
         return $all;
     }

@@ -5,9 +5,9 @@ namespace App\Http\Resources\Dashboard\ProductItem;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-use App\Http\Resources\dashboard\ProductItem\StoreResource;
-use App\Http\Resources\dashboard\ProductItem\ProductCategoryResource;
-use App\Http\Resources\dashboard\ProductItem\ExtraResource;
+use App\Http\Resources\Dashboard\ProductItem\StoreResource;
+use App\Http\Resources\Dashboard\ProductItem\ProductCategoryResource;
+use App\Http\Resources\Dashboard\ProductItem\ExtraResource;
 
 class ProductItemResource extends JsonResource
 {

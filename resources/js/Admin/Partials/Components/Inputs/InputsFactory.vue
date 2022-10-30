@@ -47,25 +47,8 @@
 		     v-model      = "data"
 		 /> 
 
-		<!-- <InputMultiSelect
+		<InputMultiSelect
 			v-if= "FactoryType === 'multiSelect'"
-			:PropLable = "Factorylable"
-			:PropType = "FactoryType"
-			:PropName = "FactoryName"
-			:PropErrors = "FactoryErrors"
-			@change      = "change"
-			v-model      = "data"
-			:PropSelectOptions = "FactorySelectOptions"
-			:PropSelectColumnName = "FactorySelectColumnName"
-
-			:PropSelectForloop= "FactorySelectForloop"
-			:PropSelectForloopColumn = "FactorySelectForloopColumn"
-
-			:PropSelectColumnOptions = "FactorySelectColumnOptions"
-			:PropFactorySelectimage = "FactorySelectimage"
-		/>  -->
-		<InputSelect
-			v-if= "FactoryType === 'select'"
 			:PropLable = "Factorylable"
 			:PropType = "FactoryType"
 			:PropName = "FactoryName"
@@ -79,9 +62,29 @@
 			:PropSelectForloopStrings = "FactorySelectForloopStrings"
 			:PropSelectForloopStringKeys = "FactorySelectForloopStringKeys"
 
-			:PropSelectimages = FactorySelectImages
+			:PropSelectimages = "FactorySelectImages"
 			:PropSelectForloopImages= "FactorySelectForloopImages"
 			:PropSelectForloopImageKeys = "FactorySelectForloopImageKeys"
+		/> 
+		<InputSelect
+			v-if= "FactoryType === 'select'"
+			:PropLable = "Factorylable"
+			:PropType = "FactoryType"
+			:PropName = "FactoryName"
+			:PropErrors = "FactoryErrors"
+			@change      = "change"
+			v-model      = "data"
+			
+			:PropSelectOptions = "FactorySelectOptions"
+
+			:PropSelectStrings = "FactorySelectStrings"
+			:PropSelectForloopStrings = "FactorySelectForloopStrings"
+			:PropSelectForloopStringKeys = "FactorySelectForloopStringKeys"
+
+			:PropSelectimages = "FactorySelectImages"
+			:PropSelectForloopImages= "FactorySelectForloopImages"
+			:PropSelectForloopImageKeys = "FactorySelectForloopImageKeys"
+
 		/> 
 		
 

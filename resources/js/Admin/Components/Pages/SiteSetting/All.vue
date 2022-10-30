@@ -95,6 +95,8 @@ export default {
         Languages : [],
 
         TableRows  : {},
+        SingleTableRows : {},
+
         Columns :  [],       
         controller_buttons   : [ 'edit' ,'show' ] ,
         PerPage  : 10
@@ -145,6 +147,7 @@ export default {
 
         // modal
             SendRowData(row){
+                this.SingleTableRows = row;
                 this.Columns.forEach(function (SingleRow) {
                     SingleRow.value = row[SingleRow.name] ;
                 });

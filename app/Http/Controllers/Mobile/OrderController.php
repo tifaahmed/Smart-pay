@@ -81,63 +81,68 @@ class OrderController extends Controller
     public function store(modelInsertRequest $request) {
         $request_order_items = $request->order_items;
 
-        try {
-            //////1  order //////
+        // try {
+            //////1 create order_model  //////
                 // sent payment_type
                 //store data without calculate  the prices
                 $order_model = $this->ModelRepository->custome_create($request->payment_type);
-            //////1  order //////
+            //////1  order_model //////
 
-            //  all related stores
+            //  get all related stores
             $store_models = $this->get_store_models($request_order_items);
-            
-        
             foreach ($store_models as $key => $store_model) {
                 // sent coupon_code & store_id
                 // get coupon_model to record the Order Stor data    
                                 
                 $coupon_model = $this->get_store_coupon($store_model->id,$request->coupon_code);
             
-                //////2  Coupon //////
+                //////2  coupon_model //////
                     $coupon_model 
                     ? 
                     $this->CouponRepository->update($coupon_model->id,['usage_counter'=>$coupon_model->usage_counter -1]) 
                     :
                     null;
-                //////2  Coupon //////
+                //////2  coupon_model //////
 
-                //////3  OrderStore //////
+                //////3  order_store_model //////
                     // sent order_id (parent), store_model(get info) , coupon_model(get info)
                     //store data without calculate  the prices
                     $order_store_model = $this->OrderStoreRepository->custome_create($order_model->id,$store_model,$coupon_model);
-                //////3  OrderStore //////
+                //////3  order_store_model //////
 
                 // order_items create
                 foreach ($request_order_items as  $order_item) {
-                    //////4  OrderItem //////
-                        // sent product_id
-                        // get product_item_model to record the Order Item data                    
-                        $product_item_model = $this->get_product_item($order_item['product_id']);
+                    // sent store_id product_id
+                    // get product_item_model if related to sore  to record the Order Item data                    
+                    $product_item_model = $this->get_product_item($store_model->id,$order_item['product_id']);
+                
+                    if ($product_item_model) {
+                        //////4  OrderItem //////
                         // sent store_id(parent),product_model(get info),quantity of every product
                         //store data without calculate  the prices
                         $order_item_model = $this->OrderItemRepository->custome_create($order_store_model->id,$product_item_model,$order_item['quantity']);
-                    //////4  OrderItem //////
-                    // create order_item_extras
-                    if ( isset($order_item['extra_ids']) ) {
+                        //////4  OrderItem //////
+                        // create order_item_extras
+                        if ( isset($order_item['extra_ids']) ) {
                         foreach ($order_item['extra_ids'] as  $extra_id) {
                             //////5  OrderItemExtra //////
-                                $extra_model = $this->get_extra($extra_id);
+                                $extra_model = $this->get_extra($extra_id,$product_item_model->id);
                                 // sent order_item_id , extra_model 
                                 //store data with prices
-                                $order_item_extra =$this->OrderItemExtraRepository->custome_create($order_item_model->id,$extra_model);
-                            //////5  OrderItemExtra //////
+                                $extra_model
+                                ?
+                                $this->OrderItemExtraRepository->custome_create($order_item_model->id,$extra_model)
+                                :
+                                null;
+                                //////5  OrderItemExtra //////
                         }
-                    } 
-                    //////4  OrderItem //////
-                        // sent model (add the prices)
-                        //store data with calculated  the prices from OrderItemExtra table
-                        $this->OrderItemRepository->custome_update($order_item_model);
-                    //////4  OrderItem //////
+                        } 
+                        //////4  OrderItem //////
+                            // sent model (add the prices)
+                            //store data with calculated  the prices from OrderItemExtra table
+                            $this->OrderItemRepository->custome_update($order_item_model);
+                        //////4  OrderItem //////
+                    }    
                 }
                 //////3  OrderStore //////
                     $order_item_sub_totals = $order_store_model->order_items->sum('sub_total');
@@ -167,13 +172,13 @@ class OrderController extends Controller
                 Response::HTTP_OK
             ) ;
 
-        } catch (\Exception $e) {
-             return $this -> MakeResponseErrors(  
-                 [$e->getMessage()  ] ,
-                 'Errors',
-                 Response::HTTP_BAD_REQUEST
-             );
-        }
+        // } catch (\Exception $e) {
+        //      return $this -> MakeResponseErrors(  
+        //          [$e->getMessage()  ] ,
+        //          'Errors',
+        //          Response::HTTP_BAD_REQUEST
+        //      );
+        // }
     }
     public function update(modelUpdateRequest $request ,$id) {
         try {

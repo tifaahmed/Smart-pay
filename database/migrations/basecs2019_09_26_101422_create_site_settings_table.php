@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('item_key')->unique(); // [note: "logo  name"]
             $table->string('item'); // [note: "logo  name"]     
+            $table->enum('item_type', [ 'image','string','integer'])->default('string');
+  
          });
     }
 

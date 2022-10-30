@@ -19,28 +19,31 @@ trait OrderTrait {
     // @return array of objects (stores data)
     public function get_store_models($request_order_items) 
     {
-        return $store_models = Store::whereHas('product_items',function (Builder $query) use($request_order_items) {
-            foreach ($request_order_items as $key => $order_item) {
-                $key == 0 ? 
-                $query->where('id',$order_item['product_id']) 
-                : 
-                $query->orWhere('id',$order_item['product_id'])
-                ;
-            }
+        $product_ids = [];
+        foreach ($request_order_items as $key => $request_order_item) {
+             $product_ids[$key] = $request_order_item['product_id'];
+        }
+        return $store_models = Store::whereHas('product_items',function (Builder $query) use($product_ids) {
+            $query->whereIn('id',$product_ids) ;
         })->get();    
     }
+    
     // must return  the model (ProductItem data)
-    public function get_product_item($product_id) {
-        return ProductItem::find($product_id);
+    public function get_product_item($store_id,$product_id) {
+        return ProductItem::where('id',$product_id)->where('store_id',$store_id)->first();
     }
     // must return the model (Coupon data)
     public function get_store_coupon($store_id,$coupon_code) {
         return Coupon::where('code',$coupon_code)->where('store_id',$store_id)->first();
     }
-    // return null model (Extra data)
-    public function get_extra($extra_id) {
-        return Extra::find($extra_id);    
+    // (Extra data) ralted to product
+    public function get_extra($extra_id,$product_item_id) {
+        return Extra::where('id',$extra_id)->whereHas('product_items',function (Builder $query) use($product_item_id) {
+                $query->where('product_id',$product_item_id) ;
+        })->first();
     }
+
+    
     // must return the model (address data)
     public function get_order_address($address_id) {
         return  Address::find($address_id);
@@ -56,8 +59,8 @@ trait OrderTrait {
             }else if($coupon_model->type == 'fixed'){
                 $discount_number =   $coupon_model->discount ;
             }
-            $discount_number;
         }  
+        return  $discount_number;
     }
 
 

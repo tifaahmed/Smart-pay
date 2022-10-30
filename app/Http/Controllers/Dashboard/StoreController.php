@@ -32,7 +32,7 @@ class StoreController extends Controller
     }
 
     
-    public function all(){
+    public function all(Request $request){
         try {
             $modal =    $this->ModelRepository->filterAll($request->filter)    ;
             return new ModelCollection($modal);
@@ -95,6 +95,8 @@ class StoreController extends Controller
             
             $this->ModelRepository->update( $id,Request()->except($this->file_columns)+$all) ;
             $model =  $this->ModelRepository->findById($id) ;
+            
+            $this->ModelRepository->sync_food_section($model->id,$request->food_section_ids ?? []);
 
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],

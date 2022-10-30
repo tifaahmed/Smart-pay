@@ -1,11 +1,20 @@
 <template>
 	<div>
 		<!-- modal delete-->
-		    <ModalDelete  :Columns="Columns"   @DeleteButton="DeleteButton" />
+		    <ModalDelete  
+				:Columns="Columns"   
+				:controller_buttons="controller_buttons"   
+				@DeleteButton="DeleteButton" 
+			/>
 		<!-- modal delete-->
 
 		<!-- modal QuickView-->
-		    <ModelQuickView :Columns="Columns" :CurrentPage="CurrentPage"/>
+		    <ModelQuickView 
+			:Columns="Columns" 
+			:CurrentPage="CurrentPage" 
+			:SingleTableRows="SingleTableRows"
+			:controller_buttons="controller_buttons"   
+		/>
 		<!-- modal QuickView -->
 
 	</div>
@@ -25,18 +34,15 @@ export default {
 	},
 	props   : {
 		Columns :null,
-		TableRows :null,
-		CurrentPage : Number
+		SingleTableRows :null,
+		TableRows : null,
+		CurrentPage : Number,
+		controller_buttons: Array
 	} ,
 
 	methods    : {
 	    DeleteButton( ) {
-	    	var id   ;
-	    	this.Columns.forEach(function (value) {
-	    		if(value.name == 'id'){
-	    			id = value.value ;
-	    		}
-	    	});
+	    	var id   = this.SingleTableRows && this.SingleTableRows['id'] ? this.SingleTableRows['id'] : null;
 	    	var CurrentPage = this.TableRows.meta.current_page ;
 	        this.$emit( 'DeleteRowButton'  , CurrentPage, id ) ;
 	    } ,
