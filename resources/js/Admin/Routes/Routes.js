@@ -11,6 +11,8 @@ import SiteSettingRoutes from './SiteSettingRoutes';
 import CouponRoutes from './CouponRoutes';
 import FoodSectionRoutes from './FoodSectionRoutes';
 import OrderRoutes from './OrderRoutes';
+import ExtraCategoryRoutes from './ExtraCategoryRoutes';
+import ExtraRoutes from './ExtraRoutes';
 
 console.log('admin rout');
 
@@ -32,5 +34,8 @@ export default {
         CouponRoutes,
         FoodSectionRoutes,
         OrderRoutes,
+        ExtraCategoryRoutes,
+        ExtraRoutes,
+
     ]
 }

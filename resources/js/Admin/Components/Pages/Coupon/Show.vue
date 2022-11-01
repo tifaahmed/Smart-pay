@@ -107,6 +107,10 @@ export default {
                     default : null
                 } ,
                 { 
+                    type: 'String'   ,header : 'discount'    , name : 'discount'     ,
+                    default : null
+                } ,
+                { 
                     type: 'String'   ,header : 'usage limit'    , name : 'usage_limit'     ,
                     default : null
                 } ,

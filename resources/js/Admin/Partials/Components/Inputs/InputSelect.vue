@@ -3,14 +3,13 @@
 		    <label  class="typo__label" :for="PropName"> {{PropLable}}  </label>
 
 			<multiselect v-model="data" 
-
-			:label="'id'" 
-			:track-by="'id'" 
-			:options="PropSelectOptions ? PropSelectOptions : []" 
-			:option-height="104"   
-			:multiple="false"   
-			:searchable="false"
-			:placeholder="'Pick one'"
+				:label="'id'" 
+				:track-by="'id'" 
+				:options="PropSelectOptions ? PropSelectOptions : []" 
+				:option-height="104"   
+				:multiple="false"   
+				:searchable="false"
+				:placeholder="'Pick one'"
 			>
 				<template slot="singleLabel" slot-scope="props" >
 					

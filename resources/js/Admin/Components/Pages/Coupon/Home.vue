@@ -3,8 +3,8 @@
     <div>
  
         <!-- breadcrumb -->
-        <div class="container-fluid" style="    margin-top: -70px;">
-            <div class="breadcrumb-header justify-content-between" style="justify-content: space-between !important; margin-top: 80px;">
+        <div class="container-fluid" >
+            <div class="breadcrumb-header justify-content-between" style="justify-content: space-between !important; margin-top: 10px;">
                 
                 <div class="my-auto">
                     <div class="d-flex">

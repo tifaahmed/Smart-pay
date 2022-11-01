@@ -182,6 +182,13 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         data_value :null  ,
                         validation:{required : true } 
                     },
+                    
+                    { 
+                        type: 'number',placeholder:'discount',header : 'discount', name : 'discount' ,
+                        translatable : false ,
+                        data_value :0  ,
+                        validation:{required : true } 
+                    },
                     { 
                         type: 'number',placeholder:'usage_limit',header : 'usage_limit', name : 'usage_limit' ,
                         translatable : false ,
