@@ -48,8 +48,8 @@ class UserStoreApiRequest extends FormRequest
         $all += [ 'latitude'               =>  [  'sometimes'  ] ]  ;
         $all += [ 'longitude'               =>  [  'sometimes'  ] ]  ;
 
-        $all += [ 'email_verified_at'       =>  ['date' ] ]  ;
-
+        $all += [ 'email_verified_at'       =>  ['sometimes','date' ] ]  ;
+        $all += [ 'phone_verified_at'       =>  ['sometimes','date' ] ]  ;
 
         return $all;
     }

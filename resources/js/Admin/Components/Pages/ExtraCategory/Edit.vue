@@ -122,8 +122,10 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
+            // receive data to send to server 
             RequestData : {},
-
+            // collect data to send to server 
+            SendData : {},
         } } ,
         methods : {
             async start(){
@@ -157,8 +159,14 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     }
                 });
             },
-            HandleData(){
-            },
+
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                },
+            //  Handle Data before call the server 
 
             DeleteErrors(){
                 for (var key in this.ServerReaponse.errors) {
@@ -221,7 +229,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },
                 update(){
-                    return (new Model).update(this.$route.params.id , this.RequestData)  ;
+                    return (new Model).update(this.$route.params.id , this.SendData)  ;
                 }
             // modal
 

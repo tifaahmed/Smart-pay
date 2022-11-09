@@ -23,12 +23,14 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
         Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
         Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
         Route::post( '/forget-password' ,  'AuthController@forget_password' )  -> name( 'forget_password' ) ,  
-        Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) ,  
+        Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) , 
+        Route::post( '/resend-pin-code' ,  'AuthController@resend_pin_code' )  -> name( 'resend_pin_code' ) , 
+        
     ]),
 
 
     
-    Route::group(['middleware' => ['auth:sanctum','role:customer']], fn ( ) : array => [
+    Route::group(['middleware' => ['auth:sanctum','verified','role:customer']], fn ( ) : array => [
         Route::name('coupon.')->prefix('/coupon')->group( fn ( ) : array => [
             Route::post('/check_coupon', 'CouponController@check_coupon')->name('check_coupon'),
         ]),
@@ -92,7 +94,7 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
 
     // auth:sanctum // auth:sanctum
     // auth:api // passport
-    Route::group(['middleware' => ['auth:sanctum']], fn ( ) : array => [
+    Route::group(['middleware' => ['auth:sanctum','verified']], fn ( ) : array => [
         // auth
         Route::name( 'auth.') -> prefix( 'auth' ,'guest','guest:api') -> group( fn ( ) => [
             Route::post( 'update-password' ,  'authController@update_password' )  -> name( 'update_password' ),

@@ -126,7 +126,11 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
+            // receive data to send to server 
             RequestData : {},
+            // collect data to send to server 
+            SendData : {},
+
 
         } } ,
         methods : {
@@ -243,26 +247,16 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 }
             },
 
-            HandleData(){
-                this.RequestData.store_id = 
-                    this.RequestData.store_id 
-                    ? 
-                    this.RequestData.store_id.id 
-                    : 
-                    null;
-                this.RequestData.product_category_id = 
-                    this.RequestData.product_category_id 
-                    ? 
-                    this.RequestData.product_category_id.id 
-                    : 
-                    null;
-                this.RequestData.product_extra_ids = 
-                    this.RequestData.product_extra_ids 
-                    ? 
-                    this.RequestData.product_extra_ids.id 
-                    : 
-                    null;
-            },
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
+                    this.SendData['product_category_id'] =  this.RequestData.product_category_id.id  ;
+                    this.SendData['product_extra_ids'] =  this.RequestData.product_extra_ids.id  ;
+                },
+            //  Handle Data before call the server 
 
             async SubmetRowButton(){
                 this.ServerReaponse = null;
@@ -298,7 +292,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },
                 update(){
-                    return (new Model).update(this.$route.params.id , this.RequestData)  ;
+                    return (new Model).update(this.$route.params.id , this.SendData)  ;
                 },
             // Model
 

@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\ActiveEmailNotification;
+use App\Notifications\ActivePhoneNotification;
+
 
 use Auth;
 
@@ -28,6 +30,7 @@ use App\Models\UserRateStore;           // pivot
     
 use App\Models\Order;           // HasMany
 use App\Models\Address;           // HasMany
+
 
 class User extends Authenticatable
 {
@@ -55,6 +58,7 @@ class User extends Authenticatable
         'phone',    // string  /unique / nullable
         'birthdate', //  date  / nullable
         'email_verified_at',  // datetime   / nullable
+        'phone_verified_at',  // datetime   / nullable
 
         'avatar', // string(file) / nullable
 
@@ -176,10 +180,16 @@ class User extends Authenticatable
         public function sendActiveEmailNotification()
         {
             $data = ['pin_code' => $this->pin_code];
-
             $this->notify(new ActiveEmailNotification($data));
-            
         }
-    //Notifications
-    
+        public function sendActivePhoneNotification()
+        {
+            $data = [] ;
+            $data += ['pin_code' => $this->pin_code];
+            $data += ['phone' => $this->phone];
+            $this->notify(new ActivePhoneNotification($data));
+        }
+
+    // Notification
+
 }

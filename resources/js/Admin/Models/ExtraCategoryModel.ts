@@ -9,7 +9,7 @@ export default class ExtraCategoryModel extends Model {
       await Model.getformDataTranslatedOrNot(formData,RequestData) ;
       return formData;
    }
-
+   // use Promise for the call back function
    protected async all( filter:object ) : Promise<any>  {  
       let result : any = '';
       try {

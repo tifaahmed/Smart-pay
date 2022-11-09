@@ -14,12 +14,13 @@ use App\Models\User ;
 
 use Illuminate\Http\Response ;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Resources\Mobile\Auth\AuthResource;
 
-use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
@@ -35,12 +36,12 @@ class AuthController extends Controller {
 
     public function login( loginApiRequest $request ) {
 
-        // get the user model by email  or phone 
+        // return object if phone or email exist
         $user = $this->get_user($request->email_phone);
-        
-        // get the user password wrong
+            
+        // if the user password wrong
         if ( ! Hash::check( $request -> password , $user -> password ) ) {
-            // if user sign by google
+            // if user password wrong &  sign by google
             if( $user->login_type ){
                 return $this -> MakeResponseErrors( 
                     [$user->login_type ],  
@@ -48,23 +49,24 @@ class AuthController extends Controller {
                     Response::HTTP_UNAUTHORIZED
                 ) ;
             }
-            // if user sign normal
+            // if user password wrong &  sign normal
             else{
                 return $this -> MakeResponseErrors( 
                     [ 'InvalidCredentials' ],  
-                    'InvalidCredentials' ,
+                    'error' ,
                     Response::HTTP_UNAUTHORIZED
                 ) ; 
             }
         }
-        // get the user not verified
-        else if( $this->email_verified($user) ){
+        // return true if email or phone (not) verified        
+        else if( $this->check_verification($user) ){
             return $this -> MakeResponseErrors( 
-                [ 'pincode sent to email' ],  
-                'pincode sent' ,
+                [ 'acount not verified pincode has been sent' ],  
+                'error' ,
                 Response::HTTP_UNAUTHORIZED
             ) ;
         }
+        
         // login user
         else {
             return $this->loginUser($user);
@@ -72,9 +74,9 @@ class AuthController extends Controller {
     }
 
     public function loginSocial( Request $request ) {
-        // get the user model by email  or phone 
+        // return object if phone or email exist
         $user = $this->get_user($request->email);
-        
+            
         // if not exist create user
         $user = $user ?? $this->store($request) ;
 
@@ -83,7 +85,12 @@ class AuthController extends Controller {
 
     public function register( RegisterApiRequest $request ) {
         $user = $this->store($request) ; // store user 
-        $this->email_verified($user); // send pin code to user email
+        if ($request->email) {
+            $this->check_email_verified($user); // send pin code to user email
+        }
+        if ($request->phone) {
+            $this->check_phone_verified($user); // send pin code to user phone
+        }
         return $this->loginUser($user); // login
     }
 
@@ -115,32 +122,57 @@ class AuthController extends Controller {
             Response::HTTP_OK
          ) ;
     }
-
-    public function check_pin_code(CheckPinCodeRequest $request){
-        // !auth('api')->check() // passport
-        if(!Auth::user()){
-
-            $user =  User::where('pin_code',$request->pin_code)->first();
-            if ($user) {
-                $user->update([ 'email_verified_at' => date("Y-m-d H:i:s") ]);
-                return $this ->loginUser($user);
-            }else{
-                return $this -> MakeResponseSuccessful( 
-                    [ 'message' => 'InvalidCredentials' ],  
-                    'InvalidCredentials' ,
-                    Response::HTTP_UNAUTHORIZED
-                ) ;  
-            }
-        }else{
-            return $this -> MakeResponseErrors( 
-                [ 'message' => 'loggin in before' ],  
-                'InvalidCredentials' ,
-                Response::HTTP_UNAUTHORIZED
-            ) ; 
-        } 
+    
+    public function resend_pin_code(Request $request){
+         
+        // return object if phone or email exist
+        $user = $this->get_user($request->email_phone);
+        $this->check_verification($user);
+        return $this -> MakeResponseSuccessful( 
+            ['pin code sent Successfully'],
+            'Successful' ,
+            Response::HTTP_OK
+         ) ;
     }
 
+    public function check_pin_code(CheckPinCodeRequest $request){
+        $user =  User::where('pin_code',$request->pin_code)->first();
+        if ($user) {
+            if ($user->email) {
+                $user->update([ 'email_verified_at' => date("Y-m-d H:i:s") ]);
+            }
+            if($user->phone){
+                $user->update([ 'phone_verified_at' => date("Y-m-d H:i:s") ]);
+            }
+            return $this ->loginUser($user);
+        }else{
+            return $this -> MakeResponseSuccessful( 
+                [ 'message' => 'InvalidCredentials' ],  
+                'InvalidCredentials' ,
+                Response::HTTP_UNAUTHORIZED
+            ) ;  
+        }
+    }
+    
     public function update_password(Request $request)
+    {
+        if( Hash::check( $request -> old_password , Auth::user()->password )){
+            Auth::user()->update(['password'=>Hash::make($request->password)]);
+            return $this -> MakeResponseSuccessful( 
+                ['message'=> 'Password reset successfully'],
+                'Successful' ,
+                Response::HTTP_OK
+            ) ;
+        }else {
+            return $this -> MakeResponseSuccessful( 
+                [ 'message' => 'InvalidCredentials' ],  
+                'InvalidCredentials' ,
+                Response::HTTP_UNAUTHORIZED
+            ) ;          
+        }
+        
+    }
+    public function new_password(Request $request)
     {
         Auth::user()->update(['password'=>Hash::make($request->password)]);
         return $this -> MakeResponseSuccessful( 
@@ -154,80 +186,6 @@ class AuthController extends Controller {
     // inside functions
 
 
-        public function store($request ) {
-            $all = [ ];
-
-
-            $all += array( 'first_name'       => $request -> get( 'first_name' ) );
-            $all += array( 'email'      => $request -> get( 'email' ) );
-            $all += array( 'phone'      => $request -> get( 'phone' ) );
-
-            $file_one = 'avatar';
-            if ($request->hasFile($file_one)) {            
-                $all += $this->HelperHandleFile($this->folder_name,$request->file($file_one),$file_one)  ;
-            }
-
-            $all += $request -> get( 'token' ) ?
-                array( 'token'       => $request -> get( 'token' )  )
-                :
-                array( 'token'       => Hash::make( Str::random(60) ) );
-
-            $all += $request -> get( 'token' ) ?
-                array( 'remember_token'       => $request -> get( 'token' )  )
-                :
-                array( 'remember_token'       => Hash::make( Str::random(60) ) );
-
-
-            $all += $request -> get( 'password' ) ?
-                array( 'password'       => Hash::make( $request -> get( 'password' ) ) )
-                :
-                (
-                    $request -> get( 'token' ) ?
-                    array( 'password'       => $request -> get( 'token' )  )
-                    :
-                    array( 'password'       => Hash::make('social') )
-                );
-
-            $all += $request -> get( 'login_type' ) ?
-                array( 'login_type' => $request->login_type )
-                :
-                array( 'login_type' => 'normal' );
-
-            $all += $request -> get( 'last_name' ) ?
-                array( 'last_name' => $request -> get( 'last_name' ) )
-                :
-                [];
-            $all += $request -> get( 'gender' ) ?
-                array( 'gender' => $request->gender  )
-                :
-                [];  
-            $all += $request -> get( 'birthdate' ) ?
-                array( 'birthdate' => $request->birthdate )
-                :
-                []; 
-
-            $all += $request -> get( 'login_type' ) && $request->login_type != 'normal' ?
-                array( 'email_verified_at' =>  date("Y-m-d H:i:s") )
-                :
-                [];
-            $all += $request -> get( 'fcm_token' ) ?
-                array( 'fcm_token' => $request ->fcm_token )
-                :
-                [];
-            $all += $request -> get( 'latitude' ) ?
-                array( 'latitude' => $request ->latitude )
-                :
-                [];
-            $all += $request -> get( 'longitude' ) ?
-                array( 'longitude' => $request ->longitude )
-                :
-                [];
-            $user =   User::create($all);  
-            // gave customer role
-            $user->assignRole('customer');
-  
-            return  $user;
-        }
 
         public function loginUser($user)
         {   
@@ -241,20 +199,11 @@ class AuthController extends Controller {
             return $this->authResponse();
         }
 
-        public function update_auth_fcm_token($fcm_token) {
-            $fcm_token ?    Auth::user()->update(['fcm_token'=>$fcm_token]) : null;
-        }
 
-        public function email_verified ($user){
-            // if not verified send pin code
-            if ($user->email_verified_at) {
-                return false;
-            }else{
-                $user->sendActiveEmailNotification();
-                return true;
-            }
-        }
 
+
+
+        
         public function authResponse () {
             return $this -> MakeResponseSuccessful( 
                 [
@@ -265,14 +214,8 @@ class AuthController extends Controller {
                 Response::HTTP_OK
             ) ; 
         }
-        public function get_user ($email_phone) {
-            if(is_numeric($email_phone)){
-                $user = User::where( 'phone' , $email_phone ) -> first( ) ;
-            }else {
-                $user = User::where( 'email' , $email_phone ) -> first( ) ;
-            }
-            return  $user;
-        }
+        
+
     // inside functions
 
 

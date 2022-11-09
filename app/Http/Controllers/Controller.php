@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Http\Controllers\ControllerTraits\ResponsesTrait;
 use App\Http\Controllers\ControllerTraits\FileTrait;
 use App\Http\Controllers\ControllerTraits\OrderTrait;
+use App\Http\Controllers\ControllerTraits\AuthTrait;
 
 class Controller extends BaseController
 {
@@ -19,7 +20,8 @@ class Controller extends BaseController
     
     ResponsesTrait,
     FileTrait,
-    OrderTrait;
+    OrderTrait,
+    AuthTrait;
     public function __construct()
     {
         $this->languages = config('app.lang_array'); // ex [ar , en ]

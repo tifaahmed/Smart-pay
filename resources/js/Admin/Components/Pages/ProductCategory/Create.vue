@@ -119,7 +119,11 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
+            // receive data to send to server 
             RequestData : {},
+            // collect data to send to server 
+            SendData : {},
+
 
         } } ,
         methods : {
@@ -153,9 +157,18 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 }
                 // front end valedate
                 else{
-                    await this.SubmetRowButton();// run the form
+                    await this.HandleData();  // get id from objects
+                    this.SubmetRowButton();  // succes from file
                 }
             },
+
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                },
+            //  Handle Data before call the server 
 
             async GetlLanguages(){
                 this.Languages  = ( await this.AllLanguages() ).data; // all languages
@@ -166,7 +179,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return  (new LanguageModel).all()  ;
                 },
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 

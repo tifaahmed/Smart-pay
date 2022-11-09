@@ -15,7 +15,8 @@
         "spatie/laravel-query-builder": "^5.0",
         "spatie/laravel-searchable": "^1.11",
         "spatie/laravel-translatable": "^6.0",
-        "torann/laravel-repository": "^0.6.2"
+        "torann/laravel-repository": "^0.6.2",
+        "twilio/sdk": "^6.43"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

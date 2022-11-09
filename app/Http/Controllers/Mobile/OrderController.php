@@ -22,7 +22,7 @@ use App\Repository\CouponRepositoryInterface;
 
 // Requests
 use App\Http\Requests\Api\Mobile\Order\OrderStoreApiRequest as modelInsertRequest;
-use App\Http\Requests\Api\Mobile\Order\OrderUpdateApiRequest as modelUpdateRequest;
+// use App\Http\Requests\Api\Mobile\Order\OrderUpdateApiRequest as modelUpdateRequest;
 
 
 class OrderController extends Controller
@@ -77,6 +77,9 @@ class OrderController extends Controller
             );
         }
     }
+
+
+
 
     public function store(modelInsertRequest $request) {
         $request_order_items = $request->order_items;
@@ -180,32 +183,32 @@ class OrderController extends Controller
         //      );
         // }
     }
-    public function update(modelUpdateRequest $request ,$id) {
-        try {
-            $old_model =  $this->ModelRepository->findById($id)  ;
-            $all = $this->update_files(
-                $old_model,
-                $request,
-                $this->folder_name,
-                $this->file_columns
-            );
+    // public function update(modelUpdateRequest $request ,$id) {
+    //     try {
+    //         $old_model =  $this->ModelRepository->findById($id)  ;
+    //         $all = $this->update_files(
+    //             $old_model,
+    //             $request,
+    //             $this->folder_name,
+    //             $this->file_columns
+    //         );
 
-            $this->ModelRepository->update( $id,Request()->except($this->file_columns)+$all) ;
-            $model =  $this->ModelRepository->findById($id) ;
+    //         $this->ModelRepository->update( $id,Request()->except($this->file_columns)+$all) ;
+    //         $model =  $this->ModelRepository->findById($id) ;
 
-            return $this -> MakeResponseSuccessful( 
-                [ new ModelResource ( $model ) ],
-                    'Successful' ,
-                    Response::HTTP_OK
-            ) ;
-            } catch (\Exception $e) {
-            return $this -> MakeResponseErrors(  
-                [$e->getMessage()  ] ,
-                'Errors',
-                Response::HTTP_NOT_FOUND
-            );
-        } 
-    }
+    //         return $this -> MakeResponseSuccessful( 
+    //             [ new ModelResource ( $model ) ],
+    //                 'Successful' ,
+    //                 Response::HTTP_OK
+    //         ) ;
+    //         } catch (\Exception $e) {
+    //         return $this -> MakeResponseErrors(  
+    //             [$e->getMessage()  ] ,
+    //             'Errors',
+    //             Response::HTTP_NOT_FOUND
+    //         );
+    //     } 
+    // }
 
     public function show($id) {
         try {

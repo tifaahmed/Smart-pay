@@ -133,9 +133,10 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
-            // collect data to send to server 
+            // receive data to send to server 
             RequestData : {},
-
+            // collect data to send to server 
+            SendData : {},
         } } ,
         methods : {
             async start(){
@@ -271,17 +272,19 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return  (new LanguageModel).all()  ;
                 },
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 
             //  Handle Data before call the server 
                 HandleData(){
-                    this.RequestData.user_id = this.RequestData.user_id ? this.RequestData.user_id.id : null;
-                    this.RequestData.store_id = this.RequestData.store_id ? this.RequestData.store_id.id : null;
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['user_id'] =  this.RequestData.user_id.id  ;
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
                 },
             //  Handle Data before call the server 
-
             // call the server
                 async SubmetRowButton(){
                     this.ServerReaponse = null;

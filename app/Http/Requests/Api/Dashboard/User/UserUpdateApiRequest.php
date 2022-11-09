@@ -23,16 +23,14 @@ class UserUpdateApiRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
-        $lang_array = config('app.lang_array') ;
-        
+    {        
         $all=[];
 
         $all += [ 'first_name'               =>  [ 'required'  ] ]  ;
         $all += [ 'last_name'               =>  [  'sometimes'  ] ]  ;
 
         $all += [ 'email'               =>  [ 'required_without:phone','unique:users,email,'.$this->id ,'email' ] ]  ;
-        $all += [ 'password'               =>  [   'required' ] ]  ;
+        $all += [ 'password'               =>  [   'sometimes' ] ]  ;
         $all += [ 'gender'               =>  [   'required' , Rule::in(['girl','boy']) ] ] ;
 
         $all += [ 'phone'               =>  [  'required_without:email','unique:users,phone,'.$this->id ,'max:15'] ]  ;
@@ -48,7 +46,8 @@ class UserUpdateApiRequest extends FormRequest
         $all += [ 'latitude'               =>  [  'sometimes'  ] ]  ;
         $all += [ 'longitude'               =>  [  'sometimes'  ] ]  ;
 
-        $all += [ 'email_verified_at'       =>  ['date' ] ]  ;
+        $all += [ 'email_verified_at'       =>  ['sometimes','date' ] ]  ;
+        $all += [ 'phone_verified_at'       =>  ['sometimes','date' ] ]  ;
 
 
  

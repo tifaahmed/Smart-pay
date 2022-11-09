@@ -39,19 +39,9 @@ class OrderUpdateApiRequest extends FormRequest
             'visa','cash'
         ]), ] ] ; //default('cash')
 
-
-        $all += [ 'user_id'=>  [ 'required' ,'integer','exists:'.User::class.',id'] ] ;
-       
-        $all += [ 'coupon_title'       =>  [ 'sometimes'  ] ]  ;       // default 0
-        $all += [ 'coupon_code'       =>  [ 'sometimes'  ] ]  ;       // default 0
-        $all += [ 'coupon_store_name'       =>  [ 'sometimes'  ] ]  ;       // default 0
-
-        $all += [ 'delevery_fee_sub_total'       =>  [ 'sometimes' ,'numeric'] ]  ;       // default 0
-        $all += [ 'product_sub_total'       =>  [ 'sometimes' ,'numeric'] ]  ;   // default 0
-        $all += [ 'extras_sub_total'       =>  [ 'sometimes' ,'numeric'] ]  ;       // default 0
-        $all += [ 'coupon_discount'       =>  [ 'sometimes' ,'numeric'] ]  ;          // default 0
-        $all += [ 'total'       =>  [ 'sometimes' ,'numeric'] ]  ;          // default 0
-
+        $all += [ 'order_note'       =>  [ 'sometimes'  ] ]  ;       // default 0
+ 
+         
         return $all;
     }
 }

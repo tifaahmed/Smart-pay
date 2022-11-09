@@ -134,8 +134,10 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
-            // collect data to send to server 
+            // receive data to send to server 
             RequestData : {},
+            // collect data to send to server 
+            SendData : {},
 
         } } ,
         methods : {
@@ -152,7 +154,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         data_value :null  ,
                         validation:{required : true } ,
                         SelectOptions : this.all_users, 
-                        SelectStrings: ['id','first_name'] ,SelectForloopStrings:[],SelectForloopStringKeys:[],
+                        SelectStrings: ['id','first_name'] ,SelectForloopStrings:['first_name'],SelectForloopStringKeys:['ar','en'],
                         SelectImages: ['avatar'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
                     },
                     { 
@@ -265,13 +267,24 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return  (new LanguageModel).all()  ;
                 },
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 
             //  Handle Data before call the server 
                 HandleData(){
-                    this.RequestData.user_id = this.RequestData.user_id ? this.RequestData.user_id.id : null;
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['user_id'] =  this.RequestData.user_id.id  ;
+
+                    if (this.RequestData.food_section_ids) {
+                        var arr_hold = [];
+                        for (var food_section_key in this.RequestData.food_section_ids) {
+                        arr_hold[food_section_key] = this.RequestData.food_section_ids[food_section_key].id  ;
+                        }
+                        this.SendData.food_section_ids  =arr_hold;
+                    }
                 },
             //  Handle Data before call the server 
 

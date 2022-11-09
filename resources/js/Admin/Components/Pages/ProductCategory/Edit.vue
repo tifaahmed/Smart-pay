@@ -118,8 +118,11 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
+            // receive data to send to server 
             RequestData : {},
-
+            // collect data to send to server 
+            SendData : {},
+            
         } } ,
         methods : {
             async start(){
@@ -177,8 +180,13 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 this.Languages  = ( await this.AllLanguages() ).data; // all languages
             },
 
-            HandleData(){
-            },
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                },
+            //  Handle Data before call the server 
 
             async SubmetRowButton(){
                 this.ServerReaponse = null;
@@ -205,7 +213,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },
                 update(){
-                    return (new Model).update(this.$route.params.id , this.RequestData)  ;
+                    return (new Model).update(this.$route.params.id , this.SendData)  ;
                 }
             // modal
 

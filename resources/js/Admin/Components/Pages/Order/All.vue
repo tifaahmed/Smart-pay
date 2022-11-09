@@ -111,7 +111,7 @@ export default {
         SingleTableRows : {},
 
         Columns :  [],       
-        controller_buttons   : [   'show' ] ,
+        controller_buttons   : [ 'edit','delete','show' ] ,
 
         PerPage  : 5
     } },

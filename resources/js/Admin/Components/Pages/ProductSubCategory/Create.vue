@@ -131,7 +131,10 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
+            // receive data to send to server 
             RequestData : {},
+            // collect data to send to server 
+            SendData : {},
 
         } } ,
         methods : {
@@ -225,9 +228,20 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     this.SubmetRowButton();// run the form
                 }
             },
-            HandleData(){
-                this.RequestData.product_category_id = this.RequestData.product_category_id.id;
-            },
+
+
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
+                    this.SendData['product_category_id'] =  this.RequestData.product_category_id.id  ;
+                },
+            //  Handle Data before call the server 
+
+
+
             async GetlLanguages(){
                 this.Languages  = ( await this.AllLanguages() ).data; // all languages
             },
@@ -240,7 +254,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return  (new LanguageModel).all()  ;
                 },
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 

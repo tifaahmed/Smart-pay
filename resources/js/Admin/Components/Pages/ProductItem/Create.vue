@@ -138,8 +138,10 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
-            // collect data to send to server 
+            // receive data to send to server 
             RequestData : {},
+            // collect data to send to server 
+            SendData : {},
 
         } } ,
         methods : {
@@ -288,33 +290,22 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return  (new LanguageModel).all()  ;
                 },
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 
+
             //  Handle Data before call the server 
                 HandleData(){
-                    this.RequestData.store_id = 
-                        this.RequestData.store_id 
-                        ? 
-                        this.RequestData.store_id.id 
-                        : 
-                        null;
-                    this.RequestData.product_category_id = 
-                        this.RequestData.product_category_id 
-                        ? 
-                        this.RequestData.product_category_id.id 
-                        : 
-                        null;
-                    this.RequestData.product_extra_ids = 
-                        this.RequestData.product_extra_ids 
-                        ? 
-                        this.RequestData.product_extra_ids.id 
-                        : 
-                        null;
-                        
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
+                    this.SendData['product_category_id'] =  this.RequestData.product_category_id.id  ;
+                    this.SendData['product_extra_ids'] =  this.RequestData.product_extra_ids.id  ;
                 },
             //  Handle Data before call the server 
+
 
             // call the server
                 async SubmetRowButton(){
