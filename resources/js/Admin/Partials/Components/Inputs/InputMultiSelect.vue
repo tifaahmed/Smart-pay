@@ -2,16 +2,13 @@
 		<div   class="form-group">
 		    <label  class="typo__label" :for="PropName"> {{PropLable}}  </label>
 
-
 			<multiselect v-model="data" 
 				:label="'id'" 
 				:track-by="'id'" 
 				:options="PropSelectOptions ? PropSelectOptions : []" 
 				:option-height="104"   
 				:multiple="true"   
-				:taggable="true"    
-				:searchable="true"
-				:close-on-select="true"
+				:searchable="false"
   				:placeholder="'Pick some'"
 			>
 				<template slot="singleLabel" slot-scope="props" >
@@ -185,7 +182,7 @@
 import Multiselect from 'vue-multiselect'
 
 export default {
-	name:'InputSelect',
+	name:'InputMultiSelect',
 
     components : { Multiselect } ,
 
@@ -221,10 +218,7 @@ export default {
         	this.$emit( 'change' ,  this.data  ) ;    
     	}
     } ,
-	methods: {
 
-
-	}
 
 
 } </script>

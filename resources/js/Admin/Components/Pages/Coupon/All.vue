@@ -71,9 +71,11 @@
                         </pagination>
                         <ModalIndex  
                             :Columns="Columns" 
+                            :SingleTableRows="SingleTableRows" 
                             :TableRows="TableRows" 
                             @DeleteRowButton="DeleteRowButton"
                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
+                            :controller_buttons = "controller_buttons"
                         />
                     </div>
                 </div>
@@ -133,7 +135,7 @@ export default {
                     default : null
                 } ,
                 
-                { 
+                {
                     type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
                     loopOnColumn:[
                         { name : 'id' , type: 'String'   } ,
@@ -141,7 +143,7 @@ export default {
                         { name : 'first_name' , type: 'String' } ,
                     ] ,
                 } ,
-                { 
+                {
                     type: 'SelectForloop'   ,header : 'store' , name : 'user'            , 
                     loopOnColumn:[
                         { name : 'id' , type: 'String'   } ,
@@ -159,6 +161,10 @@ export default {
                 } ,
                 { 
                     type: 'String'   ,header : 'type'    , name : 'type'     ,
+                    default : null
+                } ,
+                { 
+                    type: 'String'   ,header : 'discount'    , name : 'discount'     ,
                     default : null
                 } ,
                 { 

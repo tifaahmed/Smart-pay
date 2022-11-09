@@ -124,8 +124,11 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
+            // receive data to send to server 
             RequestData : {},
-
+            // collect data to send to server 
+            SendData : {},
+            
         } } ,
         methods : {
             async start(){
@@ -246,20 +249,24 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
 
 
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['user_id'] =  this.RequestData.user_id.id  ;
 
-            HandleData(){
-                this.RequestData.user_id = this.RequestData.user_id ? this.RequestData.user_id.id : null;
-                if (this.RequestData.food_section_ids) {
-                    var arr_hold = [];
-                    for (var food_section_key in this.RequestData.food_section_ids) {
-                       arr_hold[food_section_key] = this.RequestData.food_section_ids[food_section_key].id  ;
-                }
-                this.RequestData.food_section_ids  =arr_hold;
-                }
+                    if (this.RequestData.food_section_ids) {
+                        var arr_hold = [];
+                        for (var food_section_key in this.RequestData.food_section_ids) {
+                        arr_hold[food_section_key] = this.RequestData.food_section_ids[food_section_key].id  ;
+                        }
+                        this.SendData.food_section_ids  =arr_hold;
+                    }
+                },
+            //  Handle Data before call the server 
 
-                console.log(this.RequestData);
 
-            },
 
             async SubmetRowButton(){
                 this.ServerReaponse = null;
@@ -303,7 +310,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },
                 update(){
-                    return (new Model).update(this.$route.params.id , this.RequestData)  ;
+                    return (new Model).update(this.$route.params.id , this.SendData)  ;
                 }
             // modal
 

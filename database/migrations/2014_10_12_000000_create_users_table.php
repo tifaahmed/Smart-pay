@@ -28,6 +28,8 @@ return new class extends Migration
             $table->date('birthdate')->nullable();
             
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+            
             $table -> string        ( 'avatar'   ) -> nullable( )              ;
 
 

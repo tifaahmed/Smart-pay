@@ -4,9 +4,9 @@ namespace App\Http\Resources\Dashboard\Collections;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-use App\Http\Resources\Dashboard\ExtrasCategory\ExtrasCategoryResource as ModelResource;
+use App\Http\Resources\Dashboard\ExtraCategory\ExtraCategoryResource as ModelResource;
 
-class ExtrasCategoryCollection  extends ResourceCollection{
+class ExtraCategoryCollection  extends ResourceCollection{
 
     public function toArray( $request ) {
         return $this -> collection -> map( fn( $model ) => new ModelResource ( $model ) );

@@ -21,20 +21,20 @@ class RegisterApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name'      =>  [ 'required' ,'max:50'] ,
+            'first_name'      =>  [ 'sometimes' ,'max:50'] ,
             'last_name'      =>  [ 'sometimes' ,'max:50'] ,
 
             'email'     =>  [ 'required_without:phone', 'unique:users,email' ,'email','max:200'] ,
             'phone'     =>  [ 'required_without:email', 'unique:users,phone' ,'max:15' ] ,
 
-            'password'  =>  [ 'required' , 'confirmed' ,  'min:8' , 'max:15' ],
-            'password_confirmation'  =>  [ 'required' , 'min:8' , 'max:15' ],
+            'password'  =>  [ 'sometimes' , 'confirmed' ,  'min:8' , 'max:15' ],
+            'password_confirmation'  =>  [ 'sometimes' , 'min:8' , 'max:15' ],
 
 
             'avatar'    =>      [ 'sometimes', 'mimes:jpg,jpeg,webp,bmp,png' , 'max:5000'] ,
             'gender'    =>      [ 'sometimes', Rule::in(['girl','boy']) ] ,
 
-            'birthdate '=>      [  'date' , 'date_format:Y/d/m'] ,
+            'birthdate '=>      [  'sometimes' ,'date' , 'date_format:Y/d/m'] ,
             'city_id'=>         [  'sometimes' , 'integer','exists:cities,id' ] ,
 
             'fcm_token'   =>    [ 'sometimes' ,'max:200' ] ,

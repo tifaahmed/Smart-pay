@@ -48,15 +48,16 @@
                                     :FactoryType="column_val.type" :FactoryName="column_val.name"  v-model ="RequestData[column_val.name]"  
                                     :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name]  )  ) ?  ServerReaponse.errors[column_val.name] : null" 
                                     
-                                    :FactorySelectOptions="column_val.SelectOptions ? column_val.SelectOptions : [] "  
+                                    :FactorySelectOptions="column_val.type  === 'select' || column_val.type  === 'multiSelect' || column_val.type === 'Radio' ?
+                                        column_val.SelectOptions : [] "  
 
-                                    :FactorySelectStrings="column_val.type === 'select'? column_val.SelectStrings : []"   
-                                    :FactorySelectForloopStrings="column_val.type === 'select'? column_val.SelectForloopStrings : []"   
-                                    :FactorySelectForloopStringKeys="column_val.type === 'select'? column_val.SelectForloopStringKeys : []"  
+                                    :FactorySelectStrings="column_val.type === 'select'  || column_val.type  === 'multiSelect'? column_val.SelectStrings : []"   
+                                    :FactorySelectForloopStrings="column_val.type === 'select'  || column_val.type  === 'multiSelect'? column_val.SelectForloopStrings : []"   
+                                    :FactorySelectForloopStringKeys="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopStringKeys : []"  
 
-                                    :FactorySelectImages="column_val.type === 'select'? column_val.SelectImages : []"   
-                                    :FactorySelectForloopImages="column_val.type === 'select'? column_val.SelectForloopImages : []"  
-                                    :FactorySelectForloopImageKeys="column_val.type === 'select'? column_val.SelectForloopImageKeys : []" 
+                                    :FactorySelectImages="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectImages : []"   
+                                    :FactorySelectForloopImages="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopImages : []"  
+                                    :FactorySelectForloopImageKeys="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopImageKeys : []" 
                                 />
                                    
                             </span> 
@@ -95,10 +96,11 @@
 
 
 <script>
-import Model     from 'AdminModels/ProductItemModel';
-import StoreModel     from 'AdminModels/StoreModel';
-import ProductCategoryModel            from 'AdminModels/ProductCategoryModel';
-import LanguageModel    from 'AdminModels/LanguageModel';
+import Model                    from 'AdminModels/ProductItemModel';
+import StoreModel               from 'AdminModels/StoreModel';
+import ProductCategoryModel     from 'AdminModels/ProductCategoryModel';
+import ExtraModel               from 'AdminModels/ExtraModel';
+import LanguageModel            from 'AdminModels/LanguageModel';
 
 import DataService    from '../../DataService';
 
@@ -121,7 +123,8 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             Languages : [],
             all_stores : {},
             all_product_categories : {},
-             
+            all_extras : {},
+
             // tabs
             hasNoneTranslatableFields : 0,
             hasTranslatableFields : 0,
@@ -135,8 +138,10 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
-            // collect data to send to server 
+            // receive data to send to server 
             RequestData : {},
+            // collect data to send to server 
+            SendData : {},
 
         } } ,
         methods : {
@@ -145,6 +150,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     await this.GetlLanguages();
                     await this.GetlAllStores();
                     await this.GetlAllProductCategories();
+                    await this.GetlAllExtras();
                 // get data
 
                 this.Columns = [ 
@@ -164,6 +170,15 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : true } ,
                         SelectOptions : this.all_product_categories, 
                         SelectStrings: [] ,SelectForloopStrings:['title'],SelectForloopStringKeys:['ar','en'],
+                        SelectImages: [] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
+                    { 
+                        type: 'multiSelect',placeholder:'',header :'extras', name : 'product_extra_ids' ,
+                        translatable : false ,
+                        data_value : null  ,
+                        validation:{required : false } ,
+                        SelectOptions : this.all_extras, 
+                        SelectStrings: ['id','price'] ,SelectForloopStrings:['title'],SelectForloopStringKeys:['ar','en'],
                         SelectImages: [] ,SelectForloopImages:[],SelectForloopImageKeys:[],
                     },
                     { 
@@ -202,7 +217,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     { 
                         type: 'number',placeholder:'discount',header : 'discount', name : 'discount' ,
                         translatable : false , 
-                        data_value :null  ,
+                        data_value :0  ,
                         validation:{required : false } 
                     },
                     
@@ -247,6 +262,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
 
             // get data
+                async GetlAllExtras(){
+                    this.all_extras = (await this.AllExtras()).data.data;
+                },
                 async GetlAllStores(){
                     this.all_stores = (await this.AllStores()).data.data;
                 },
@@ -259,6 +277,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             // get data
 
             // model 
+                AllExtras(){
+                    return  (new ExtraModel).all()  ;
+                },
                 AllStores(){
                     return  (new StoreModel).all()  ;
                 },
@@ -269,26 +290,22 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return  (new LanguageModel).all()  ;
                 },
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 
+
             //  Handle Data before call the server 
                 HandleData(){
-                    this.RequestData.store_id = 
-                        this.RequestData.store_id 
-                        ? 
-                        this.RequestData.store_id.id 
-                        : 
-                        null;
-                    this.RequestData.product_category_id = 
-                        this.RequestData.product_category_id 
-                        ? 
-                        this.RequestData.product_category_id.id 
-                        : 
-                        null;
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
+                    this.SendData['product_category_id'] =  this.RequestData.product_category_id.id  ;
+                    this.SendData['product_extra_ids'] =  this.RequestData.product_extra_ids.id  ;
                 },
             //  Handle Data before call the server 
+
 
             // call the server
                 async SubmetRowButton(){

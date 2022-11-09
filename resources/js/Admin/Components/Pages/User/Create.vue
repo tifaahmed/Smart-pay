@@ -126,8 +126,12 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 message : null,
             },
 
-            RequestData : {},
 
+            // receive data to send to server 
+            RequestData : {},
+            // collect data to send to server 
+            SendData : {},
+            
         } } ,
         methods : {
             async start(){
@@ -255,16 +259,22 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     this.SubmetRowButton();// run the form
                 }
             },
-            HandleData(){
 
-            },
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                },
+            //  Handle Data before call the server
+
             async GetlLanguages(){
                 this.Languages  = ( await this.AllLanguages() ).data; // all languages
             },
 
             // model 
                 store(){
-                    return (new Model).store(this.RequestData)  ;
+                    return (new Model).store(this.SendData)  ;
                 },
             // model 
 

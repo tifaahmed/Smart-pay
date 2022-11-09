@@ -276,9 +276,7 @@
 			},
         	async logout(){
         		let data = await (new AuthModel).logout();
-				if (data.status  == 200) {
-					this.$router.push({ name: 'Auth.Login' })
-				}
+				this.$router.push({ name: 'Auth.Login' })
         	}
         }
 

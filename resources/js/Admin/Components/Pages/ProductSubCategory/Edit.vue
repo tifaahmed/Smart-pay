@@ -217,10 +217,16 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 this.Languages  = ( await this.AllLanguages() ).data; // all languages
             },
 
-            HandleData(){
-                this.RequestData.product_category_id = this.RequestData.product_category_id.id;
-            },
 
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
+                    this.SendData['product_category_id'] =  this.RequestData.product_category_id.id  ;
+                },
+            //  Handle Data before call the server 
             async SubmetRowButton(){
                 this.ServerReaponse = null;
                 let data = await this.update()  ; // send update request
@@ -249,7 +255,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },
                 update(){
-                    return (new Model).update(this.$route.params.id , this.RequestData)  ;
+                    return (new Model).update(this.$route.params.id , this.SendData)  ;
                 }
             // modal
 
