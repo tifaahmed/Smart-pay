@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\Api\Mobile\Auth\loginApiRequest ;
 use App\Http\Requests\Api\Mobile\Auth\RegisterApiRequest ;
-use App\Http\Requests\Api\Mobile\Auth\ForgetPasswordByEmailApiRequest ;
 use App\Http\Requests\Api\Mobile\Auth\CheckPinCodeRequest ;
-use App\Http\Requests\Api\Mobile\Auth\UpdatePasswordRequest ;
 
 use App\Models\User ;
 
@@ -105,23 +103,7 @@ class AuthController extends Controller {
          ) ;
     }
 
-    public function forget_password(ForgetPasswordByEmailApiRequest $request)
-    {
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-        
-        if ($status == Password::RESET_LINK_SENT) {
-            return [
-                'status' => __($status)
-            ];
-        }
-        return $this -> MakeResponseSuccessful( 
-            ['send email Successfully'],
-            'Successful' ,
-            Response::HTTP_OK
-         ) ;
-    }
+
     
     public function resend_pin_code(Request $request){
          
@@ -192,18 +174,13 @@ class AuthController extends Controller {
             //  user Auth
             Auth::loginUsingId($user->id);
 
-            // update auth user  fcm_token 
+            // update auth user  fcm_token if exist
             $this->update_auth_fcm_token($user->fcm_token);
 
             // login Response
             return $this->authResponse();
         }
 
-
-
-
-
-        
         public function authResponse () {
             return $this -> MakeResponseSuccessful( 
                 [
@@ -215,7 +192,6 @@ class AuthController extends Controller {
             ) ; 
         }
         
-
     // inside functions
 
 

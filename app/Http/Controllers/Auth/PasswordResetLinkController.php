@@ -1,47 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Mobile\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use App\Http\Requests\Api\Mobile\Auth\ForgetPasswordByEmailApiRequest ;
+use Illuminate\Http\Response ;
+use Illuminate\Support\Facades\Auth;
 
 class PasswordResetLinkController extends Controller
 {
-    /**
-     * Display the password reset link request view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
+
+    public function store(ForgetPasswordByEmailApiRequest $request)
     {
-        return view('auth.forgot-password');
-    }
+        try {
+            // return object if phone or email exist
+            $user = $this->get_user($request->email_phone);
+        
+            if ($user->email == $request->email_phone) {
+                $status = Password::sendResetLink(
+                    // $request->only('email')
+                    ['email' => $request->email_phone]
+                );
+            }
 
-    /**
-     * Handle an incoming password reset link request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
+            if ($user->phone == $request->email_phone) {
+                $user->sendActivePhoneNotification();
+            }
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+            return $this -> MakeResponseSuccessful( 
+                ['pin code sent Successfully'],
+                'Successful' ,
+                Response::HTTP_OK
+            ) ;
+        } catch (\Exception $e) {
+            return $this -> MakeResponseErrors(  
+                [$e->getMessage()  ] ,
+                'Errors',
+                Response::HTTP_NOT_FOUND
+            );
+        }    
     }
 }

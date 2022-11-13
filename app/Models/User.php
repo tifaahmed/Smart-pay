@@ -187,7 +187,7 @@ class User extends Authenticatable
             $data = [] ;
             $data += ['pin_code' => $this->pin_code];
             $data += ['phone' => $this->phone];
-            $this->notify(new ActivePhoneNotification($data));
+            // $this->notify(new ActivePhoneNotification($data));
         }
 
     // Notification

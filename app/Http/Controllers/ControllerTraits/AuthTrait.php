@@ -24,7 +24,6 @@ trait AuthTrait {
             return $falg;
         }
 
-
         // * @param   $user object (model)
         // return false if email_verified
         // return true if (not) email_verified & send code to mail 
@@ -55,7 +54,7 @@ trait AuthTrait {
         // * @param   $email_phone string 
         // return object if phone or email exist
         // return null if phone or email (not) exist
-        public function get_user ($email_phone) {
+        public function get_user ($email_phone) :object {
             if(is_numeric($email_phone)){
                 $user = User::where( 'phone' , $email_phone ) -> first( ) ;
             }else {
@@ -75,7 +74,7 @@ trait AuthTrait {
 
     // * @param   $request  array
     // return obj (model)  
-    public function store($request ) {
+    public function store($request ) :object {
         $all = [ ];
 
 
