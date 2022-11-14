@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\Mobile\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
 class CheckPinCodeRequest extends FormRequest {
     public function authorize()

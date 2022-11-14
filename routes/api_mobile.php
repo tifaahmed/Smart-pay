@@ -21,11 +21,14 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
     Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
         Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
         Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
-        Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,    
-        Route::post( '/forget-password' ,  'AuthController@forget_password' )  -> name( 'forget_password' ) ,  
-        Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) , 
-        Route::post( '/resend-pin-code' ,  'AuthController@resend_pin_code' )  -> name( 'resend_pin_code' ) , 
+        Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,
+
+        Route::post( '/forgot-password' ,  'Auth\PasswordResetLinkController@store' )->name( 'forget_password' ) ,  
+        Route::post( '/new-password'    ,  'Auth\NewPasswordController@store' )->name( 'new_password' ) ,  
         
+        Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) , 
+
+        Route::post( '/resend-pin-code' ,  'AuthController@resend_pin_code' )  -> name( 'resend_pin_code' ) , 
     ]),
 
 
@@ -96,8 +99,8 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
     // auth:api // passport
     Route::group(['middleware' => ['auth:sanctum','verified']], fn ( ) : array => [
         // auth
-        Route::name( 'auth.') -> prefix( 'auth' ,'guest','guest:api') -> group( fn ( ) => [
-            Route::post( 'update-password' ,  'authController@update_password' )  -> name( 'update_password' ),
+        Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
+            Route::post( 'update-password' ,  'Auth\UpdatePasswordController@forget_password' )  -> name( 'forget_password' ),
             Route::post( 'logout' ,  'authController@logout' )  -> name( 'logout' ) ,
         ]),
 
@@ -105,7 +108,6 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
         Route::name('user.')->prefix('/user')->group( fn ( ) : array => [
             Route::get('/show'                 ,   'UserController@show'                )->name('show'),
             Route::post('/update'              ,   'UserController@update'              )->name('update'),
-            Route::post('/apdate-password'     ,   'UserController@apdatePassword'      )->name('apdate_password'),
         ]), 
         // product-category
         Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
