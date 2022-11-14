@@ -72,78 +72,78 @@ trait AuthTrait {
 
 
 
-    // * @param   $request  array
+    // * @param    $data  array
     // return obj (model)  
-    public function store($request ) :object {
+    private function store($data)   {
         $all = [ ];
 
 
-        $all += $request -> get( 'first_name' ) ?
-        array( 'first_name' => $request -> get( 'first_name' ) )
+        $all += $data -> get( 'first_name' ) ?
+        array( 'first_name' => $data -> get( 'first_name' ) )
         :
         array( 'first_name' => 'unknown' );
 
-        $all += array( 'email'      => $request -> get( 'email' ) );
-        $all += array( 'phone'      => $request -> get( 'phone' ) );
+        $all += array( 'email'      => $data -> get( 'email' ) );
+        $all += array( 'phone'      => $data -> get( 'phone' ) );
 
         $file_one = 'avatar';
-        if ($request->hasFile($file_one)) {            
-            $all += $this->HelperHandleFile($this->folder_name,$request->file($file_one),$file_one)  ;
+        if ($data->hasFile($file_one)) {            
+            $all += $this->HelperHandleFile($this->folder_name,$data->file($file_one),$file_one)  ;
         }
 
-        $all += $request -> get( 'token' ) ?
-            array( 'token'       => $request -> get( 'token' )  )
+        $all += $data -> get( 'token' ) ?
+            array( 'token'       => $data -> get( 'token' )  )
             :
             array( 'token'       => Hash::make( Str::random(60) ) );
 
-        $all += $request -> get( 'token' ) ?
-            array( 'remember_token'       => $request -> get( 'token' )  )
+        $all += $data -> get( 'token' ) ?
+            array( 'remember_token'       => $data -> get( 'token' )  )
             :
             array( 'remember_token'       => Hash::make( Str::random(60) ) );
 
 
-        $all += $request -> get( 'password' ) ?
-            array( 'password'       => Hash::make( $request -> get( 'password' ) ) )
+        $all += $data -> get( 'password' ) ?
+            array( 'password'       => Hash::make( $data -> get( 'password' ) ) )
             :
             (
-                $request -> get( 'token' ) ?
-                array( 'password'       => $request -> get( 'token' )  )
+                $data -> get( 'token' ) ?
+                array( 'password'       => $data -> get( 'token' )  )
                 :
                 array( 'password'       => Hash::make('social') )
             );
 
-        $all += $request -> get( 'login_type' ) ?
-            array( 'login_type' => $request->login_type )
+        $all += $data -> get( 'login_type' ) ?
+            array( 'login_type' => $data->login_type )
             :
             array( 'login_type' => 'normal' );
 
-        $all += $request -> get( 'last_name' ) ?
-            array( 'last_name' => $request -> get( 'last_name' ) )
+        $all += $data -> get( 'last_name' ) ?
+            array( 'last_name' => $data -> get( 'last_name' ) )
             :
             [];
-        $all += $request -> get( 'gender' ) ?
-            array( 'gender' => $request->gender  )
+        $all += $data -> get( 'gender' ) ?
+            array( 'gender' => $data->gender  )
             :
             [];  
-        $all += $request -> get( 'birthdate' ) ?
-            array( 'birthdate' => $request->birthdate )
+        $all += $data -> get( 'birthdate' ) ?
+            array( 'birthdate' =>  $data->birthdate )
             :
             []; 
 
-        $all += $request -> get( 'login_type' ) && $request->login_type != 'normal' ?
+        $all +=  $data -> get( 'login_type' ) &&  $data->login_type != 'normal' ?
             array( 'email_verified_at' =>  date("Y-m-d H:i:s") )
             :
             [];
-        $all += $request -> get( 'fcm_token' ) ?
-            array( 'fcm_token' => $request ->fcm_token )
+        $all +=  $data -> get( 'fcm_token' ) ?
+            array( 'fcm_token' =>  $data ->fcm_token )
             :
             [];
-        $all += $request -> get( 'latitude' ) ?
-            array( 'latitude' => $request ->latitude )
+        $all +=  $data -> get( 'latitude' ) ?
+            array( 'latitude' =>  $data ->latitude )
             :
             [];
-        $all += $request -> get( 'longitude' ) ?
-            array( 'longitude' => $request ->longitude )
+        $all +=  $data -> get( 'longitude' ) ?
+            array( 'longitude' =>  $data ->longitude )
             :
             [];
         $user =   User::create($all);  
