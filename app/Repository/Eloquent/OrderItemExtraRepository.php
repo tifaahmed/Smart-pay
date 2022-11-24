@@ -21,10 +21,10 @@ class  OrderItemExtraRepository extends BaseRepository implements OrderItemExtra
 	{
 		$this->model =  $model;
 	}
-	public function custome_create($order_item_id,$extra_model){
-		$extra_id =  $extra_model->id;
-		$extra_title =  $extra_model->title;
-		$extra_price =  $extra_model->price;
+	public function custome_create($order_item_id,$cart_extra){
+		$extra_id =  $cart_extra->id;
+		$extra_title =  $cart_extra->extra_title;
+		$extra_price =  $cart_extra->extra_price;
 		
 		$sub_total =  $extra_price ;
 		

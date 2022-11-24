@@ -40,7 +40,7 @@ class BaseRepository implements EloquentRepositoryInterface
  		
 		return QueryBuilder::for($this->model->with($relations))
 		->allowedFilters($fillable )	
-			
+		// if user is the owner 	
 		->allowedFilters(AllowedFilter::scope('relate_auth_user') )	
 
 		->get($columns);

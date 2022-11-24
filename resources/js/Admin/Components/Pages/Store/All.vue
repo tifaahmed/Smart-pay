@@ -138,7 +138,7 @@ export default {
                 } ,
                 
                 { 
-                    type: 'MultiSelectForloopModal'   ,header : 'food_sections' , name : 'food_sections'            , 
+                    type: 'MultiSelectForloopModal'   ,header : 'food sections' , name : 'food_sections'            , 
                     loopOnColumn:[
                         { name : 'id' , type: 'String'    } ,
                         { name : 'title' , type: 'Forloop' ,secondLoopOnColumn:this.Languages  } ,

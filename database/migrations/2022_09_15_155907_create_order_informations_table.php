@@ -20,8 +20,9 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
             $table->string('user_full_name');
-            $table->string('phone');
-
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();  
+            
             $table->text('address'); 
             $table->string('department')->nullable();  
             $table->string('house')->nullable();  

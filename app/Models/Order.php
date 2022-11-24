@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth ;
 
 use App\Models\User;               // belongsTo
 
@@ -31,18 +32,19 @@ class Order extends Model
         'total', // float  , default 0 //(order_store_sub_totals + site_fee'
     
     ];
+    //scope
+        public function scopeRelateAuthUser($query){
+            return $query->where('user_id',Auth::user()->id);
+        }
 
     // HasMany
         public function order_stores(){
             return $this->HasMany(OrderStore::class);
         }
-
-        
     // belongsTo
         public function user(){
             return $this->belongsTo(User::class,'user_id');
         }
-
     // HasOne
         public function order_information(){
             return $this->HasOne(OrderInformation::class,'order_id');

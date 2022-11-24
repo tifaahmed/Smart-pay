@@ -112,7 +112,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
             Languages : [],
             all_users : {},
-            all_sood_sections : {},
+            all_food_sections : {},
 
             hasNoneTranslatableFields : 0,
             hasTranslatableFields : 0,
@@ -141,7 +141,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         type: 'multiSelect',placeholder:'',header :'Food Sections', name : 'food_section_ids' ,translatable : false ,
                         data_value :receivedData.food_sections  ,
                         validation:{required : false } ,
-                        SelectOptions : this.all_sood_sections, 
+                        SelectOptions : this.all_food_sections, 
                         SelectStrings: ['id'] ,SelectForloopStrings:['title'],SelectForloopStringKeys:['ar','en'],
                         SelectImages: ['image'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
                     },
@@ -289,7 +289,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 this.all_users = (await this.AllUsers()).data.data;
             },
             async GetlAllFoodSections(){
-                this.all_sood_sections = (await this.AllFoodSections()).data.data;
+                this.all_food_sections = (await this.AllFoodSections()).data.data;
             },
             async GetlLanguages(){
                 this.Languages  = ( await this.AllLanguages() ).data; // all languages

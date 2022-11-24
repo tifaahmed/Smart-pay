@@ -77,6 +77,7 @@
                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
                             :controller_buttons = "controller_buttons"
                         />
+                        
                     </div>
                 </div>
             </div>

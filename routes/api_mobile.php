@@ -19,16 +19,53 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
 
     // auth
     Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
+
         Route::post( '/login' ,   'AuthController@login'  ) -> name( 'login' ) ,
         Route::post( '/login-social' ,   'AuthController@loginSocial'  ) -> name( 'loginSocial' ) ,
         Route::post( '/register' ,  'AuthController@register' )  -> name( 'register' ) ,
+        Route::post( '/active-acount' ,  'AuthController@active_acount' )  -> name( 'active_acount' ) , 
 
-        Route::post( '/forgot-password' ,  'Auth\PasswordResetLinkController@store' )->name( 'forget_password' ) ,  
-        Route::post( '/new-password'    ,  'Auth\NewPasswordController@store' )->name( 'new_password' ) ,  
-        
-        Route::post( '/check-pin-code' ,  'AuthController@check_pin_code' )  -> name( 'check_pin_code' ) , 
 
-        Route::post( '/resend-pin-code' ,  'AuthController@resend_pin_code' )  -> name( 'resend_pin_code' ) , 
+
+        Route::post( '/reset-password' ,  'Auth\ForgetPassword\PasswordResetLinkController@reset' )->name( 'password.reset' ) ,  
+        Route::post( '/check-pin-code' ,  'Auth\ForgetPassword\CheckPinCodeController@check_pin_code' )  -> name( 'check_pin_code' ) , 
+        Route::post( '/new-password'    ,  'Auth\ForgetPassword\NewPasswordController@new_password' )->name( 'password.new' ) ,  
+
+    ]),
+
+    
+    // auth:sanctum // auth:sanctum
+    // auth:api // passport
+    Route::group(['middleware' => ['auth:sanctum','verified']], fn ( ) : array => [
+        // auth
+        Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
+            Route::post( 'update-password' ,  'Auth\UpdatePasswordController@update_password' )  -> name( 'password.update' ),
+            Route::post( 'logout' ,  'authController@logout' )  -> name( 'logout' ) ,
+        ]),
+
+        // user
+        Route::name('user.')->prefix('/user')->group( fn ( ) : array => [
+            Route::get('/show'                 ,   'UserController@show'                )->name('show'),
+            Route::post('/update'              ,   'UserController@update'              )->name('update'),
+        ]), 
+        // product-category
+        Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
+            Route::post('/fav-toggle'         ,   'ProductItemsController@fav_toggle'  )->name('fav'),
+        ]),
+        // store
+        Route::name('store.')->prefix('store')->group( fn ( ) : array => [
+            Route::post('/fav-toggle'         ,   'StoreController@fav_toggle'  )->name('fav'),
+            Route::post('/rate'               ,   'StoreController@rate'        )->name('rate'),
+            Route::post(''                    ,   'StoreController@store'       )->name('store'),
+        ]),
+        // cart
+        Route::name('cart.')->prefix('cart')->group( fn ( ) : array => [
+            Route::get('/'                    ,   'CartController@all'         )->name('all'),
+            Route::post(''                    ,   'CartController@store'       )->name('store'),
+            Route::post('/{id}/update'        ,   'CartController@update'      )->name('update'),
+            Route::DELETE('/{id}'             ,   'CartController@destroy'     )->name('destroy'),
+
+        ]),
     ]),
 
 
@@ -95,31 +132,9 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
     ]),
 
 
-    // auth:sanctum // auth:sanctum
-    // auth:api // passport
-    Route::group(['middleware' => ['auth:sanctum','verified']], fn ( ) : array => [
-        // auth
-        Route::name( 'auth.') -> prefix( 'auth') -> group( fn ( ) => [
-            Route::post( 'update-password' ,  'Auth\UpdatePasswordController@forget_password' )  -> name( 'forget_password' ),
-            Route::post( 'logout' ,  'authController@logout' )  -> name( 'logout' ) ,
-        ]),
 
-        // user
-        Route::name('user.')->prefix('/user')->group( fn ( ) : array => [
-            Route::get('/show'                 ,   'UserController@show'                )->name('show'),
-            Route::post('/update'              ,   'UserController@update'              )->name('update'),
-        ]), 
-        // product-category
-        Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
-            Route::post('/fav-toggle'         ,   'ProductItemsController@fav_toggle'  )->name('fav'),
-        ]),
-        // store
-        Route::name('store.')->prefix('store')->group( fn ( ) : array => [
-            Route::post('/fav-toggle'         ,   'StoreController@fav_toggle'  )->name('fav'),
-            Route::post('/rate'               ,   'StoreController@rate'        )->name('rate'),
-            Route::post(''                    ,   'StoreController@store'       )->name('store'),
-        ]),
-    ]),
+
+
     Route::group(['middleware' => ['auth:sanctum','role:store']], fn ( ) : array => [   
         Route::name('store.')->prefix('store')->group( fn ( ) : array => [
             Route::get('/my-store'           ,   'StoreController@my_store'        )->name('my_store'),

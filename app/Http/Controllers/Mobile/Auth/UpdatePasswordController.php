@@ -14,31 +14,32 @@ use Illuminate\Support\Facades\Hash;
 class UpdatePasswordController extends Controller
 {
 
-    public function forget_password(UpdatePasswordRequest $request)
+
+    public function update_password(UpdatePasswordRequest $request)
     {
-        // return object if phone or email exist
-        $user = $this->get_user($request->email_phone);
+        try {
+
+            Auth::user()->update(['password'=>Hash::make($request->password)]);
+            return $this -> MakeResponseSuccessful( 
+                ['message'=> 'Password reset successfully'],
+                'Successful' ,
+                Response::HTTP_OK
+            ) ;
+
+
+            return $this -> MakeResponseSuccessful( 
+                [ 'message' => 'InvalidCredentials' ],  
+                'InvalidCredentials' ,
+                Response::HTTP_UNAUTHORIZED
+            ) ;          
+        } catch (\Exception $e) {
+            return $this -> MakeResponseSuccessful( 
+                [ 'message' => 'InvalidCredentials' ],  
+                'InvalidCredentials' ,
+                Response::HTTP_UNAUTHORIZED
+            ) ;  
+        }  
+    }
     
-        if (condition) {
-            # code...
-        }
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-        
-        if ($status == Password::RESET_LINK_SENT) {
-            return [
-                'status' => __($status)
-            ];
-        }
-        return $this -> MakeResponseSuccessful( 
-            ['pin code sent Successfully'],
-            'Successful' ,
-            Response::HTTP_OK
-         ) ;
-    }
-    public function store(Request $request)
-    {
-   
-    }
+ 
 }

@@ -254,7 +254,14 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     }
                     this.SendData['store_id'] =  this.RequestData.store_id.id  ;
                     this.SendData['product_category_id'] =  this.RequestData.product_category_id.id  ;
-                    this.SendData['product_extra_ids'] =  this.RequestData.product_extra_ids.id  ;
+                    
+                    if (this.RequestData.product_extra_ids) {
+                        var arr_hold = [];
+                        for (var product_extra_key in this.RequestData.product_extra_ids) {
+                        arr_hold[product_extra_key] = this.RequestData.product_extra_ids[product_extra_key].id  ;
+                        }
+                        this.SendData.product_extra_ids  =arr_hold;
+                    }
                 },
             //  Handle Data before call the server 
 

@@ -15,23 +15,18 @@ trait OrderTrait {
 
 
 
-	// * @param  array  $request_order_items
+	// * @param  array of objects  $request_order_items
     // @return array of objects (stores data)
-    public function get_store_models($request_order_items) 
-    {
-        $product_ids = [];
-        foreach ($request_order_items as $key => $request_order_item) {
-             $product_ids[$key] = $request_order_item['product_id'];
-        }
-        return $store_models = Store::whereHas('product_items',function (Builder $query) use($product_ids) {
-            $query->whereIn('id',$product_ids) ;
-        })->get();    
+    public function get_store_models($carts)  {
+        $store_ids = $carts->pluck('store_id');
+        return $store_models = Store::whereIn('id',$store_ids)->get();    
     }
     
     // must return  the model (ProductItem data)
-    public function get_product_item($store_id,$product_id) {
-        return ProductItem::where('id',$product_id)->where('store_id',$store_id)->first();
-    }
+    // public function get_product_item($store_id,$product_id) {
+    //     return ProductItem::where('id',$product_id)->where('store_id',$store_id)->first();
+    // }
+    
     // must return the model (Coupon data)
     public function get_store_coupon($store_id,$coupon_code) {
         return Coupon::where('code',$coupon_code)->where('store_id',$store_id)->first();

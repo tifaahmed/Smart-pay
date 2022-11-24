@@ -98,6 +98,7 @@
 <script>
 import Model     from 'AdminModels/StoreModel';
 import UserModel            from 'AdminModels/UserModel';
+import FoodSectionModel            from 'AdminModels/FoodSectionModel';
 import LanguageModel    from 'AdminModels/LanguageModel';
 
 import DataService    from '../../DataService';
@@ -120,6 +121,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             // get data 
             Languages : [],
             all_users : {},
+            all_food_sections : {},
 
             // tabs
             hasNoneTranslatableFields : 0,
@@ -145,6 +147,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 // get data
                     await this.GetlLanguages();
                     await this.GetlAllUsers();
+                    await this.GetlAllFoodSections();
                 // get data
 
                 this.Columns = [ 
@@ -157,6 +160,16 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         SelectStrings: ['id','first_name'] ,SelectForloopStrings:['first_name'],SelectForloopStringKeys:['ar','en'],
                         SelectImages: ['avatar'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
                     },
+                    { 
+                        type: 'multiSelect',placeholder:'',header :'food sections', name : 'food_section_ids' ,
+                        translatable : false ,
+                        data_value : null  ,
+                        validation:{required : true } ,
+                        SelectOptions : this.all_food_sections, 
+                        SelectStrings: ['id'] ,SelectForloopStrings:['title'],SelectForloopStringKeys:['ar','en'],
+                        SelectImages: ['image'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
+                    
                     { 
                         type: 'string',placeholder:'title',header : 'title', name : 'title' ,
                         translatable : true ,
@@ -254,6 +267,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 async GetlAllUsers(){
                     this.all_users = (await this.AllUsers()).data.data;
                 },
+                async GetlAllFoodSections(){
+                    this.all_food_sections = (await this.AllFoodSections()).data.data;
+                },
                 async GetlLanguages(){
                     this.Languages  = ( await this.AllLanguages() ).data; // all languages
                 },
@@ -262,6 +278,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             // model 
                 AllUsers(){
                     return  (new UserModel).all()  ;
+                },
+                AllFoodSections(){
+                    return  (new FoodSectionModel).all()  ;
                 },
                 AllLanguages(){
                     return  (new LanguageModel).all()  ;

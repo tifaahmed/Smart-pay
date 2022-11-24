@@ -27,24 +27,30 @@ class  OrderStoreRepository extends BaseRepository implements OrderStoreReposito
 		]);
 	}
 
-	public function custome_create($order_id,$store_model,$coupon_model){
+	public function custome_create($order_id,$store_model,$coupon_model = null){
 		$coupon_discount = 0;
 		$order_item_sub_totals = 0;
 		$sub_total = 0 ;
+
+		$store_delevery_fee = $store_model->delevery_fee ?? 0 ;
 		
+
 		$order_store_data = [];
-
+		// ralation to the parent
 		$order_store_data['order_id'] = $order_id;
-		$order_store_data['store_id'] = $store_model->id; // will not delete if store deleted
 
+		// store data
+		$order_store_data['store_id'] = $store_model->id; // will not delete if store deleted
 		$order_store_data['store_title'] = $store_model->title;
 
+		// can be nul if there is no coupon used
 		$order_store_data['coupon_title'] = $coupon_model ? $coupon_model->title : null;
 		$order_store_data['coupon_code'] = $coupon_model ? $coupon_model->code : null;
 		$order_store_data['coupon_discount_type'] = $coupon_model ? $coupon_model->type : null;
 		
-		$order_store_data['delevery_fee'] = $store_model->delevery_fee; // ,delevery fee from single stores
+		$order_store_data['delevery_fee'] = $store_delevery_fee; // ,delevery fee from single stores
 		
+		// will calculate later in update
 		$order_store_data['coupon_discount'] = $coupon_discount; // order_item_sub_totals - discount
 		$order_store_data['order_item_sub_totals'] = $order_item_sub_totals; //,collect sub_total of table order_items
 		$order_store_data['sub_total'] = $sub_total; //  (order_item_sub_totals + delevery_fee ) - coupon_discount 

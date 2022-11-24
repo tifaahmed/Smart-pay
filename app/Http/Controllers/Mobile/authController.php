@@ -105,19 +105,9 @@ class AuthController extends Controller {
 
 
     
-    public function resend_pin_code(Request $request){
-         
-        // return object if phone or email exist
-        $user = $this->get_user($request->email_phone);
-        $this->check_verification($user);
-        return $this -> MakeResponseSuccessful( 
-            ['pin code sent Successfully'],
-            'Successful' ,
-            Response::HTTP_OK
-         ) ;
-    }
 
-    public function check_pin_code(CheckPinCodeRequest $request){
+
+    public function active_acount(CheckPinCodeRequest $request){
         $user =  User::where('pin_code',$request->pin_code)->first();
         if ($user) {
             if ($user->email) {
@@ -136,36 +126,7 @@ class AuthController extends Controller {
         }
     }
     
-    public function update_password(Request $request)
-    {
-        if( Hash::check( $request -> old_password , Auth::user()->password )){
-            Auth::user()->update(['password'=>Hash::make($request->password)]);
-            return $this -> MakeResponseSuccessful( 
-                ['message'=> 'Password reset successfully'],
-                'Successful' ,
-                Response::HTTP_OK
-            ) ;
-        }else {
-            return $this -> MakeResponseSuccessful( 
-                [ 'message' => 'InvalidCredentials' ],  
-                'InvalidCredentials' ,
-                Response::HTTP_UNAUTHORIZED
-            ) ;          
-        }
-        
-    }
-    public function new_password(Request $request)
-    {
-        Auth::user()->update(['password'=>Hash::make($request->password)]);
-        return $this -> MakeResponseSuccessful( 
-            ['message'=> 'Password reset successfully'],
-            'Successful' ,
-            Response::HTTP_OK
-        ) ;
-    }
 
-
-    // inside functions
 
 
 
