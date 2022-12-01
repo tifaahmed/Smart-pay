@@ -45,6 +45,7 @@ trait CartTrait {
 
         // product info
             $product_item = ProductItem::find($product_id);
+            $cart_arr['store_id'] = $product_item->store_id;
             $cart_arr['product_title'] = $product_item->title;
             $cart_arr['product_discount'] = $product_item->discount;
             $cart_arr['product_price'] = $product_item->price;

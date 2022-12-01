@@ -33,7 +33,18 @@ class CartStoreApiRequest extends FormRequest
     {        
         $all=[];
         
-        $all += [ 'product_id' =>  [ 'required' ,'integer','exists:'.ProductItem::class.',id'] ] ;
+        $all += [ 'product_id' =>  [ 'required' ,'integer',
+        Rule::exists(ProductItem::class,'id')
+        ->where(function ($query) {
+            return $query->where('deleted_at', NULL)
+            ->where('status', 'active')
+            ->whereHas('store' ,function (Builder $store) {
+                    $store->where('status','accepted') ;
+            })->first();
+
+        }),
+        
+        ] ] ;
         $all += [ 'quantity'   =>  [ 'required' ,'integer','min:1'] ] ;
         if ($this->extra_ids) {
             foreach ($this->extra_ids as $key => $value) {                
@@ -50,8 +61,7 @@ class CartStoreApiRequest extends FormRequest
     public function messages()
     {
         return [
-            'address_id.exists' => '"The selected address id is invalid or noy for the login user.',
-            
+            'product_id.exists' => '"The selected product is invalid or deleted or not active.',
         ];
     }
 }

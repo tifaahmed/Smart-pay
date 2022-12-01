@@ -21,23 +21,32 @@ class StoreResource extends JsonResource
         $all=[];
         $all += [ 'id' =>   $this->id ]  ;
 
+        $all += [ 'status' =>   $this->status ]  ;
+
+        $all += [ 'image' =>   check_image($this->image)]  ;
+
         $all += [ 'title' =>   $this->title ]  ;
         $all += [ 'description' =>   $this->description ]  ;
-        
-        $all += [ 'delevery_fee' =>   $this->delevery_fee ]  ;
-        $all += [ 'status' =>   $this->status ]  ;
-        
-        $all += [ 'image' =>   check_image($this->image)]  ;
         $all += [ 'phone' =>   $this->phone ]  ;
+        
+        $all += [ 'rate' =>   $this->rate ]  ;
+        $all += [ 'delevery_fee' =>   $this->delevery_fee ]  ;
+        
+        $all += [ 'address' =>   $this->address ]  ;
+        $all += [ 'streat' =>   $this->streat ]  ;
+        $all += [ 'building' =>   $this->building ]  ;
 
+        $all += [ 'city_id' =>   $this->city_id ]  ;
+        $all += [ 'city_name' =>   $this->city_name ]  ;
+        
         $all += [ 'latitude' =>   $this->latitude ]  ;
         $all += [ 'longitude' =>   $this->longitude ]  ;
         
+        // append
         $all += [ 'distance' =>   $this->distance ]  ;
         
 
         $all += [ 'fav' =>    $this->fav_stores()->RelateUser($user_id)->first() ? 1 : 0 ]  ;
-        $all += [ 'rate' =>   $this->rate ]  ;
         
 
         return $all;

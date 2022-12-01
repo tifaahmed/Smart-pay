@@ -31,25 +31,33 @@ class Store extends Model
     protected $fillable = [
         'user_id',  // int / unsigned
 
-        'title',       //text  [note: "store name"]
-        'description', //text  [note: "store information"]
+        'status', //enum  /'pending', 'accepted', 'rejected' ,'canceled' , 'busy' /default('pending') 
         
+        'image',       //string  nullable
+
+        'title',       //text    nullable
+        'description', //text nullable
+        'phone',    // string
+
+        'rate',  // float / default : 5
         'delevery_fee', // float , default : 0
         
-        'status',   // enum / 'pending', 'accepted', 'rejected' ,'canceled'
+        'address', // text,nullable
+        'streat', // string,nullable
+        'building', // string,nullable
         
-        'image',   // string / [note: "store logo  pizza"]
-        'phone',    // string
+        'city_id', // integer, nullable
+        'city_name', // string, nullable
         
         'latitude', // string
         'longitude', // string
         
-        'rate',  // float / default : 5
 
     ];
     public $translatable = [
         'title', 
-        'description'           
+        'description' ,  
+        'city_name'        
     ];
     public $append = [
         'distance', 
@@ -73,6 +81,7 @@ class Store extends Model
                 $query->where('discount',$filter);
             });
         }
+
         public function scopeNearest($query,...$nearest)
         {
             // if sent the location
@@ -83,9 +92,7 @@ class Store extends Model
             }
             // else get old location
             else if (Auth::user() &&  Auth::user()->latitude &&  Auth::user()->longitude) {
-                $latitude = Auth::user()->latitude ;
-                $longitude  = Auth::user()->longitude;
-                $distance = 500;
+
             }
             // do nothing
             else{

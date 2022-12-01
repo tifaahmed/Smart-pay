@@ -30,23 +30,38 @@ class Cart extends Model
     ];
 
     // get
-        // calculate single product discount
-        // return integer
+
+        // calculate single product discount_value 
+        // return integer (discount_value)
+        public function getDiscountValueAttribute (): int{
+            return  (  $this->product_price * ($this->product_discount/100)  )  ;
+        }
+
+        // calculate single product discount 
+        // return integer (product_price_after_offer)
         public function getProductPriceAfterOfferAttribute (): int{
-            $result = - (  $this->product_price * ($this->product_discount/100)  ) + $this->product_price ;
+            $result = - $this->discount_value   + $this->product_price ;
             $result = ( $result > 0 )? $result :   0;
             return $result;
         }
+
+        // calculate (single product discount  x quantity )
+        // return integer (discount_value_sub_total)
+        public function getDiscountValueSubTotalAttribute (): int{
+            return  $this->discount_value * $this->quantity ;
+        }
+
         // calculate (single product price after discount x quantity)+( extras_price x quantity)
-        // return integer
+        // return integer ()
         public function getProductPriceSubTotalAttribute (): int{
             $cart_product_price =  $this->product_price_after_offer * $this->quantity ;
             $cart_product_extras_price = $this->cart_extras->sum('extra_price') * $this->quantity ;
             $result = $cart_product_price + $cart_product_extras_price;
             return $result;
         }
+
         public function getProductImageAttribute (): string{
-            return $cart_product_price =  check_image($this->product_item->image) ;
+            return   $this->product_item->image ;
         }
         
     //scope

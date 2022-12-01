@@ -220,14 +220,22 @@ Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:adm
             Route::post('/{id}/update'      ,   'OrderItemExtraController@update'       )->name('update'),
         ]),    
     // address
-    Route::name('address.')->prefix('/address')->group( fn ( ) : array => [
-        Route::get('/'                          ,   'AddressController@all'                 )->name('all'),
-        Route::post(''                          ,   'AddressController@store'               )->name('store'),
-        Route::get('/{id}/show'                 ,   'AddressController@show'                )->name('show'),
-        Route::get('/collection'                ,   'AddressController@collection'          )->name('collection'),
-        Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
-        Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
-    ]),
-    
+        Route::name('address.')->prefix('/address')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'AddressController@all'                 )->name('all'),
+            Route::post(''                          ,   'AddressController@store'               )->name('store'),
+            Route::get('/{id}/show'                 ,   'AddressController@show'                )->name('show'),
+            Route::get('/collection'                ,   'AddressController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
+        ]),
+    // address
+        Route::name('subscription.')->prefix('/address')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'SubscriptionController@all'                 )->name('all'),
+            Route::post(''                          ,   'SubscriptionController@store'               )->name('store'),
+            Route::get('/{id}/show'                 ,   'SubscriptionController@show'                )->name('show'),
+            Route::get('/collection'                ,   'SubscriptionController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'                   ,   'SubscriptionController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'              ,   'SubscriptionController@update'              )->name('update'),
+        ]),
 ]);
     

@@ -26,6 +26,7 @@ class OrderInformationResource extends JsonResource
         $all += [ 'note' =>   $this->note ]  ;
         $all += [ 'type' =>   $this->type ]  ;
 
+        $all += [ 'city_id' =>   $this->city_id ]  ;
         $all += [ 'city_name' =>   $this->city_name ]  ;
 
         $all += [ 'latitude' =>   $this->latitude ]  ;

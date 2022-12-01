@@ -72,7 +72,7 @@ if (!function_exists('resource_date')) {
     }
 }
 if (!function_exists('check_image')) {
-    function check_image($image)
+    function check_image($image=null)
     {
         return 
         ( $image && Storage::disk('public')->exists( $image) ) 
@@ -82,3 +82,4 @@ if (!function_exists('check_image')) {
         null;
     }
 }
+

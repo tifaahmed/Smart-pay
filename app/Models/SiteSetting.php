@@ -18,5 +18,9 @@ class SiteSetting extends Model
         'item_key', // string , unique [note: "logo , name"]
         'item', // string  [note: "http , atafal "] 
     ];
+
+    public function getSiteFeeAttribute(){
+        return $this->find(9)->item;
+    }
    
 }

@@ -53,25 +53,27 @@ class CartController extends Controller
     public function store(modelInsertRequest $request) {
         try {
             // @return the repeated object 
-            $repeated_cart_product = $this->getRepeatedProduct($request->product_id,$request->extra_ids);
+                $repeated_cart_product = $this->getRepeatedProduct($request->product_id,$request->extra_ids);
+            
             // if repeated inside cart increase quantity
-            if ($repeated_cart_product) {
-                $arr = ['quantity' => $repeated_cart_product->quantity +  $request->quantity] ;
-                $this->ModelRepository->update($repeated_cart_product->id, $arr );
-                $cart = $this->ModelRepository->findById($repeated_cart_product->id);
-            }
+                if ($repeated_cart_product) {
+                    $arr = ['quantity' => $repeated_cart_product->quantity +  $request->quantity] ;
+                    $this->ModelRepository->update($repeated_cart_product->id, $arr );
+                    $cart = $this->ModelRepository->findById($repeated_cart_product->id);
+                }
             // new product or same product but deffrent extra
-            else{
-                $cart_arr = $this->cart_arr($request->product_id ,$request->quantity );
-                $cart = $this->ModelRepository->create(  $cart_arr ) ;
-    
-                if ($request->extra_ids) {
-                    foreach ($request->extra_ids as $key => $extra_id) {
-                        $extra_arr = $this->extra_arr($cart->id,$extra_id);
-                        $this->CartExrtraRepository->create( $extra_arr ) ;
+                else{
+                    // @return the cart array with the  product data
+                    $cart_arr = $this->cart_arr($request->product_id ,$request->quantity );
+                    $cart = $this->ModelRepository->create(  $cart_arr ) ;
+        
+                    if ($request->extra_ids) {
+                        foreach ($request->extra_ids as $key => $extra_id) {
+                            $extra_arr = $this->extra_arr($cart->id,$extra_id);
+                            $this->CartExrtraRepository->create( $extra_arr ) ;
+                        }
                     }
                 }
-            }
 
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $cart ) ],
@@ -85,6 +87,34 @@ class CartController extends Controller
                 Response::HTTP_BAD_REQUEST
             );
         }
+    }
+    public function update(modelUpdateRequest $request, $id) {
+
+        if ($request->quantity <= 0) {
+            $this->ModelRepository->deleteById($id);
+        }else{
+            $arr = ['quantity' =>   $request->quantity] ;
+            $this->ModelRepository->update($id, $arr );
+
+
+            $cart = $this->ModelRepository->findById($id);
+            //get_the removed()
+            foreach ($cart->extra_ids as $key => $extra_id) {
+
+                $this->CartExrtraRepository->deleteById($extra_id);
+                return dd( $extra_id );
+
+            }
+            if ($request->extra_ids) {
+                return dd( $request->extra_ids );
+
+                foreach ($request->extra_ids as $key => $extra_id) {
+                    $this->CartExrtraRepository->create( $extra_arr ) ;
+                }
+            }
+            
+        }
+
     }
     public function destroy(modeRelatedRequest $request, $id) {
         try {

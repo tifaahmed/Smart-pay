@@ -12,7 +12,7 @@ return new class extends Migration
         Schema::create('cart_extras', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('cart_id')->unsigned();
+            $table->integer('cart_id')->unsigned()->comment('onDelete cascade');
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             
             $table->integer('extra_id')->unsigned()->comment('will not delete if extra deleted');

@@ -23,26 +23,25 @@ class  OrderRepository extends BaseRepository implements OrderRepositoryInterfac
 		$this->model =  $model;
 	}
 
-	public function custome_create($payment_type){
-		$order_status = 'not_confirmed';
+	// create the basec data
+	public function custome_create($payment_type,$site_fee)   {
+		$user_id = Auth::user()->id;
+
 		$payment_type = $payment_type;
 		$payment_card_status  = $payment_type == 'visa' ? 'pindding' : null;
-		$user_id = Auth::user()->id;
-		$order_code =  rand(1111111111, 9999999999);
 
-
+		$order_code =  rand(1111111111, 9999999999).time();
+		$site_fee =  $site_fee;
+		
 		$order_data = [];
 		$order_data['user_id'] = $user_id;
 
-		$order_data['order_status'] =  $order_status ;
-		$order_data['payment_type'] =  $payment_type;
-		$order_data['payment_card_status'] = $payment_card_status;
+		$order_data['payment_type'] =  $payment_type; //  [ 'visa','cash'] , default('cash')
+		$order_data['payment_card_status'] = $payment_card_status; // [ 'paid','pending'] , nullable
 
-		
-		$order_data['order_code'] = $order_code;
-		$order_data['order_store_sub_totals'] = 0;
-		$order_data['site_fee'] = 0;
-		$order_data['total'] = 0;
+		$order_data['order_code'] = $order_code; // unique
+
+		$order_data['site_fee'] = $site_fee; // unique
 		
 		return  $this->create( $order_data ) ;
 

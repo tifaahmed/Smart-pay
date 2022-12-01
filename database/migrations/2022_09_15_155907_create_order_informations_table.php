@@ -31,6 +31,7 @@ return new class extends Migration
             $table->enum('type', ['home', 'work', 'rest' ,'mosque'])->default('home');
 
             
+            $table->string('city_id')->nullable()->comment('will be deleted if order deleted'); 
             $table->string('city_name')->nullable();  
 
             $table->string('latitude')->nullable();   

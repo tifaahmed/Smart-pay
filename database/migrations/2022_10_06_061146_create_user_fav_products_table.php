@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('user_fav_products', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('user_id')->unsigned()->comment('onDelete cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             
-            $table->integer('product_id')->nullable()->unsigned();
+            $table->integer('product_id')->unsigned()->comment('onDelete cascade');
             $table->foreign('product_id')->references('id')->on('product_items')->onDelete('cascade');
             
             $table->timestamps();

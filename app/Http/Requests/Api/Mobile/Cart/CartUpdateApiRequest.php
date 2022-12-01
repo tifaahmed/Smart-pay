@@ -9,6 +9,7 @@ use App\Rules\ExtraRelatedProductRule;
 
 use App\Models\ProductItem;
 use App\Models\Extra;
+use App\Models\Cart;
 
 use Auth;
 
@@ -31,14 +32,14 @@ class CartUpdateApiRequest extends FormRequest
      */
     public function rules()
     {        
+        $product_id = Cart::find($this->id)->product_id;
+
         $all=[];
-        
-        $all += [ 'product_id' =>  [ 'required' ,'integer','exists:'.ProductItem::class.',id'] ] ;
-        $all += [ 'quantity'   =>  [ 'required' ,'integer','min:1'] ] ;
+        $all += [ 'quantity'   =>  [ 'required' ,'integer'] ] ;
         if ($this->extra_ids) {
             foreach ($this->extra_ids as $key => $value) {                
                 $all += [ 'extra_ids.'.$key =>  [ 'required' ,'integer','exists:'.Extra::class.',id',
-                    new ExtraRelatedProductRule($this->product_id) 
+                    new ExtraRelatedProductRule($product_id) 
                 ]  ] ;
             }
         }

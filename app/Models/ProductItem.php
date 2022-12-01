@@ -36,7 +36,6 @@ class ProductItem extends Model
         'discount', // int ,  enum  5 10 15 20 
         'price',   // float / default : 0
 
-
         'status', // string , enum  request_as_new request_as_edit active  deactivate out_of_stock
     ];
    

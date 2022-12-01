@@ -16,21 +16,28 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->increments('id');
 
-
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->enum('status', ['pending', 'accepted', 'rejected' ,'canceled'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'rejected' ,'canceled' , 'busy'])->default('pending');
 
-            $table->string('image'); // [note: "store logo  pizza"]
+            $table->string('image')->nullable(); // [note: "store logo  pizza"]
 
-            $table->text('title'); // [note: "translatable"]
-            $table->text('description'); // [note: "translatable"]
+            $table->text('title')->nullable(); // [note: "translatable"]
+            $table->text('description')->nullable(); // [note: "translatable"]
+            $table->string('phone')->nullable(); 
 
-            $table->string('phone'); 
             $table->float('rate')->default(5);
             $table->float('delevery_fee')->default(0);
             
+
+            $table->text('address')->nullable(); // [note: "translatable"]
+            $table->string('streat')->nullable(); // [note: "translatable"]
+            $table->string('building')->nullable(); // [note: "translatable"]
+
+            $table->integer('city_id')->nullable()->comment('will not delete if city deleted');  
+            $table->string('city_name')->nullable();  
+
             $table->string('latitude')->nullable() ;
             $table->string('longitude')->nullable();
 

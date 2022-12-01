@@ -19,19 +19,28 @@ class Order extends Model
     protected $table = 'orders';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'order_status', //string , [ 'not_confirmed','confirmed','shipping','delevered','canceled','ask_to_retrieve'] , default('not_confirmed')
-        'payment_card_status' , //string ,  [ 'paid','pindding'] , default('pindding')
+        'user_id', // integer , unsigned // will not delete if user deleted
+
         'payment_type' ,  // string , [ 'visa','cash'] , default('cash')
-    
-        'user_id', // integer , unsigned
-        'order_code', // random string
-        'order_note',
-        'order_store_sub_totals', // float  , default 0 // collect price of table order_stores
         
+        'payment_card_status' , //string ,  [ 'paid','pending'] , nullable
+        'payment_card_data' , // text , nullable
+
+        'order_code', // string  , unique
+        'order_note', // text , nullable // wrote only from admin if needed
+        
+        //1- user paied with card and shop reject
+        //2- user paied with cash or card and ask to ask_to_retrieve from the store_id
+        //create cuopon automatic to the user_id with store_id
+        'order_store_retrieve_sub_totals', // float  , default 0 // collect retrieve_price of table order_store
+        'order_store_price_sub_totals', // float  , default 0 // collect price of table order_stores
+
         'site_fee', // float  , default 0  
-        'total', // float  , default 0 //(order_store_sub_totals + site_fee'
-    
+        'total' // float , default 0 // order_store_price_sub_totals + site_fee
+
     ];
+
+
     //scope
         public function scopeRelateAuthUser($query){
             return $query->where('user_id',Auth::user()->id);

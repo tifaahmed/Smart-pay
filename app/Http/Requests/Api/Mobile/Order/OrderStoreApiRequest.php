@@ -89,7 +89,7 @@ class OrderStoreApiRequest extends FormRequest
     public function messages()
     {
         return [
-            'address_id.exists' => '"The selected address id is invalid or noy for the login user.',
+            'address_id.exists' => '"The selected address id is invalid or not for the login user.',
             
         ];
     }

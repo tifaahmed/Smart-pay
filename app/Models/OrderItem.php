@@ -28,7 +28,7 @@ class OrderItem extends Model
         'order_item_extra_sub_totals', // float , default(0) ,collect sub_total of table order_item_extras
         'sub_total', // float , default(0) ,(product_price after offer  * quantity ) + order_item_extra_sub_totals
     ];
-
+ 
     // belongsTo
         public function order(){
             return $this->belongsTo(Order::class,'order_id');

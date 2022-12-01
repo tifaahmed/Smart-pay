@@ -19,9 +19,9 @@ return new class extends Migration
             $table->integer('user_id')->nullable()->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             
-            $table->integer('city_id')->nullable()->unsigned();
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
-            
+            $table->string('city_id')->nullable()->comment('will not delete if city deleted');  
+            $table->string('city_name')->nullable();  
+
             $table->text('address'); 
             $table->string('department')->nullable();  
             $table->string('house')->nullable();  
