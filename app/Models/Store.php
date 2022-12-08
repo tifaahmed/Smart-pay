@@ -17,6 +17,7 @@ use App\Models\FoodSectionStore; // pivot
 
 use App\Models\ProductItem;          // HasMany
 use App\Models\OrderItem;          // HasMany
+use App\Models\OrderStore;          // HasMany
 
 
 use Auth;
@@ -81,7 +82,9 @@ class Store extends Model
                 $query->where('discount',$filter);
             });
         }
-
+        public function scopeRelateAuthUser($query){
+            return $query->where('user_id',Auth::user()->id);
+        }
         public function scopeNearest($query,...$nearest)
         {
             // if sent the location
@@ -121,6 +124,9 @@ class Store extends Model
         }
         public function order_item(){
             return $this->HasMany(OrderItem::class);
+        }
+        public function order_store(){
+            return $this->HasMany(OrderStore::class);
         }
     // belongsTo
         public function user(){

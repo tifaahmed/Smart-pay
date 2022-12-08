@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Builder;
+use Auth;
 
 use App\Models\ProductCategory;     // belongsTo
 use App\Models\Store;              // belongsTo
@@ -44,11 +46,34 @@ class ProductItem extends Model
         'description',            
     ];
 
+    // filter scopes
+        public $scopes = [
+            'relate_auth_store','store_status','my_fav_products'
+        ];
     //scope
-    public function scopeStoreFilter($query,$filter){
-        $store_id = $filter && $filter['StoreFilter']  ? $filter['StoreFilter'] : null;
-        return $store_id ? $query->where('store_id',$store_id) : $query;
-    }
+        public function scopeRelateAuthStore($query,$filter){
+            if ($filter == false) {
+                return $query->where('store_id','!=' ,Auth::user()->store->id);
+            }
+            return $query->where('store_id',Auth::user()->store->id);
+        }
+        public function scopeStoreStatus($query,$filter){
+            return $query->whereHas('store',function (Builder $query) use($filter) {
+                $query->where('status',$filter) ;
+            });            
+        }
+        public function scopeMyFavProducts($query,$filter){
+            if ($filter == false) {
+                return $query->whereHas('fav_products',function (Builder $query) {
+                    $query->where('user_id','!=' ,Auth::user()->store->id) ;
+                });
+            }
+            return $query->whereHas('fav_products',function (Builder $query) {
+                $query->where('user_id',Auth::user()->store->id) ;
+            });
+        }
+ 
+
 
     // belongsTo
         public function product_category(){

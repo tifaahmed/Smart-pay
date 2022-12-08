@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\Dashboard\Address;
+namespace App\Http\Requests\Api\Dashboard\Subscription;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -39,7 +39,7 @@ class SubscriptionUpdateApiRequest extends FormRequest
             'pending', 'accepted', 'rejected' ,'canceled'
         ]), ] ] ; // default('pending')
         $all += [ 'payment_type'        =>  [ 'sometimes' ,Rule::in([
-            'visa , cash'
+            'visa' , 'cash'
         ]), ] ] ; // default('cash')
         $all += [ 'payment_card_status'        =>  [ 'sometimes' ,Rule::in([
             'paid' , 'pindding' , 'rejected' , 'canceled' 

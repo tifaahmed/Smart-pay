@@ -11,7 +11,7 @@ class SubscriptionResource extends JsonResource
     {
         
         $model = $this;
-        $lang_array = lang_array() ;
+        $lang_array = config('app.lang_array') ;
 
 
         $string_fields = [
@@ -41,7 +41,7 @@ class SubscriptionResource extends JsonResource
         $all += [ 'id' =>   $this->id ]  ;
         
         // relations 
-            $all += [ 'store' =>   $this->store ]  ;// integer , unsigned ,comment( on Delete cascade )
+            $all += [ 'store' => new StoreResource  ($this->store) ]  ;// integer , unsigned ,comment( on Delete cascade )
         
         //  Resources/Helpers functions 
             $all += resource_translated_string($model,$lang_array,$translated_string_fields);

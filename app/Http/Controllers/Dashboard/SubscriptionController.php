@@ -32,7 +32,7 @@ class SubscriptionController extends Controller
 
     public function all(Request $request){
         try {
-            $modal =    $this->ModelRepository->filterAll($request->filter)    ;
+            $modal =    $this->ModelRepository->all()    ;
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -45,7 +45,7 @@ class SubscriptionController extends Controller
     
     public function collection(Request $request){
         try {
-            $modal = $this->ModelRepository->filterPaginate($request->filter,$request->per_page ? $request->per_page : $this->default_per_page);
+            $modal = $this->ModelRepository->collection( $request->per_page ?? $this->default_per_page);
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -74,7 +74,7 @@ class SubscriptionController extends Controller
 
     public function update(modelUpdateRequest $request ,$id) {
         try {
-            $this->ModelRepository->update( $id,request->all()) ;
+            $this->ModelRepository->update( $id,$request->all()) ;
             $model =  $this->ModelRepository->findById($id) ;
 
             return $this -> MakeResponseSuccessful( 

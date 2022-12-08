@@ -1,8 +1,8 @@
 <template>
     <div>
          
-        <b-button v-b-modal="modal_id" variant="outline-primary" > modal</b-button>
-        <b-modal :id="modal_id" title="BootstrapVue" centered  >
+        <b-button v-b-modal="modal_id" variant="outline-primary" > {{ValueColumn.length}}</b-button>
+        <b-modal :id="modal_id"  hide-footer="true"  hide-header="true">
             <div  v-for="( RowVal , Rowkey )  in ValueColumn" :key="Rowkey"   >
                 <div  v-for="( valLoop , Loopkey )  in LoopOnColumn" :key="Loopkey"   >
                     <div v-if="valLoop && RowVal  && RowVal[valLoop.name] !== 'null'" style="    text-align: center;"> 
@@ -38,6 +38,6 @@ export default {
     methods : {
         randomNumber : function(){
         return Math.floor(Math.random() * (10000 - 1 + 1)) + 1;
-        }
+        },
     }
 } </script>

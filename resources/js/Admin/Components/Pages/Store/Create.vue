@@ -193,7 +193,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         type: 'Radio',placeholder:'status',header : 'status', name : 'status' ,
                         translatable : false , 
                         SelectOptions :['pending','accepted','rejected','canceled'],
-                        data_value :null  ,
+                        data_value :'pending'  ,
                         validation:{required : true } 
                     },
                     { 

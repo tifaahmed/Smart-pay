@@ -41,7 +41,6 @@ class CartStoreApiRequest extends FormRequest
             ->whereHas('store' ,function (Builder $store) {
                     $store->where('status','accepted') ;
             })->first();
-
         }),
         
         ] ] ;
@@ -61,7 +60,7 @@ class CartStoreApiRequest extends FormRequest
     public function messages()
     {
         return [
-            'product_id.exists' => '"The selected product is invalid or deleted or not active.',
+            'product_id.exists' => '"The selected product is invalid or deleted or not active  or the store is not active.',
         ];
     }
 }

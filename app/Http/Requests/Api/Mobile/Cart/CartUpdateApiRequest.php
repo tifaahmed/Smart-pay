@@ -22,9 +22,16 @@ class CartUpdateApiRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $cart = Auth::user()->carts()->find($this->id);
+        if (!$cart) {
+                return false;
+        }
+        return true;        
     }
-
+    protected function failedAuthorization()
+    {
+        throw new \Illuminate\Auth\Access\AuthorizationException('Not Authoriz.');
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -50,7 +57,6 @@ class CartUpdateApiRequest extends FormRequest
     public function messages()
     {
         return [
-            'address_id.exists' => '"The selected address id is invalid or noy for the login user.',
             
         ];
     }

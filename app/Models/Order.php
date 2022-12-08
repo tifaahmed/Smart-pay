@@ -39,7 +39,9 @@ class Order extends Model
         'total' // float , default 0 // order_store_price_sub_totals + site_fee
 
     ];
-
+    public $scopes = [
+        'relate_auth_user'
+    ];
 
     //scope
         public function scopeRelateAuthUser($query){

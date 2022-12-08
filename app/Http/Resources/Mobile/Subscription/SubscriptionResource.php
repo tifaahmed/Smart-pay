@@ -5,7 +5,7 @@ namespace App\Http\Resources\Mobile\Subscription;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 use Auth;
-class SubscriptionsResource extends JsonResource
+class SubscriptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

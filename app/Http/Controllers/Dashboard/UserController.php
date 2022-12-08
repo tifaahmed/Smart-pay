@@ -30,7 +30,8 @@ class UserController extends Controller
         $this->default_per_page = 10;
     }
 
-    public function all(){
+
+    public function all(Request $request){
         try {
             $modal =    $this->ModelRepository->all()    ;
             return new ModelCollection($modal);
@@ -42,7 +43,6 @@ class UserController extends Controller
             );
         }
     }
-
     public function collection(Request $request){
         try {
             $modal = $this->ModelRepository->collection( $request->per_page ? $request->per_page : $this->default_per_page);

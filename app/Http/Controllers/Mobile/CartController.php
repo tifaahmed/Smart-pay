@@ -53,7 +53,7 @@ class CartController extends Controller
     public function store(modelInsertRequest $request) {
         try {
             // @return the repeated object 
-                $repeated_cart_product = $this->getRepeatedProduct($request->product_id,$request->extra_ids);
+                $repeated_cart_product = $this->get_repeated_product($request->product_id,$request->extra_ids);
             
             // if repeated inside cart increase quantity
                 if ($repeated_cart_product) {
@@ -89,31 +89,36 @@ class CartController extends Controller
         }
     }
     public function update(modelUpdateRequest $request, $id) {
-
+        $cart = $this->ModelRepository->findById($id);
+        $cart_extras_ids = $cart->cart_extras->pluck('extra_id')->toArray();
+        // quantity become  0 delete the product with the extras
         if ($request->quantity <= 0) {
             $this->ModelRepository->deleteById($id);
-        }else{
+        }
+        // else change quantity
+        else{
             $arr = ['quantity' =>   $request->quantity] ;
             $this->ModelRepository->update($id, $arr );
-
-
-            $cart = $this->ModelRepository->findById($id);
-            //get_the removed()
-            foreach ($cart->extra_ids as $key => $extra_id) {
-
-                $this->CartExrtraRepository->deleteById($extra_id);
-                return dd( $extra_id );
-
+        
+            // if all extras deleted
+            if (!$request->extra_ids) {
+                $cart->cart_extras->delete();
             }
-            if ($request->extra_ids) {
-                return dd( $request->extra_ids );
+            // else add or delete or edit extras
+            else{
+                //  if deleted extras
+                $removed_cart_extras_ids =  $this->get_removed_cart_extras_ids($cart,$cart_extras_ids,$request->extra_ids);
+                count($removed_cart_extras_ids) ? $this->CartExrtraRepository->deleteByArray([$removed_cart_extras_ids]) : null;
 
-                foreach ($request->extra_ids as $key => $extra_id) {
+                //  if added extras
+                $added_extras_ids =  $this->get_added_extras_ids($cart,$cart_extras_ids,$request->extra_ids);
+                foreach ($added_extras_ids as $key => $extra_id) {
+                    $extra_arr = $this->extra_arr($cart->id,$extra_id);
                     $this->CartExrtraRepository->create( $extra_arr ) ;
                 }
             }
-            
-        }
+        } 
+        
 
     }
     public function destroy(modeRelatedRequest $request, $id) {

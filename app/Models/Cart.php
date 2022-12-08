@@ -28,9 +28,10 @@ class Cart extends Model
         'product_price', //float , default(1) , single product pure price
         'quantity' 
     ];
-
+    public $scopes = [
+        'relate_auth_user'
+    ];
     // get
-
         // calculate single product discount_value 
         // return integer (discount_value)
         public function getDiscountValueAttribute (): int{

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;              // belongsTo
-
+use Auth;
 class Subscription extends Model
 {
     use HasFactory;
@@ -28,8 +28,14 @@ class Subscription extends Model
         'payment_card_status', //  enum  / paid , pindding , rejected , canceled / nullable ;
         'payment_card_data', //  text  nullable ;
     ];
-
-
+    // filter scopes
+        public $scopes = [
+            'relate_auth_store'
+        ];
+    // scope
+        public function scopeRelateAuthStore($query){
+            return $query->where('store_id',Auth::user()->store->id);
+        }
     // belongsTo
         public function store(){
             return $this->belongsTo(Store::class,'store_id');

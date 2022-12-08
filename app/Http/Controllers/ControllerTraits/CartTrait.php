@@ -15,7 +15,7 @@ trait CartTrait {
     // * @param  int   $product_id
 	// * @param  array   $extra_ids
     // @return the repeated object 
-    public function getRepeatedProduct($product_id ,$extra_ids )   {
+    public function get_repeated_product($product_id ,$extra_ids )   {
          $carts =  Auth::user()->carts()
         ->where('product_id',$product_id)
         ->get();
@@ -27,8 +27,22 @@ trait CartTrait {
             }
         } 
     }
-
-
+    // * @param  object   $cart
+    // * @param  array   $cart_extras_ids
+	// * @param  array   $request_extra_ids
+    // @return array removed_cart_extras_ids 
+    public function get_removed_cart_extras_ids(object $cart, array $cart_extras_ids,array $request_extra_ids) :array  {
+        $removed_extras_ids = array_diff($cart_extras_ids,$request_extra_ids);
+        return $cart->cart_extras->whereIn('extra_id',$removed_extras_ids)->pluck('id')->toArray();
+    }
+    // * @param  object   $cart
+    // * @param  array   $cart_extras_ids
+	// * @param  array   $request_extra_ids
+    // @return array added_extras_ids 
+    public function get_added_extras_ids(object $cart, array $cart_extras_ids,array $request_extra_ids) :array  {
+        return $added_extras_ids = array_diff($request_extra_ids,$cart_extras_ids);
+    }
+   
 	// * @param  int   $product_id
 	// * @param  int   $quantity
     // @return array 
@@ -52,7 +66,7 @@ trait CartTrait {
 
         return $cart_arr;
     }
-    public function extra_arr($cart_id,$extra_id) :array  {
+    public function extra_arr(int $cart_id,int $extra_id) :array  {
         $extra_arr = [];
         // cart relation
             $extra_arr['cart_id'] = $cart_id;

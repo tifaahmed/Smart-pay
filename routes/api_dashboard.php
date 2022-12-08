@@ -229,7 +229,7 @@ Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:adm
             Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
         ]),
     // address
-        Route::name('subscription.')->prefix('/address')->group( fn ( ) : array => [
+        Route::name('subscription.')->prefix('/subscription')->group( fn ( ) : array => [
             Route::get('/'                          ,   'SubscriptionController@all'                 )->name('all'),
             Route::post(''                          ,   'SubscriptionController@store'               )->name('store'),
             Route::get('/{id}/show'                 ,   'SubscriptionController@show'                )->name('show'),

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OrderItem;
+use App\Models\Order;
 
 class OrderStore extends Model
 {
@@ -21,8 +22,6 @@ class OrderStore extends Model
         //  3- store  can confirmed first then rejected or shipping and delevered 
         //  4-user can ask_to_retrieve
         'order_status', // enum default('not_confirmed')
-        
-        
         
         'store_id', // integer , unsigned , will not delete if store deleted
         'store_title', // string , nullable ,
@@ -41,9 +40,24 @@ class OrderStore extends Model
         'order_item_sub_totals', // float , default(0)  ,collect sub_total of table order_items
         'sub_total', // float , default(0)  , (order_item_sub_totals + delevery_fee ) - coupon_discount 
     ];
+    public $scopes = [
+        'relate_auth_store'
+    ];
+
+
+    // scope
+        public function scopeRelateAuthStore($query){
+            return $query->where('store_id',1);
+        }
+
+
     // hasMany
         public function order_items(){
             return $this->hasMany(OrderItem::class);
-        }    
-    
+        }   
+         
+    // belongsTo
+        public function order(){
+            return $this->belongsTo(Order::class,'order_id');
+        }
 }

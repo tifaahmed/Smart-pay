@@ -121,16 +121,33 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::get('/collection'                ,   'ExtraCategoryController@collection'          )->name('collection'),
         ]),
 
+
+
+
+
+
+    ]),
+    Route::group(['middleware' => ['auth:sanctum','verified','role:customer']], fn ( ) : array => [
         // order
-        Route::name('order.')->prefix('/order')->group( fn ( ) : array => [
-            Route::get('/'                          ,   'OrderController@all'                 )->name('all'),
-            Route::post(''                          ,   'OrderController@store'               )->name('store'),
-            Route::get('/{id}/show'                 ,   'OrderController@show'                )->name('show'),
-            Route::get('/collection'                ,   'OrderController@collection'          )->name('collection'),
-            Route::post('/{id}/update'              ,   'OrderController@update'              )->name('update'),
-        ]),
+            Route::name('order.')->prefix('/order')->group( fn ( ) : array => [
+                Route::get('/'                          ,   'OrderController@all'                 )->name('all'),
+                Route::post(''                          ,   'OrderController@store'               )->name('store'),
+                Route::get('/{id}/show'                 ,   'OrderController@show'                )->name('show'),
+                Route::get('/collection'                ,   'OrderController@collection'          )->name('collection'),
+                Route::post('/{id}/update'              ,   'OrderController@update'              )->name('update'),
+            ]),
     ]),
 
+    Route::group(['middleware' => ['auth:sanctum','verified','role:store|customer']], fn ( ) : array => [
+        // order-store
+            Route::name('order-store.')->prefix('/order-store')->group( fn ( ) : array => [
+                Route::get('/'                          ,   'OrderStoreController@all'                 )->name('all'),
+                Route::post(''                          ,   'OrderStoreController@store'               )->name('store'),
+                Route::get('/{id}/show'                 ,   'OrderStoreController@show'                )->name('show'),
+                Route::get('/collection'                ,   'OrderStoreController@collection'          )->name('collection'),
+                Route::post('/{id}/update'              ,   'OrderStoreController@update'              )->name('update'),
+            ]),
+    ]),
 
 
 
@@ -139,11 +156,17 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
         Route::name('store.')->prefix('store')->group( fn ( ) : array => [
             Route::get('/my-store'           ,   'StoreController@my_store'        )->name('my_store'),
             Route::post('update'            ,   'StoreController@update'          )->name('update'),
-
         ]),
-    ])
 
+         
+    ]),
+    Route::group(['middleware' => ['auth:sanctum','verified','role:store']], fn ( ) : array => [   
+        Route::name('subscription.')->prefix('subscription')->group( fn ( ) : array => [
+            Route::get('/'          ,   'SubscriptionController@all'                 )->name('all'),
 
+        ]),   
+    ]),
+    
 
 
 ]);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\Dashboard\Address;
+namespace App\Http\Requests\Api\Dashboard\Subscription;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -17,19 +17,19 @@ class SubscriptionStoreApiRequest extends FormRequest
     {        
         $all=[];
 
-        $all += [ 'store_id'   =>  [ 'required' ,'integer','exists:'.User::class.',id'] ] ;
+        $all += [ 'store_id'   =>  [ 'required' ,'integer','exists:'.Store::class.',id'] ] ;
 
-        $all += [ 'start_date'          =>  [ 'required'] ]  ;
-        $all += [ 'end_date'             =>  [ 'required'] ]  ;
+        $all += [ 'start_date'          =>  [ 'required','date'] ]  ;
+        $all += [ 'end_date'             =>  [ 'required','date'] ]  ;
 
-        $all += [ 'month_number'                 =>  [ 'integer'  ] ]  ;
+        $all += [ 'month_number'                 =>  [ 'required','integer'  ] ]  ;
 
         //comment (1-start with pending 2-user can canceled 3- admin  rejected or accepted )
-        $all += [ 'subscription_status'        =>  [ 'sometimes' ,Rule::in([
+        $all += [ 'subscription_status'        =>  [ 'required' ,Rule::in([
             'pending', 'accepted', 'rejected' ,'canceled'
         ]), ] ] ; // default('pending')
         $all += [ 'payment_type'        =>  [ 'sometimes' ,Rule::in([
-            'visa , cash'
+            'visa' , 'cash'
         ]), ] ] ; // default('cash')
         $all += [ 'payment_card_status'        =>  [ 'sometimes' ,Rule::in([
             'paid' , 'pindding' , 'rejected' , 'canceled' 

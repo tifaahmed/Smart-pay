@@ -9,8 +9,18 @@ Route::get('storage_link', function (){
 });
 
 
-Route::get( '/dashboard/{any}' , fn( ) => view( 'admin-panel' ) )-> where( 'any' , '.*' )   -> name( 'admin' ) ;
-Route::get( '/dashboard' , fn( ) => view( 'admin-panel' ) ) ;
+// Route::get( '/dashboard/{any}' , fn( ) => view( 'admin-panel' ) )-> where( 'any' , '.*' )   -> name( 'admin' ) ;
+// Route::get( '/dashboard' , fn( ) => view( 'admin-panel' ) ) ;
+
+ 
+Route::get('/dashboard/{any}','HomeController@admin_panel')-> where( 'any' , '.*' )-> name( 'admin' ) ;
+
+
+
+Route::get( '/dashboard', function ($token) {
+    return  view( 'admin-panel' );
+}) ;
+
 
 
 Route::get( '/reset-password/{token}', function ($token) {
