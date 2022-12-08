@@ -16,20 +16,21 @@ class OrderInformation extends Model
         'order_id', // integer , unsigned , cascade
 
         'user_full_name', // string , 
-        'phone', // string , 
-        'email', // string , 
+        'phone', // string ,// nullable 
+        'email', // string , ,// nullable 
         
         'address', // text , 
-        'department', // string , 
-        'house', // string , 
-        'street', // string , 
-        'note', // text , 
+        'department', // string , ,// nullable 
+        'house', // string , ,// nullable 
+        'street', // string , ,// nullable 
+        'note', // text , ,// nullable 
         'type', // enum , ['home', 'work', 'rest' ,'mosque'] , default('home')
 
-        'city_name', // string , 
+        'city_id', // integer , will be deleted if order deleted
+        'city_name', // string ,,// nullable 
         
-        'latitude', // string , 
-        'longitude', // string , 
+        'latitude', // string , ,// nullable 
+        'longitude', // string , ,// nullable 
     ];
     // belongsTo
         public function order(){

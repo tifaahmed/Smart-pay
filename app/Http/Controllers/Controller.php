@@ -11,6 +11,7 @@ use App\Http\Controllers\ControllerTraits\ResponsesTrait;
 use App\Http\Controllers\ControllerTraits\FileTrait;
 use App\Http\Controllers\ControllerTraits\OrderTrait;
 use App\Http\Controllers\ControllerTraits\AuthTrait;
+use App\Http\Controllers\ControllerTraits\CartTrait;
 
 class Controller extends BaseController
 {
@@ -21,6 +22,7 @@ class Controller extends BaseController
     ResponsesTrait,
     FileTrait,
     OrderTrait,
+    CartTrait,
     AuthTrait;
     public function __construct()
     {

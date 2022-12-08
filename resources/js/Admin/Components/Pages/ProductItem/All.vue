@@ -43,7 +43,7 @@
                                     </td>
                                     <td>
                                         <TableControllers 
-                                            :controller_buttons = "controller_buttons"
+                                            :controller_buttons = controller_buttons
                                             :RowId="row.id" 
                                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page : 1" 
                                             @SendRowData="SendRowData(row)"
@@ -67,8 +67,10 @@
                         <Pagination v-if="TableRows"  :data="TableRows" @pagination-change-page="initial" />
 
                         <ModalIndex  
+                            :controller_buttons="controller_buttons" 
                             :Columns="Columns" 
                             :TableRows="TableRows" 
+                            :SingleTableRows="SingleTableRows" 
                             @DeleteRowButton="DeleteRowButton"
                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
                         />
@@ -97,7 +99,6 @@ export default {
 
     data( ) { return {
         filter :{  id : null  },
-
 
         TableName :'ProductItem',
         Languages : [],
@@ -130,6 +131,14 @@ export default {
                 { 
                     type: 'Router'    ,header : 'id'                , name : 'id'               ,
                     default : null
+                } ,
+                { 
+                    type: 'MultiSelectForloopModal'   ,header : 'product extras' , name : 'product_extras'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'title' , type: 'Forloop' ,secondLoopOnColumn:this.Languages  } ,
+                        { name : 'price' , type: 'String'    } ,
+                    ] ,
                 } ,
                 { 
                     type: 'SelectForloop'   ,header : 'category' , name : 'product_category'            , 

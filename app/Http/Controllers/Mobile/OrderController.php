@@ -13,12 +13,13 @@ use App\Http\Resources\Mobile\Collections\OrderCollection as ModelCollection;
 use App\Http\Resources\Mobile\Order\OrderResource as ModelResource;
 
 // lInterfaces
-use App\Repository\OrderRepositoryInterface as ModelInterface;
+use App\Repository\OrderRepositoryInterface ;
 use App\Repository\OrderInformationRepositoryInterface ;
 use App\Repository\OrderItemRepositoryInterface  ;
 use App\Repository\OrderItemExtraRepositoryInterface  ;
 use App\Repository\OrderStoreRepositoryInterface;
 use App\Repository\CouponRepositoryInterface;
+use App\Repository\CartRepositoryInterface;
 
 // Requests
 use App\Http\Requests\Api\Mobile\Order\OrderStoreApiRequest as modelInsertRequest;
@@ -33,28 +34,32 @@ class OrderController extends Controller
     private $OrderItemExtraRepository;
     private $OrderStoreRepository;
     private $CouponRepository;
+    private $CartRepository;
     
     public function __construct(
-        ModelInterface $Repository,
+        OrderRepositoryInterface $OrderRepository,
         OrderInformationRepositoryInterface $OrderInformationRepository,
+        OrderStoreRepositoryInterface $OrderStoreRepository,
         OrderItemRepositoryInterface $OrderItemRepository,
         OrderItemExtraRepositoryInterface $OrderItemExtraRepository,
-        OrderStoreRepositoryInterface $OrderStoreRepository,
-        CouponRepositoryInterface $CouponRepository
+
+        CouponRepositoryInterface $CouponRepository,
+        CartRepositoryInterface $CartRepository
     )
     {
-        $this->ModelRepository = $Repository;
+        $this->OrderRepository = $OrderRepository;
         $this->OrderInformationRepository = $OrderInformationRepository;
         $this->OrderItemRepository = $OrderItemRepository;
         $this->OrderItemExtraRepository = $OrderItemExtraRepository;
         $this->OrderStoreRepository = $OrderStoreRepository;
         $this->CouponRepository = $CouponRepository;
+        $this->CartRepository = $CartRepository;
         $this->default_per_page = 10;
     }
     
-    public function all(){
+    public function all(Request $request){
         try {
-            $modal =    $this->ModelRepository->all()    ;
+            $modal =    $this->OrderRepository->all()    ;
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -67,7 +72,7 @@ class OrderController extends Controller
     
     public function collection(Request $request){
         try {
-            $modal = $this->ModelRepository->collection( $request->per_page ?? $this->default_per_page);
+            $modal = $this->OrderRepository->collection( $request->per_page ?? $this->default_per_page);
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -82,82 +87,126 @@ class OrderController extends Controller
 
 
     public function store(modelInsertRequest $request) {
-        $request_order_items = $request->order_items;
+        $carts = Auth::user()->carts;
+        $request_payment_type = $request->payment_type;
+        $request_coupon_code = $request->coupon_code;
+        $site_fee =  $this->get_site_fee();
+        try {
+            //  get all related stores
+            $store_models = $this->get_store_models($carts);
 
-        // try {
             //////1 create order_model  //////
                 // sent payment_type
-                //store data without calculate  the prices
-                $order_model = $this->ModelRepository->custome_create($request->payment_type);
-            //////1  order_model //////
+                //store basec data without calculate  the prices
+                $order_model = $this->OrderRepository->custome_create($request_payment_type,$site_fee);
+            //////1  create order_model //////
 
-            //  get all related stores
-            $store_models = $this->get_store_models($request_order_items);
+
             foreach ($store_models as $key => $store_model) {
                 // sent coupon_code & store_id
                 // get coupon_model to record the Order Stor data    
-                                
-                $coupon_model = $this->get_store_coupon($store_model->id,$request->coupon_code);
-            
-                //////2  coupon_model //////
+                $coupon_model = $this->get_store_coupon($store_model->id,$request_coupon_code);
+
+                //////2  udate coupon_model //////
                     $coupon_model 
                     ? 
                     $this->CouponRepository->update($coupon_model->id,['usage_counter'=>$coupon_model->usage_counter -1]) 
                     :
                     null;
-                //////2  coupon_model //////
+                //////2  create coupon_model //////
 
                 //////3  order_store_model //////
                     // sent order_id (parent), store_model(get info) , coupon_model(get info)
                     //store data without calculate  the prices
-                    $order_store_model = $this->OrderStoreRepository->custome_create($order_model->id,$store_model,$coupon_model);
+                    $order_store_model = $this->OrderStoreRepository->custome_create(
+                            $order_model->id,
+                            $store_model,
+                            $coupon_model
+                        );
                 //////3  order_store_model //////
 
                 // order_items create
-                foreach ($request_order_items as  $order_item) {
+                foreach ($carts as  $cart) {
                     // sent store_id product_id
                     // get product_item_model if related to sore  to record the Order Item data                    
-                    $product_item_model = $this->get_product_item($store_model->id,$order_item['product_id']);
-                
-                    if ($product_item_model) {
+                    $cart = $cart->store_id == $store_model->id ? $cart : null;
+
+                    if ($cart) {
                         //////4  OrderItem //////
-                        // sent store_id(parent),product_model(get info),quantity of every product
-                        //store data without calculate  the prices
-                        $order_item_model = $this->OrderItemRepository->custome_create($order_store_model->id,$product_item_model,$order_item['quantity']);
+                            // sent store_id(parent),product_model(get info),quantity of every product
+                            //store data without calculate  the prices
+                            $order_item_model = $this->OrderItemRepository->custome_create(
+                                        $order_store_model->id,
+                                        $cart
+                                    );
                         //////4  OrderItem //////
                         // create order_item_extras
-                        if ( isset($order_item['extra_ids']) ) {
-                        foreach ($order_item['extra_ids'] as  $extra_id) {
+
+                        foreach ($cart->cart_extras as  $cart_extra) {
                             //////5  OrderItemExtra //////
-                                $extra_model = $this->get_extra($extra_id,$product_item_model->id);
+
                                 // sent order_item_id , extra_model 
                                 //store data with prices
-                                $extra_model
-                                ?
-                                $this->OrderItemExtraRepository->custome_create($order_item_model->id,$extra_model)
-                                :
-                                null;
-                                //////5  OrderItemExtra //////
+                                $this->OrderItemExtraRepository->custome_create($order_item_model->id,$cart_extra);
+                            //////5  OrderItemExtra //////
                         }
-                        } 
                         //////4  OrderItem //////
-                            // sent model (add the prices)
-                            //store data with calculated  the prices from OrderItemExtra table
-                            $this->OrderItemRepository->custome_update($order_item_model);
+                            $product_price_after_offer = $this->get_calculated_cart_product_price(
+                                    $cart->product_price,
+                                    $cart->product_discount,
+                                );
+                            $order_item_extra_sub_totals = $this->get_calculated_order_item_extra_sub_totals(
+                                    $order_item_model
+                                );
+                            $sub_total = $this->get_calculated_order_item_sub_total (
+                                    $product_price_after_offer,
+                                    $cart->quantity,
+                                    $order_item_extra_sub_totals
+                                );
+                            $this->OrderItemRepository->update($order_item_model->id , [
+                                'order_item_extra_sub_totals'=>$order_item_extra_sub_totals, // collect sub_total of table order_item_extras
+                                'sub_total'=> $sub_total // (product_price after offer  * quantity ) + order_item_extra_sub_totals
+                            ]);
                         //////4  OrderItem //////
                     }    
                 }
                 //////3  OrderStore //////
-                    $order_item_sub_totals = $order_store_model->order_items->sum('sub_total');
-                    $discount_number = $this->get_calculated_discount($coupon_model,$order_item_sub_totals) ?? 0 ;
-                    $this->OrderStoreRepository->custome_update($order_store_model,$discount_number);
+                    $order_item_sub_totals = $this->get_order_item_sub_totals(
+                            $order_store_model
+                        );
+                    $discount_number = 
+                        $coupon_model  ? 
+                            $this->get_calculated_discount_number(
+                                $coupon_model->discount,
+                                $coupon_model->type,
+                                $coupon_model->percent_limit,
+                                $order_item_sub_totals
+                            ) 
+                        : 0  ;
+                    $sub_total  =    $this->get_calculated_store_sub_total(
+                                $discount_number ,
+                                $order_item_sub_totals ,
+                                $order_store_model->delevery_fee 
+                            );
+                    $this->OrderStoreRepository->update($order_store_model->id ,[
+                        'order_item_sub_totals'=>$order_item_sub_totals , 
+                        'coupon_discount'=>$discount_number ,
+                        'sub_total'=>  $sub_total
+                    ]);
+
                 //////3  OrderStore //////
 
             }
             //////1  order //////
-                $order_model->update([
-                    'order_store_sub_totals'=> $order_model->order_stores->sum('sub_total') ,
-                    'total'=> $order_model->order_stores->sum('sub_total')
+                $order_store_sub_totals = $this->get_calculated_order_store_sub_totals(
+                                                $order_model
+                                            ) ;
+                $total = $this->get_calculated_order_total(
+                            $order_model
+                        ) ;
+                $this->OrderRepository->update($order_model->id,[
+                    'order_store_sub_totals'=>  $order_store_sub_totals,
+                    'total'=>   $total
                 ]);
             //////1  order //////
 
@@ -169,50 +218,31 @@ class OrderController extends Controller
                 // sent $order_id,$address_modal
                 $order_information_model = $this->OrderInformationRepository->custome_create($order_model->id,$address_modal);
             //////5  OrderInformation //////
+
+            //////6  delete the cart //////
+                Auth::user()->carts()->delete();
+            //////6  delete the cart //////
+
+
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $order_model ) ],
                 'Successful'               ,
                 Response::HTTP_OK
             ) ;
 
-        // } catch (\Exception $e) {
-        //      return $this -> MakeResponseErrors(  
-        //          [$e->getMessage()  ] ,
-        //          'Errors',
-        //          Response::HTTP_BAD_REQUEST
-        //      );
-        // }
+        } catch (\Exception $e) {
+            $order_model->delete();
+             return $this -> MakeResponseErrors(  
+                 [$e->getMessage()  ] ,
+                 'Errors',
+                 Response::HTTP_BAD_REQUEST
+             );
+        }
     }
-    // public function update(modelUpdateRequest $request ,$id) {
-    //     try {
-    //         $old_model =  $this->ModelRepository->findById($id)  ;
-    //         $all = $this->update_files(
-    //             $old_model,
-    //             $request,
-    //             $this->folder_name,
-    //             $this->file_columns
-    //         );
-
-    //         $this->ModelRepository->update( $id,Request()->except($this->file_columns)+$all) ;
-    //         $model =  $this->ModelRepository->findById($id) ;
-
-    //         return $this -> MakeResponseSuccessful( 
-    //             [ new ModelResource ( $model ) ],
-    //                 'Successful' ,
-    //                 Response::HTTP_OK
-    //         ) ;
-    //         } catch (\Exception $e) {
-    //         return $this -> MakeResponseErrors(  
-    //             [$e->getMessage()  ] ,
-    //             'Errors',
-    //             Response::HTTP_NOT_FOUND
-    //         );
-    //     } 
-    // }
 
     public function show($id) {
         try {
-            $model = $this->ModelRepository->findById($id);
+            $model = $this->OrderRepository->findById($id);
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
                 'Successful',

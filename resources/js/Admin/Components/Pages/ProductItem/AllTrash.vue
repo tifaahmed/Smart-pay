@@ -21,10 +21,10 @@
                             <tbody>
                                 <tr v-for="( row    , rowkey ) in TableRows.data " :key="rowkey" >
                                     <td  v-for="( column , key    )  in Columns" :key="key" class="teeee" 
-                                        v-if="!column.invisible"
+                                        v-if="column && !column.invisible"
                                     >
                                         <ColumsIndex  
-                                            :ValueColumn="row[column.name]"   
+                                            :ValueColumn="row[column.name] ? row[column.name] : column.default "   
                                             :typeColumn="column.type" 
                                             :LoopOnColumn="column.loopOnColumn"
                                             @SendRowData ="SendRowData(row)"  
@@ -32,6 +32,7 @@
                                     </td>
                                     <td>
                                         <TrashedControllers 
+                                            :controller_buttons = controller_buttons
                                             :RowId="row.id" 
                                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
                                             @SendRowData="SendRowData(row)"
@@ -56,8 +57,10 @@
                             <span slot="next-nav" >  > </span>
                         </pagination>
                         <ModalIndex  
+                            :controller_buttons="controller_buttons" 
                             :Columns="Columns" 
                             :TableRows="TableRows" 
+                            :SingleTableRows="SingleTableRows" 
                             @DeleteRowButton="DeleteRowButton"
                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
                         />
@@ -86,17 +89,14 @@ export default {
     data( ) { return {
         filter :{  id : null  },
 
-
         TableName :'ProductItem',
         Languages : [],
 
         TableRows  : {},
+        SingleTableRows : {},
+
         Columns :  [],       
-        // Controller   : [
-        //     { type: 'edit'    ,  invisible : true } ,
-        //     { type: 'delete'  ,  invisible : true } ,
-        //     { type: 'show'    ,  invisible : true } ,
-        // ] ,
+        controller_buttons   : [ 'edit','delete','show' ] ,
         PerPage  : 10
     } },
     mounted() {
@@ -201,6 +201,7 @@ export default {
         },
         // modal
             SendRowData(row){
+                this.SingleTableRows = row;
                 this.Columns.forEach(function (SingleRow) {
                     SingleRow.value = row[SingleRow.name] ;
                 });

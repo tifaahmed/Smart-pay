@@ -12,6 +12,7 @@ License        :   Licensed under ThemeForest License
 
 -------------------------------------------------------------------*/
 
+
 /*
 1.  Accordions
 2.  Alerts
@@ -82,11 +83,13 @@ License        :   Licensed under ThemeForest License
 67  Tabs
 */
 
+
 /* ######## FONT ######## */
+
 @import "custom/fonts/font";
 
+/* ######## BOOTSTRAP ######## */
 
-/* ######## BOOTSTRAP ######## */ 
 @import "variables";
 @import "bootstrap/accordion";
 @import "bootstrap/alerts";
@@ -110,7 +113,8 @@ License        :   Licensed under ThemeForest License
 @import "bootstrap/tooltip";
 @import "bootstrap/tabs";
 
-/*  ######## CUSTOM-STYLES ######## */ 
+/*  ######## CUSTOM-STYLES ######## */
+
 @import "custom/checkbox";
 @import "custom/countdown";
 @import "custom/custom-control";
@@ -131,6 +135,7 @@ License        :   Licensed under ThemeForest License
 @import "custom/widgets";
 
 /* ######## LAYOUT-STYLES ######## */
+
 @import "layout/footer";
 @import "layout/header";
 @import "layout/horizontal-menu";
@@ -140,6 +145,7 @@ License        :   Licensed under ThemeForest License
 @import "layout/sidebar";
 
 /* ######## LIB-STYLES ######## */
+
 @import "lib/chart";
 @import "lib/datatable";
 @import "lib/datepicker";
@@ -152,6 +158,7 @@ License        :   Licensed under ThemeForest License
 @import "lib/spectrum";
 
 /* ######## TEMP-STYLES ######## */
+
 @import "temp/calendar";
 @import "temp/chat";
 @import "temp/contact";
@@ -160,6 +167,7 @@ License        :   Licensed under ThemeForest License
 @import "temp/mail";
 
 /* ######## UTILITIES-STYLES ######## */
+
 @import "util/background";
 @import "util/border";
 @import "util/height";
@@ -169,6 +177,3 @@ License        :   Licensed under ThemeForest License
 @import "util/position";
 @import "util/typography";
 @import "util/width";
-
-
-

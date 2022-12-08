@@ -23,13 +23,12 @@ class OrderItem extends Model
         'product_title', // string , nullable , 
         'product_offer', // enum , 0%,10%,5%,15%,20% product offer
         'product_price', // float ,default(1) ,  pure price
-        
-        'quantity', // integer , default(1) 
+        'product_quantity', // integer , default(1) 
         
         'order_item_extra_sub_totals', // float , default(0) ,collect sub_total of table order_item_extras
         'sub_total', // float , default(0) ,(product_price after offer  * quantity ) + order_item_extra_sub_totals
     ];
-
+ 
     // belongsTo
         public function order(){
             return $this->belongsTo(Order::class,'order_id');

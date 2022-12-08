@@ -32,9 +32,9 @@ class loginApiRequest extends FormRequest
          
         $all = [];
         if(is_numeric($this->email_phone)){
-            $all += [ 'email_phone'=>  [ 'required' ,'integer','exists:'.User::class.',phone'] ] ;
+            $all += [ 'email_phone'=>  [ 'required' ,'numeric','exists:'.User::class.',phone'] ] ;
         } else{
-            $all += [ 'email_phone'=>  [ 'required' ,'string','email','exists:'.User::class.',email'] ] ;
+            $all += [ 'email_phone'=>  [ 'required' ,'email','exists:'.User::class.',email'] ] ;
         }
         $all += [ 'password'=>  [ 'required' ,'string','min:6'] ] ;
 

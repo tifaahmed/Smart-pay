@@ -27,8 +27,8 @@ class RegisterApiRequest extends FormRequest
             'email'     =>  [ 'required_without:phone', 'unique:users,email' ,'email','max:200'] ,
             'phone'     =>  [ 'required_without:email', 'unique:users,phone' ,'max:15' ] ,
 
-            'password'  =>  [ 'sometimes' , 'confirmed' ,  'min:8' , 'max:15' ],
-            'password_confirmation'  =>  [ 'sometimes' , 'min:8' , 'max:15' ],
+            'password'  =>  [ 'sometimes' , 'confirmed' ,  'min:6' , 'max:15' ],
+            'password_confirmation'  =>  [ 'sometimes' , 'min:6' , 'max:15' ],
 
 
             'avatar'    =>      [ 'sometimes', 'mimes:jpg,jpeg,webp,bmp,png' , 'max:5000'] ,

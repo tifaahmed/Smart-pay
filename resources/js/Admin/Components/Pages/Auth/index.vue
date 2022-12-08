@@ -7,7 +7,7 @@
                 <div class="col-md-6 col-lg-6 col-xl-7 d-none d-md-flex bg-primary-transparent">
                     <div class="row wd-100p mx-auto text-center">
                         <div class="col-md-12 col-lg-12 col-xl-12 my-auto mx-auto wd-100p">
-                            <img src="" class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
+                            <img :src="logo" class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
                         </div>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                                     <div class="card-sigin">
                                         <div class="mb-5 d-flex"> 
                                             <!-- <a href="login.php"> -->
-                                                <img src="" class="sign-favicon ht-40" alt="logo">
+                                                <img :src="logo" class="sign-favicon ht-40" alt="logo">
                                             <!-- </a> -->
                                             <div class="card-sigin">
                                                 <div class="main-signup-header">
@@ -51,10 +51,27 @@
 
 
 <script>
+import SiteSettingModel     from 'AdminModels/SiteSettingModel';
+
     export default {
         name:'AuthIndex',
         mounted() {
-            console.log( 'AuthIndex' )
+            console.log( 'AuthIndex' );
+            this.initial();
+
         },
+        data( ) { return {
+			logo : null,
+        } } ,
+        methods : {
+            async initial( ) {
+            	this.logo  = ((await this.Show(1)).data.data[0]).item ;
+        	},
+			// model
+                async Show(id) {
+                        return await ( (new SiteSettingModel).show(id) )
+                },
+			// model
+        }
     }
 </script>

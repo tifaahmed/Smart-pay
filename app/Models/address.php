@@ -29,7 +29,9 @@ class Address extends Model
         'latitude',  // string  ,nullable
         'longitude',  // string  ,nullable
     ];
-
+    public $scopes = [
+        'relate_auth_user'
+    ];
     //scope
         public function scopeRelateAuthUser($query){
             return $query->where('user_id',Auth::user()->id);

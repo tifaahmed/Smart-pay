@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('user_rate_stores', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('user_id')->nullable()->unsigned();
+            $table->integer('user_id')->nullable()->unsigned()->comment('onDelete cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             
-            $table->integer('store_id')->nullable()->unsigned();
+            $table->integer('store_id')->nullable()->unsigned()->comment('onDelete cascade');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             
             $table->integer('rate')->default('1');

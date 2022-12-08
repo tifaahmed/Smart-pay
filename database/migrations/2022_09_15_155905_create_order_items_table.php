@@ -24,7 +24,7 @@ return new class extends Migration
             $table->float('product_offer')->default(0)->comment('10%,5%,15%,20% product offer');
             $table->float('product_price')->default(1)->comment('single product pure price');
 
-            $table->integer('quantity')->default(1); 
+            $table->integer('product_quantity')->default(1); 
 
             $table->float('order_item_extra_sub_totals')->default(0)->comment('collect sub_total of table order_item_extras');
 

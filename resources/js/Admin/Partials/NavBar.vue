@@ -206,7 +206,8 @@
 
                         </a>
 					</div>
-					<div class="dropdown main-profile-menu nav nav-item nav-link" :class="showMenu ? 'show' : ''">
+					<!-- :class="showMenu ? 'show' : ''" -->
+					<div class="dropdown main-profile-menu nav nav-item nav-link" >
 						<a class="profile-user d-flex" @click="toggleShow()">
 							<img alt="" :src="PropAvatar">
 						</a>
@@ -261,7 +262,7 @@
             console.log( 'nav_bar' )
         },
         data( ) { return {
-            showMenu: false
+            // showMenu: false
         } } ,
 		props : {
 			PropLogo : null,
@@ -271,9 +272,9 @@
 			
 		},  
         methods : {
-        	toggleShow: function() {
-				this.showMenu = !this.showMenu;
-			},
+        	// toggleShow: function() {
+			// 	this.showMenu = !this.showMenu;
+			// },
         	async logout(){
         		let data = await (new AuthModel).logout();
 				this.$router.push({ name: 'Auth.Login' })

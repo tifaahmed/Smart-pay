@@ -20,8 +20,9 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
             $table->string('user_full_name');
-            $table->string('phone');
-
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();  
+            
             $table->text('address'); 
             $table->string('department')->nullable();  
             $table->string('house')->nullable();  
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->enum('type', ['home', 'work', 'rest' ,'mosque'])->default('home');
 
             
+            $table->string('city_id')->nullable()->comment('will be deleted if order deleted'); 
             $table->string('city_name')->nullable();  
 
             $table->string('latitude')->nullable();   

@@ -28,8 +28,9 @@ use App\Models\UserFavStore;            // pivot
 use App\Models\UserFavProduct;          // pivot
 use App\Models\UserRateStore;           // pivot
     
-use App\Models\Order;           // HasMany
-use App\Models\Address;           // HasMany
+use App\Models\Order;          // HasMany
+use App\Models\Address;        // HasMany
+use App\Models\Cart;           // HasMany
 
 
 class User extends Authenticatable
@@ -113,6 +114,9 @@ class User extends Authenticatable
             public function address(){
                 return $this->HasMany(Address::class);
             }
+            public function carts(){
+                return $this->HasMany(Cart::class);
+            }
             
         // HasOne
             public function store(){
@@ -169,7 +173,7 @@ class User extends Authenticatable
 
         public function sendPasswordResetNotification($token)
         {
-            $url = asset('api/auth/reset-password?token='.$token);
+            $url = asset('reset-password'.$token);
 
             $data = [] ;
             $data += ['url' => $url];

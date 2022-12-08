@@ -35,14 +35,20 @@ class BaseRepository implements EloquentRepositoryInterface
 	{    
 		$keyName= $this->model->getKeyName() ;
 		$fillable= $this->model->getFillable() ;
-
 		array_push($fillable,$keyName);
- 		
+
+		
+		$all_scopes = [];
+		if ($this->model->scopes) {
+			foreach ($this->model->scopes as $key => $value) {
+				array_push( $all_scopes , AllowedFilter::scope($value) );
+			}
+		}
+
+
 		return QueryBuilder::for($this->model->with($relations))
 		->allowedFilters($fillable )	
-			
-		->allowedFilters(AllowedFilter::scope('relate_auth_user') )	
-
+		->allowedFilters($all_scopes)
 		->get($columns);
 	}
 
@@ -50,7 +56,7 @@ class BaseRepository implements EloquentRepositoryInterface
 	 * @param  int  $modelId
 	 * @return  pagination 
 	 */
-	public function collection(int $modelId, array $relations = []) 
+	public function collection(int $modelId = 10, array $relations = []) 
 	{
 		$keyName= $this->model->getKeyName() ;
 		$fillable= $this->model->getFillable() ;
@@ -180,7 +186,15 @@ class BaseRepository implements EloquentRepositoryInterface
 	{
 		return $this->findById($modelId)->delete();
 	}
-
+	/**
+	* delete model by id
+	* @param  int $modelId
+	* @return bool
+	*/
+	public function deleteByArray(array $modelIds = []) : bool
+	{
+		return $this->model->whereIn('id',$modelIds)->delete();
+	}
 	/**
 	* restor model by id
 	* @param  int $modelId

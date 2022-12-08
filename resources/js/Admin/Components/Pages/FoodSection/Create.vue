@@ -118,7 +118,6 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
             // get data 
             Languages : [],
-            all_users : {},
 
             // tabs
             hasNoneTranslatableFields : 0,
@@ -143,11 +142,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             async start(){
                 // get data
                     await this.GetlLanguages();
-                    await this.GetlAllUsers();
                 // get data
 
                 this.Columns = [ 
-                   
                     { 
                         type: 'string',placeholder:'title',header : 'title', name : 'title' ,
                         translatable : true ,
@@ -208,9 +205,6 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             
 
             // get data
-                async GetlAllUsers(){
-                    this.all_users = (await this.AllUsers()).data.data;
-                },
                 async GetlLanguages(){
                     this.Languages  = ( await this.AllLanguages() ).data; // all languages
                 },

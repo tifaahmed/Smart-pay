@@ -13,6 +13,7 @@ import FoodSectionRoutes from './FoodSectionRoutes';
 import OrderRoutes from './OrderRoutes';
 import ExtraCategoryRoutes from './ExtraCategoryRoutes';
 import ExtraRoutes from './ExtraRoutes';
+import SubscriptionRoutes from './SubscriptionRoutes';
 
 console.log('admin rout');
 
@@ -36,6 +37,7 @@ export default {
         OrderRoutes,
         ExtraCategoryRoutes,
         ExtraRoutes,
+        SubscriptionRoutes,
 
     ]
 }

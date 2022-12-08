@@ -97,6 +97,13 @@ interface EloquentRepositoryInterface
 	public function deleteById(int $modelId): bool;
 
 	/**
+	* delete model by array
+	* @param  array $modelIds
+	* @return bool
+	*/
+	public function deleteByArray(array $modelIds): bool ;
+
+	/**
 	 * @param  int  	$modelId
 	 * @return string  	$relation_coulmn
 	 */

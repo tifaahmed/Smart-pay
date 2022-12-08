@@ -69,6 +69,8 @@ class Kernel extends HttpKernel
         'LocalizationMiddleware' => \App\Http\Middleware\LocalizationMiddleware::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'verified' => \App\Http\Middleware\VerifiedMiddleware::class,
+        'StoreRelated' => \App\Http\Middleware\StoreRelatedmiddleware::class,
+        'CustomerRelated' => \App\Http\Middleware\CustomerRelatedmiddleware::class,
         
     ];
 }

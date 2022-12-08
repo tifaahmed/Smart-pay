@@ -1,12 +1,26 @@
 import Vue from 'vue'
 
 export default class DataService {
+	static FilterData = {}  ;
 	static RequestData = {}  ;
 	static ErrorsData  = {}  ;
 
+    static  now(){
+        const date = new Date();
+        const day = (date.getDate()).toString().padStart(2, '0');
+        const month = (date.getMonth()).toString().padStart(2, '0');
+        return  date.getFullYear()+'-'+month+'-'+day ;
+    }
 
     // *********************************************
-
+    static  handleFilters(Columns){
+        for (var key in Columns) {
+            if (Columns[key].searchable) {
+                DataService.FilterData[Columns[key].name] = null;
+            }
+        }
+        return DataService.FilterData;
+    }
     static  handleColumns(Columns,Languages){
         for (var key in Columns) {
             // this.$set( DataService.RequestData,  Columns[key].name ,1); 
