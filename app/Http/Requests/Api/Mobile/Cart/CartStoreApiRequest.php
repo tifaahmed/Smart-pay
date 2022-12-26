@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 use App\Rules\ExtraRelatedProductRule;
+use App\Rules\ProductAcceptedStoreRule;
 
 use App\Models\ProductItem;
 use App\Models\Extra;
@@ -36,12 +37,10 @@ class CartStoreApiRequest extends FormRequest
         $all += [ 'product_id' =>  [ 'required' ,'integer',
         Rule::exists(ProductItem::class,'id')
         ->where(function ($query) {
-            return $query->where('deleted_at', NULL)
-            ->where('status', 'active')
-            ->whereHas('store' ,function (Builder $store) {
-                    $store->where('status','accepted') ;
-            })->first();
+            $query->where('deleted_at', NULL);
+            $query->where('status', 'active');
         }),
+        new ProductAcceptedStoreRule()
         
         ] ] ;
         $all += [ 'quantity'   =>  [ 'required' ,'integer','min:1'] ] ;

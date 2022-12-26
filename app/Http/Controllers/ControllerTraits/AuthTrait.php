@@ -44,7 +44,7 @@ trait AuthTrait {
             if ($user->phone_verified_at) {
                 return false;
             }else{
-                $user->sendActivePhoneNotification();
+                $this->OtpSend($user->phone);
                 return true;
             }
         }
@@ -74,7 +74,7 @@ trait AuthTrait {
 
     // * @param    $data  array
     // return obj (model)  
-    private function store($data)   {
+    public function store_user($data)   {
         $all = [ ];
 
 

@@ -25,37 +25,6 @@ class StoreRepository extends BaseRepository implements StoreRepositoryInterface
 		$this->model =  $model;
 	}
 
-    public function filter($filter){
-		$keyName= $this->model->getKeyName() ;
-		$fillable= $this->model->getFillable() ;
-		array_push($fillable,$keyName);
- 
-		$result = QueryBuilder::for($this->model);
-
-		$result = $result->allowedFilters($fillable);
-		$result = $result->allowedFilters(AllowedFilter::scope('free_delevery') )	;
-		$result = $result->allowedFilters(AllowedFilter::scope('offer') )	;
-		$result = $result->allowedFilters(AllowedFilter::scope("nearest") )		;
-		$result = $result->allowedFilters(AllowedFilter::scope("food_section") )		;
-
-		if ( isset($filter) && isset($filter['nearest'])  ) {
-			$result = $result->orderby("distance", "desc") ;
-		}else{
-			$result = $result->latest('id');
-		}
-
-		return $result;
-	}
-
-    public function filterPaginate($filter,int $itemsNumber){
-		$result =  $this->filter($filter);
-		return $result->paginate($itemsNumber)->appends(request()->query());
-		
-	}
-	public function filterAll($filter)  {
-		$result =  $this->filter($filter);
-		return $result ->get();
-	}
 
 
 	public function sync_food_section(int $id,array $food_section_ids = []) 

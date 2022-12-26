@@ -61,11 +61,12 @@ class Cart extends Model
             return $result;
         }
 
-        public function getProductImageAttribute (): string{
-            return   $this->product_item->image ;
+        public function getProductImageAttribute () {
+            return   $this->product_item ? $this->product_item->image : null;
         }
         
     //scope
+        // relate_auth_user
         public function scopeRelateAuthUser($query){
             return $query->where('user_id',Auth::user()->id);
         }

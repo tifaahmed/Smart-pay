@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Resources\Dashboard\Extra\ExtraCategoryResource;
+use App\Http\Resources\Dashboard\Extra\StoreResource;
 
 class ExtraResource extends JsonResource
 {
@@ -38,6 +39,7 @@ class ExtraResource extends JsonResource
 
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'extra_category' => new  ExtraCategoryResource($this->extra_category) ]  ;
+        $all += [ 'store' => new  StoreResource($this->store) ]  ;
 
         $all += resource_translated_string($model,$lang_array,$translated_string_fields);
         $all += resource_translated_image($model,$lang_array,$translated_image_fields);

@@ -17,8 +17,9 @@ class Address extends Model
     protected $primaryKey = 'id';
     
     protected $fillable = [
-        'user_id',  // integer , unsigned
-        'city_id',  // integer , unsigned
+        'user_id',  // integer , unsigned , onDelete('cascade')
+        'city_id',  // integer , unsigned ,  will not delete if city deleted
+        'city_name',
         'address',  // text  
         'department',  // string  ,nullable
         'house',  // string  ,nullable
@@ -36,14 +37,19 @@ class Address extends Model
         public function scopeRelateAuthUser($query){
             return $query->where('user_id',Auth::user()->id);
         }
+    // set    
+        public function setCityNameAttribute($value){
+            return $this->attributes['city_name'] = $this->city->name;
+        }
 
-    // belongsTo
-        public function user(){
-            return $this->belongsTo(User::class,'user_id');
-        }
-        public function city(){
-            return $this->belongsTo(City::class,'city_id');
-        }
+    // reations    
+        // belongsTo
+            public function user(){
+                return $this->belongsTo(User::class,'user_id');
+            }
+            public function city(){
+                return $this->belongsTo(City::class,'city_id');
+            }
 }
 
  

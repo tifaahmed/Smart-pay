@@ -35,7 +35,7 @@ class StoreController extends Controller
     
     public function all(Request $request){
         try {
-            $model =  $this->ModelRepository->filterAll($request->filter) ;
+            $model =  $this->ModelRepository->all() ;
             return new ModelCollection($model);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -48,7 +48,7 @@ class StoreController extends Controller
 
     public function collection(Request $request){
         try {
-            $model = $this->ModelRepository->filterPaginate($request->filter, $request->prepage ?? 10);
+            $model = $this->ModelRepository->collection($request->prepage ?? 10);
             return new ModelCollection($model);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  

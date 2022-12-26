@@ -42,8 +42,8 @@ class AuthController extends Controller {
             // if user password wrong &  sign by google
             if( $user->login_type ){
                 return $this -> MakeResponseErrors( 
-                    [$user->login_type ],  
-                    'google' ,
+                    [ 'InvalidCredentials' ],  
+                    'first login type '.$user->login_type ,
                     Response::HTTP_UNAUTHORIZED
                 ) ;
             }
@@ -76,18 +76,19 @@ class AuthController extends Controller {
         $user = $this->get_user($request->email);
             
         // if not exist create user
-        $user = $user ?? $this->store($request) ;
+        $user = $user ?? $this->store_user($request) ;
 
         return $this->loginUser($user); // login
     }
 
     public function register( RegisterApiRequest $request ) {
-        $user = $this->store($request) ; // store user 
+        $user = $this->store_user($request) ; // store user 
+
         if ($request->email) {
             $this->check_email_verified($user); // send pin code to user email
         }
         if ($request->phone) {
-            $this->check_phone_verified($user); // send pin code to user phone
+            $this->OtpSend($user->phone);
         }
         return $this->loginUser($user); // login
     }
@@ -108,8 +109,12 @@ class AuthController extends Controller {
 
 
     public function active_acount(CheckPinCodeRequest $request){
-        $user =  User::where('pin_code',$request->pin_code)->first();
-        if ($user) {
+
+        $user = $this->get_user($request->email_phone);
+
+        
+        // if ($user) {
+            // $this->OtpChecks($user->phone,$request->pin_code);// validation 
             if ($user->email) {
                 $user->update([ 'email_verified_at' => date("Y-m-d H:i:s") ]);
             }
@@ -117,13 +122,13 @@ class AuthController extends Controller {
                 $user->update([ 'phone_verified_at' => date("Y-m-d H:i:s") ]);
             }
             return $this ->loginUser($user);
-        }else{
-            return $this -> MakeResponseSuccessful( 
-                [ 'message' => 'InvalidCredentials' ],  
-                'InvalidCredentials' ,
-                Response::HTTP_UNAUTHORIZED
-            ) ;  
-        }
+        // }else{
+        //     return $this -> MakeResponseSuccessful( 
+        //         [ 'message' => 'InvalidCredentials' ],  
+        //         'InvalidCredentials' ,
+        //         Response::HTTP_UNAUTHORIZED
+        //     ) ;  
+        // }
     }
     
 

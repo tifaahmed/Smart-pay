@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\ActiveEmailNotification;
-use App\Notifications\ActivePhoneNotification;
+use App\Notifications\SentOtpPhoneNotification;
 
 
 use Auth;
@@ -184,15 +184,9 @@ class User extends Authenticatable
         public function sendActiveEmailNotification()
         {
             $data = ['pin_code' => $this->pin_code];
-            $this->notify(new ActiveEmailNotification($data));
+            $this->notify(new SentOtpPhoneNotification($data));
         }
-        public function sendActivePhoneNotification()
-        {
-            $data = [] ;
-            $data += ['pin_code' => $this->pin_code];
-            $data += ['phone' => $this->phone];
-            // $this->notify(new ActivePhoneNotification($data));
-        }
+
 
     // Notification
 

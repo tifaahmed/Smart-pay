@@ -17,6 +17,7 @@ use App\Repository\AddressRepositoryInterface as ModelInterface;
 // Requests
 use App\Http\Requests\Api\Mobile\Address\AddressStoreApiRequest as modelInsertRequest;
 use App\Http\Requests\Api\Mobile\Address\AddressUpdateApiRequest as modelUpdateRequest;
+use App\Http\Requests\Api\Mobile\Address\AddressRelatedApiRequest as modeRelatedRequest;
 
 class AddressController extends Controller
 {
@@ -58,7 +59,7 @@ class AddressController extends Controller
 
     public function store(modelInsertRequest $request) {
         try {
-            $all = $request->all();
+            $all = $request->validated();
             if ($this->file_columns) {
                 $all += $this->store_files(
                     $request,
@@ -74,6 +75,7 @@ class AddressController extends Controller
                 );
             }
             $all['user_id'] = Auth::user()->id;
+            $all['city_name'] = ''; //by Mutator
             $model = $this->ModelRepository->create( $all ) ;
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
@@ -91,14 +93,6 @@ class AddressController extends Controller
     public function update(modelUpdateRequest $request ,$id) {
         try {
              $old_model =  $this->ModelRepository->findById($id);
-
-            if ($old_model->user_id != Auth::user()->id ) {
-                return $this -> MakeResponseErrors( 
-                    [ 'not your auth data' ],  
-                    'Error' ,
-                    Response::HTTP_UNAUTHORIZED
-                ) ;             
-            }
 
             $all = $request->all();
             if ($this->file_columns) {
@@ -134,16 +128,9 @@ class AddressController extends Controller
         } 
     }
 
-    public function show($id) {
+    public function show(modeRelatedRequest $request,$id) {
         try {
             $model = $this->ModelRepository->findById($id);
-            if ($model->user_id != Auth::user()->id ) {
-                return $this -> MakeResponseErrors( 
-                    [ 'not your auth data' ],  
-                    'Error' ,
-                    Response::HTTP_UNAUTHORIZED
-                ) ;             
-            }
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
                 'Successful',
@@ -158,11 +145,11 @@ class AddressController extends Controller
         }
     }
 
-    public function destroy($id) {
+    public function destroy(modeRelatedRequest $request, $id) {
         try {
             $this->ModelRepository->deleteById($id);
             return $this -> MakeResponseSuccessful( 
-                [ ],
+                [ 'deleted'],
                 'Successful',
                 Response::HTTP_OK
             ) ;

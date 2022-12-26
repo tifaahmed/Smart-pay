@@ -28,8 +28,8 @@ class ProductItem extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'store_id',  // integer , unsigned
-        'product_category_id',  // integer , unsigned
+        'store_id',  // integer , unsigned ,   onDelete('cascade')
+        'product_category_id',  // integer , unsigned ,  // will not delete if product_category deleted
         
         'title', // string
         'description', // text
@@ -48,20 +48,23 @@ class ProductItem extends Model
 
     // filter scopes
         public $scopes = [
-            'relate_auth_store','store_status','my_fav_products'
+            'relate_auth_store','store_status','my_fav_products','subscripted_store'
         ];
     //scope
+        // relate_auth_store
         public function scopeRelateAuthStore($query,$filter){
             if ($filter == false) {
                 return $query->where('store_id','!=' ,Auth::user()->store->id);
             }
             return $query->where('store_id',Auth::user()->store->id);
         }
+        // store_status
         public function scopeStoreStatus($query,$filter){
             return $query->whereHas('store',function (Builder $query) use($filter) {
                 $query->where('status',$filter) ;
             });            
         }
+        // my_fav_products
         public function scopeMyFavProducts($query,$filter){
             if ($filter == false) {
                 return $query->whereHas('fav_products',function (Builder $query) {
@@ -72,7 +75,15 @@ class ProductItem extends Model
                 $query->where('user_id',Auth::user()->store->id) ;
             });
         }
- 
+        // subscripted_store
+        public function scopeSubscriptedStore($query,$filter){
+            return $query->whereHas('store',function ($store_query)  {
+                $store_query->whereHas('subscriptions',function ($subscription_query)  {
+                    $subscription_query->whereDate('end_date','>=',date('Y-m-d')) ;
+                    $subscription_query->AcceptedStatus() ;
+                });            
+            });            
+        }
 
 
     // belongsTo

@@ -89,34 +89,49 @@ class CartController extends Controller
         }
     }
     public function update(modelUpdateRequest $request, $id) {
-        $cart = $this->ModelRepository->findById($id);
-        $cart_extras_ids = $cart->cart_extras->pluck('extra_id')->toArray();
-        // quantity become  0 delete the product with the extras
-        if ($request->quantity <= 0) {
-            $this->ModelRepository->deleteById($id);
-        }
-        // else change quantity
-        else{
-            $arr = ['quantity' =>   $request->quantity] ;
-            $this->ModelRepository->update($id, $arr );
-        
-            // if all extras deleted
-            if (!$request->extra_ids) {
-                $cart->cart_extras->delete();
+        try {
+            $request_extra_ids = $request->extra_ids ?? [];
+            $cart = $this->ModelRepository->findById($id);
+            $old_cart_extras_ids = $cart->cart_extras->pluck('extra_id')->toArray();
+            // quantity become  0 delete the product with the extras
+            if ($request->quantity <= 0) {
+                $this->ModelRepository->deleteById($id);
             }
-            // else add or delete or edit extras
+            // else change quantity
             else{
-                //  if deleted extras
-                $removed_cart_extras_ids =  $this->get_removed_cart_extras_ids($cart,$cart_extras_ids,$request->extra_ids);
-                count($removed_cart_extras_ids) ? $this->CartExrtraRepository->deleteByArray([$removed_cart_extras_ids]) : null;
+                $arr = ['quantity' =>   $request->quantity] ;
+                $this->ModelRepository->update($id, $arr );
+            
+                // if all extras deleted
+                if (count($request_extra_ids) <= 0 && $cart->cart_extras->count() > 0 ) {
+                    $cart->cart_extras->delete();
+                }
+                // else add or delete or edit extras
+                else{
+                    //  if deleted extras
+                    $removed_cart_extras_ids =  $this->get_removed_cart_extras_ids($cart,$old_cart_extras_ids,$request_extra_ids);
+                    count($removed_cart_extras_ids) ? $this->CartExrtraRepository->deleteByArray([$removed_cart_extras_ids]) : null;
 
-                //  if added extras
-                $added_extras_ids =  $this->get_added_extras_ids($cart,$cart_extras_ids,$request->extra_ids);
-                foreach ($added_extras_ids as $key => $extra_id) {
-                    $extra_arr = $this->extra_arr($cart->id,$extra_id);
-                    $this->CartExrtraRepository->create( $extra_arr ) ;
+                    //  if added extras
+                    $added_extras_ids =  $this->get_added_extras_ids($cart,$old_cart_extras_ids,$request_extra_ids);
+                    foreach ($added_extras_ids as $key => $extra_id) {
+                        $extra_arr = $this->extra_arr($cart->id,$extra_id);
+                        $this->CartExrtraRepository->create( $extra_arr ) ;
+                    }
                 }
             }
+            $new_cart = $this->ModelRepository->findById($id);
+            return $this -> MakeResponseSuccessful( 
+                [ 'Successful' ],
+                'Successful',
+                Response::HTTP_OK
+            ) ;
+        } catch (\Exception $e) {
+            return $this -> MakeResponseErrors(  
+                [$e->getMessage()  ] ,
+                'Errors',
+                Response::HTTP_BAD_REQUEST
+            );
         } 
         
 
@@ -125,7 +140,7 @@ class CartController extends Controller
         try {
             $this->ModelRepository->deleteById($id);
             return $this -> MakeResponseSuccessful( 
-                [ ],
+                [ 'cart deleted'],
                 'Successful',
                 Response::HTTP_OK
             ) ;

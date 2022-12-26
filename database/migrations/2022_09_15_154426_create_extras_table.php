@@ -17,10 +17,14 @@ return new class extends Migration
             $table->increments('id');
 
             $table->integer('extra_category_id')->unsigned();
-            $table->foreign('extra_category_id')->references('id')->on('extra_categories')->onDelete('cascade');
-
+            $table->integer('store_id')->unsigned();
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
+            
             $table->string('title'); // [note: "translatable"]
             $table->float('price')->default(0);
+
+
+            $table->enum('status', [ 'request_as_new','request_as_edit','active','deactivate','out_of_stock'])->default('request_as_new');
 
             $table->timestamps();
         });
