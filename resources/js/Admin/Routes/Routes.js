@@ -14,6 +14,7 @@ import OrderRoutes from './OrderRoutes';
 import ExtraCategoryRoutes from './ExtraCategoryRoutes';
 import ExtraRoutes from './ExtraRoutes';
 import SubscriptionRoutes from './SubscriptionRoutes';
+import CountryRoutes from './CountryRoutes';
 
 console.log('admin rout');
 
@@ -38,6 +39,6 @@ export default {
         ExtraCategoryRoutes,
         ExtraRoutes,
         SubscriptionRoutes,
-
+        CountryRoutes,
     ]
 }

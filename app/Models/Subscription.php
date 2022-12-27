@@ -32,9 +32,13 @@ class Subscription extends Model
         public $scopes = [
             'relate_auth_store'
         ];
+
     // scope
         public function scopeRelateAuthStore($query){
             return $query->where('store_id',Auth::user()->store->id);
+        }
+        public function scopeAcceptedStatus($query){
+            return $query->where('subscription_status','accepted');
         }
     // belongsTo
         public function store(){

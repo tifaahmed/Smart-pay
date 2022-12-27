@@ -12,6 +12,7 @@ use App\Http\Controllers\ControllerTraits\FileTrait;
 use App\Http\Controllers\ControllerTraits\OrderTrait;
 use App\Http\Controllers\ControllerTraits\AuthTrait;
 use App\Http\Controllers\ControllerTraits\CartTrait;
+use App\Http\Controllers\ControllerTraits\SmsTwilioTrait;
 
 class Controller extends BaseController
 {
@@ -23,7 +24,8 @@ class Controller extends BaseController
     FileTrait,
     OrderTrait,
     CartTrait,
-    AuthTrait;
+    AuthTrait,
+    SmsTwilioTrait;
     public function __construct()
     {
         $this->languages = config('app.lang_array'); // ex [ar , en ]

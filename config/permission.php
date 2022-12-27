@@ -158,4 +158,17 @@ return [
 
         'store' => 'default',
     ],
+    'excluded_routes' => [
+        'auth.login',
+        'auth.register',
+        'auth.loginSocial',
+        'auth.check_pin_code',
+        'auth.active_acount',
+        'auth.logout',
+        'auth.password.new',
+        'auth.password.reset',
+        'auth.password.update',
+        
+        'language.all',
+    ]
 ];

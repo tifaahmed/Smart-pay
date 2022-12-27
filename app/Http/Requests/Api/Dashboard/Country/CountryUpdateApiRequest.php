@@ -28,7 +28,7 @@ class CountryUpdateApiRequest extends FormRequest
         
         $all=[];
 
-        $all += [ 'image'                  =>  [ 'required' ,'file','max:50000'] ]  ;
+        $all += [ 'image'                  =>  [ 'sometimes' ,'file','max:50000'] ]  ;
         $all += [ 'phone_code'                 =>  [ 'required' ,'numeric' ,'unique:countries,phone_code,'.$this->id  ] ]  ;
 
         foreach ($lang_array as $key => $value) {

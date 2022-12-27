@@ -63,13 +63,13 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::get('/'                    ,   'CartController@all'         )->name('all'),
             Route::post(''                    ,   'CartController@store'       )->name('store'),
             Route::post('/{id}/update'        ,   'CartController@update'      )->name('update'),
-            Route::DELETE('/{id}'             ,   'CartController@destroy'     )->name('destroy'),
+            Route::post('/{id}'             ,   'CartController@destroy'     )->name('destroy'),
 
         ]),
     ]),
 
 
-    
+    // customer only
     Route::group(['middleware' => ['auth:sanctum','verified','role:customer']], fn ( ) : array => [
         Route::name('coupon.')->prefix('/coupon')->group( fn ( ) : array => [
             Route::post('/check_coupon', 'CouponController@check_coupon')->name('check_coupon'),
@@ -80,7 +80,7 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::post(''                          ,   'AddressController@store'               )->name('store'),
             Route::get('/{id}/show'                 ,   'AddressController@show'                )->name('show'),
             Route::get('/collection'                ,   'AddressController@collection'          )->name('collection'),
-            Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
+            Route::post('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
             Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
         ]),
         // country
@@ -95,12 +95,6 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::get('/'                          ,   'ProductCategoryController@all'                 )->name('all'),
             Route::get('/{id}/show'                 ,   'ProductCategoryController@show'                )->name('show'),
             Route::get('/collection'                ,   'ProductCategoryController@collection'          )->name('collection'),
-        ]),
-        // product-category
-        Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
-            Route::get('/'                          ,   'ProductItemsController@all'         )->name('all'),
-            Route::get('/{id}/show'                 ,   'ProductItemsController@show'        )->name('show'),
-            Route::get('/collection'                ,   'ProductItemsController@collection'  )->name('collection'),
         ]),
         // store
         Route::name('food-section.')->prefix('food-section')->group( fn ( ) : array => [
@@ -121,45 +115,61 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
             Route::get('/collection'                ,   'ExtraCategoryController@collection'          )->name('collection'),
         ]),
 
-
-
-
-
-
-    ]),
-    Route::group(['middleware' => ['auth:sanctum','verified','role:customer']], fn ( ) : array => [
         // order
-            Route::name('order.')->prefix('/order')->group( fn ( ) : array => [
-                Route::get('/'                          ,   'OrderController@all'                 )->name('all'),
-                Route::post(''                          ,   'OrderController@store'               )->name('store'),
-                Route::get('/{id}/show'                 ,   'OrderController@show'                )->name('show'),
-                Route::get('/collection'                ,   'OrderController@collection'          )->name('collection'),
-                Route::post('/{id}/update'              ,   'OrderController@update'              )->name('update'),
-            ]),
+        Route::name('order.')->prefix('/order')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'OrderController@all'                 )->name('all'),
+            Route::post(''                          ,   'OrderController@store'               )->name('store'),
+            Route::get('/{id}/show'                 ,   'OrderController@show'                )->name('show'),
+            Route::get('/collection'                ,   'OrderController@collection'          )->name('collection'),
+            Route::post('/{id}/update'              ,   'OrderController@update'              )->name('update'),
+        ]),
     ]),
 
     Route::group(['middleware' => ['auth:sanctum','verified','role:store|customer']], fn ( ) : array => [
         // order-store
-            Route::name('order-store.')->prefix('/order-store')->group( fn ( ) : array => [
-                Route::get('/'                          ,   'OrderStoreController@all'                 )->name('all'),
-                Route::post(''                          ,   'OrderStoreController@store'               )->name('store'),
-                Route::get('/{id}/show'                 ,   'OrderStoreController@show'                )->name('show'),
-                Route::get('/collection'                ,   'OrderStoreController@collection'          )->name('collection'),
-                Route::post('/{id}/update'              ,   'OrderStoreController@update'              )->name('update'),
-            ]),
+        Route::name('order-store.')->prefix('/order-store')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'OrderStoreController@all'                 )->name('all'),
+            Route::get('/{id}/show'                 ,   'OrderStoreController@show'                )->name('show'),
+            Route::get('/collection'                ,   'OrderStoreController@collection'          )->name('collection'),
+            Route::post('/{id}/update'              ,   'OrderStoreController@update'              )->name('update'),
+        ]),
+        // extra
+        Route::name('extra.')->prefix('/extra')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'ExtraController@all'                 )->name('all'),
+            Route::get('/{id}/show'                 ,   'ExtraController@show'                )->name('show'),
+            Route::get('/collection'                ,   'ExtraController@collection'          )->name('collection'),
+        ]),
+        // product-item
+        Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'ProductItemsController@all'         )->name('all'),
+            Route::get('/{id}/show'                 ,   'ProductItemsController@show'        )->name('show'),
+            Route::get('/collection'                ,   'ProductItemsController@collection'  )->name('collection'),
+        ]),
     ]),
 
 
 
-
+    //  store only
     Route::group(['middleware' => ['auth:sanctum','role:store']], fn ( ) : array => [   
+        // store
         Route::name('store.')->prefix('store')->group( fn ( ) : array => [
             Route::get('/my-store'           ,   'StoreController@my_store'        )->name('my_store'),
             Route::post('update'            ,   'StoreController@update'          )->name('update'),
         ]),
-
-         
+        // extra
+        Route::name('extra.')->prefix('/extra')->group( fn ( ) : array => [
+            Route::post(''                          ,   'ExtraController@store'               )->name('store'),
+            Route::DELETE('/{id}'                   ,   'ExtraController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'              ,   'ExtraController@update'              )->name('update'),
+        ]),
+        // product-item
+        Route::name('product-item.')->prefix('/product-item')->group( fn ( ) : array => [
+            Route::post(''                          ,   'ProductItemsController@store'       )->name('store'),
+            Route::post('/{id}/update'              ,   'ProductItemsController@update'      )->name('update'),
+        ]),
     ]),
+
+    // verified & store only
     Route::group(['middleware' => ['auth:sanctum','verified','role:store']], fn ( ) : array => [   
         Route::name('subscription.')->prefix('subscription')->group( fn ( ) : array => [
             Route::get('/'          ,   'SubscriptionController@all'                 )->name('all'),

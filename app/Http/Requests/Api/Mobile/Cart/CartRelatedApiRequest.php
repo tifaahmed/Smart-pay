@@ -10,22 +10,26 @@ use Auth;
 
 class CartRelatedApiRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    public function __construct()
+    {
+        $this->authorization_message = '';
+    }
     public function authorize()
     {
-        $cart = Auth::user()->carts()->find($this->id);
-        if (!$cart) {
-                return false;
+        $model = Cart::find($this->id);
+        if (!$model) {
+            $this->authorization_message = 'id not found';
+            return false;
         }
-        return true;    
+        if ($model->user_id != Auth::user()->id ) {
+            $this->authorization_message = 'not your auth data';
+            return false;           
+        }
+        return true;
     }
     protected function failedAuthorization()
     {
-        throw new \Illuminate\Auth\Access\AuthorizationException('Not Authoriz.');
+        throw new \Illuminate\Auth\Access\AuthorizationException($this->authorization_message);
     }
     /**
      * Get the validation rules that apply to the request.

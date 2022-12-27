@@ -18,6 +18,7 @@ use App\Models\FoodSectionStore; // pivot
 use App\Models\ProductItem;          // HasMany
 use App\Models\OrderItem;          // HasMany
 use App\Models\OrderStore;          // HasMany
+use App\Models\Subscription;          // HasMany
 
 
 use Auth;
@@ -63,13 +64,18 @@ class Store extends Model
     public $append = [
         'distance', 
     ];
-    
+    // filter scopes
+        public $scopes = [
+            'food_section','free_delevery','offer','nearest','relate_auth_user','subscripted_store'
+        ];
     //scope
+        // food_section
         public function scopeFoodSection($query,$filter){
             return $query->whereHas('food_sections',function (Builder $query) use($filter) {
                 $filter && is_numeric($filter) ? $query->where('food_section_id',$filter) : null ;
             });
         }
+        // free_delevery
         public function scopeFreeDelevery($query,$filter){
             if ($filter == 0 || $filter == false) {
                 return $query->where('delevery_fee',0)->orWhere('delevery_fee',null);
@@ -77,14 +83,26 @@ class Store extends Model
                 return $query->where('delevery_fee',$filter);
             }
         }
+        // offer
         public function scopeOffer($query,$filter){
             return $query->whereHas('product_items',function (Builder $query) use($filter) {
                 $query->where('discount',$filter);
             });
         }
+
+        // subscripted_store
+        public function scopeSubscriptedStore($query,$filter){
+            return $query->whereHas('subscriptions',function ($subscription_query)  {
+                $subscription_query->whereDate('end_date','>=',date('Y-m-d')) ;
+                $subscription_query->AcceptedStatus() ;
+            });            
+        }
+        // relate_auth_user
         public function scopeRelateAuthUser($query){
             return $query->where('user_id',Auth::user()->id);
         }
+
+        // nearest
         public function scopeNearest($query,...$nearest)
         {
             // if sent the location
@@ -95,7 +113,9 @@ class Store extends Model
             }
             // else get old location
             else if (Auth::user() &&  Auth::user()->latitude &&  Auth::user()->longitude) {
-
+                $latitude = Auth::user()->latitude;
+                $longitude  = Auth::user()->longitude;
+                $distance = 5000;
             }
             // do nothing
             else{
@@ -115,18 +135,21 @@ class Store extends Model
             )";
         
             return $query->select("*")->selectRaw("$haversine AS distance")
-                ->having("distance", "<=", $distance);
+                ->having("distance", "<=", $distance)->orderby("distance", "desc");
         }
 
     // HasMany
         public function product_items(){
             return $this->HasMany(ProductItem::class);
         }
-        public function order_item(){
+        public function order_items(){
             return $this->HasMany(OrderItem::class);
         }
-        public function order_store(){
+        public function order_stores(){
             return $this->HasMany(OrderStore::class);
+        }
+        public function subscriptions(){
+            return $this->HasMany(Subscription::class);
         }
     // belongsTo
         public function user(){

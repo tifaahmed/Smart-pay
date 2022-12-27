@@ -69,15 +69,14 @@ class OrderStoreController extends Controller
 
     public function update(modelUpdateRequest $request ,$id) {
         try {
-            $old_model =  $this->ModelRepository->findById($id)  ;
-            $all = $this->update_files(
-                $old_model,
-                $request,
-                $this->folder_name,
-                $this->file_columns
-            );
+            $arr = [];
+            $arr += ['order_status' =>$request->order_status] ;
+            if ($user->hasRole('store')) {
+                $arr += ['store_note' =>$request->store_note] ;
+                $arr += ['retrieve_price' =>$request->retrieve_price] ;
+            }
 
-            $this->ModelRepository->update( $id, $request->only(['order_status','store_note'])  ) ;
+            $this->ModelRepository->update( $id, $arr  ) ;
             $model =  $this->ModelRepository->findById($id) ;
 
             return $this -> MakeResponseSuccessful( 

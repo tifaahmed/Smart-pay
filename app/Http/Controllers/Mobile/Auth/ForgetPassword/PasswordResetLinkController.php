@@ -18,14 +18,13 @@ class PasswordResetLinkController extends Controller
             $user = $this->get_user($request->email_phone);
         
             if ($user->email == $request->email_phone) {
-                $status = Password::sendResetLink(
-                    // $request->only('email')
-                    ['email' => $request->email_phone]
-                );
+                $status = Password::sendResetLink([
+                    'email' => $request->email_phone
+                ]);
             }
 
             if ($user->phone == $request->email_phone) {
-                $user->sendActivePhoneNotification();
+                $this->OtpSend($request->email_phone);
             }
 
             return $this -> MakeResponseSuccessful( 

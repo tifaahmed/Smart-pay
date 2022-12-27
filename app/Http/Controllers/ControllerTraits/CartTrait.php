@@ -29,9 +29,9 @@ trait CartTrait {
     }
     // * @param  object   $cart
     // * @param  array   $cart_extras_ids
-	// * @param  array   $request_extra_ids
+	// * @param ( array or null)  $request_extra_ids
     // @return array removed_cart_extras_ids 
-    public function get_removed_cart_extras_ids(object $cart, array $cart_extras_ids,array $request_extra_ids) :array  {
+    public function get_removed_cart_extras_ids(object $cart, array $cart_extras_ids,array $request_extra_ids=[]) :array  {
         $removed_extras_ids = array_diff($cart_extras_ids,$request_extra_ids);
         return $cart->cart_extras->whereIn('extra_id',$removed_extras_ids)->pluck('id')->toArray();
     }
@@ -39,7 +39,7 @@ trait CartTrait {
     // * @param  array   $cart_extras_ids
 	// * @param  array   $request_extra_ids
     // @return array added_extras_ids 
-    public function get_added_extras_ids(object $cart, array $cart_extras_ids,array $request_extra_ids) :array  {
+    public function get_added_extras_ids(object $cart, array $cart_extras_ids,array $request_extra_ids = []) :array  {
         return $added_extras_ids = array_diff($request_extra_ids,$cart_extras_ids);
     }
    
