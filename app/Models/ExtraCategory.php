@@ -22,7 +22,9 @@ class ExtraCategory extends Model
     public $translatable = [
         'title'
     ];
-
+    public $scopes = [
+        'product_filter'
+    ];
     // scope
     public function scopeProductFilter($query,$filter){
         $product_id = $filter  ??  null;

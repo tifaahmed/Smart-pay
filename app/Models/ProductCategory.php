@@ -24,13 +24,19 @@ class ProductCategory extends Model
     public $translatable = [
         'title',            
     ];
-
+    // filter scopes
+    public $scopes = [
+        'store_filter',
+    ];
     
     // scope
-    public function scopeStoreFilter($query,$store_id){
-        return $query->whereHas('product_items',function (Builder $query) use($store_id) {
-            $query->where('store_id',$store_id);
-        });
+    public function scopeStoreFilter($query,$filter){
+        if ($filter) {
+            return $query->whereHas('product_items',function (Builder $query) use($filter) {
+                $query->where('store_id',$filter);
+            });
+        }
+        return $query;    
     }
     // HasMany
     public function product_items(){

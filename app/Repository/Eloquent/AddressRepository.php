@@ -2,7 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
-use App\Models\address as ModelName;
+use App\Models\Address as ModelName;
 use App\Repository\AddressRepositoryInterface;
 
 class  AddressRepository extends BaseRepository implements AddressRepositoryInterface

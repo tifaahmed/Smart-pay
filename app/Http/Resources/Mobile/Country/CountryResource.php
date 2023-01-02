@@ -20,6 +20,8 @@ class CountryResource extends JsonResource
         $all=[];
 
         $all += [ 'id' =>   $this->id ]  ;
+        
+        $all += [ 'phone_code' =>   $this->phone_code ]  ;
         $all += [ 'name' =>   $this->name ]  ;
         $all += [ 'image' =>  
         $this->image && Storage::disk('public')->exists( $this->image)

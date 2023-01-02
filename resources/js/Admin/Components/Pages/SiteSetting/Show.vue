@@ -53,7 +53,7 @@ export default {
         ColumsIndex
     },
     data( ) { return {
-        TableName :'',
+        TableName :'SiteSetting',
         TablePageName :'SiteSetting.All',
 
         Columns :  [],

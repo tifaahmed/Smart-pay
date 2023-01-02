@@ -228,7 +228,7 @@ Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:adm
             Route::DELETE('/{id}'                   ,   'AddressController@destroy'             )->name('destroy'),
             Route::post('/{id}/update'              ,   'AddressController@update'              )->name('update'),
         ]),
-    // address
+    // subscription
         Route::name('subscription.')->prefix('/subscription')->group( fn ( ) : array => [
             Route::get('/'                          ,   'SubscriptionController@all'                 )->name('all'),
             Route::post(''                          ,   'SubscriptionController@store'               )->name('store'),
@@ -237,5 +237,16 @@ Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:adm
             Route::DELETE('/{id}'                   ,   'SubscriptionController@destroy'             )->name('destroy'),
             Route::post('/{id}/update'              ,   'SubscriptionController@update'              )->name('update'),
         ]),
+        Route::name('role.')->prefix('/role')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'RoleController@all'                 )->name('all'),
+            Route::post(''                          ,   'RoleController@store'               )->name('store'),
+            Route::get('/{id}/show'                 ,   'RoleController@show'                )->name('show'),
+            Route::get('/collection'                ,   'RoleController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'                   ,   'RoleController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'              ,   'RoleController@update'              )->name('update'),
+        ]),
+
+    // Route::get('/roles-updatePermissions', 'RolesController@updatePermissions')->name('roles.updatePermissions')
+    
 ]);
     

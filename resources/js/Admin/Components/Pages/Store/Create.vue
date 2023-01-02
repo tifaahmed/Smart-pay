@@ -96,10 +96,10 @@
 
 
 <script>
-import Model     from 'AdminModels/StoreModel';
+import Model                from 'AdminModels/StoreModel';
 import UserModel            from 'AdminModels/UserModel';
-import FoodSectionModel            from 'AdminModels/FoodSectionModel';
-import LanguageModel    from 'AdminModels/LanguageModel';
+import FoodSectionModel     from 'AdminModels/FoodSectionModel';
+import LanguageModel        from 'AdminModels/LanguageModel';
 
 import DataService    from '../../DataService';
 

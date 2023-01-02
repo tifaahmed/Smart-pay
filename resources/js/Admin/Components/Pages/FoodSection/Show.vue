@@ -52,7 +52,7 @@ export default {
         ColumsIndex
     },
     data( ) { return {
-        TableName :'',
+        TableName :'FoodSection',
         TablePageName :'FoodSection.All',
 
         Columns :  [],

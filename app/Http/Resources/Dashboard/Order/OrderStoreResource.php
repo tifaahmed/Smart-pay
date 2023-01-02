@@ -17,7 +17,8 @@ class OrderStoreResource extends JsonResource
         $all += [ 'store_id' =>   $this->store_id ]  ;
         $all += [ 'store_title' =>   $this->store_title ]  ;
         $all += [ 'store_note' =>   $this->store_note ]  ;
-
+        $all += [ 'order_status' =>   $this->order_status ]  ;
+        
         $all += [ 'coupon_title' =>   $this->coupon_title ]  ;
         $all += [ 'coupon_code' =>   $this->coupon_code ]  ;
         $all += [ 'coupon_discount_type' =>   $this->coupon_discount_type ]  ;

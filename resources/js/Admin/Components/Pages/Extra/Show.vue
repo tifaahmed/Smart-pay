@@ -52,7 +52,7 @@ export default {
         ColumsIndex
     },
     data( ) { return {
-        TableName :'',
+        TableName :'Extra',
         TablePageName :'Extra.All',
 
         Columns :  [],
@@ -77,7 +77,18 @@ export default {
                     type: 'Router'    ,header : 'id'                , name : 'id'               ,
                     default : null
                 } ,
-
+                { 
+                    type: 'SelectForloop'   ,header : 'store' , name : 'store'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'   } ,
+                        { name : 'image' , type: 'Image'  }  ,
+                        { name : 'title' , type: 'Forloop'  , secondLoopOnColumn : ['ar'] }  ,
+                    ] ,
+                } ,
+                { 
+                    type: 'String'   ,header : 'status'    , name : 'status'     ,
+                    default : null
+                } ,
                 { 
                     type: 'Forloop'   ,header : 'title'             , name : 'title'            , 
                     loopOnColumn:this.Languages ,  default : null

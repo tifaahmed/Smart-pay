@@ -24,8 +24,13 @@ class ExtraCategoryResource extends JsonResource
         $all += [ 'type' =>   $this->type ]  ;
         $all += [ 'title' =>   $this->title ]  ;
 
+        $extras = $this->extras();
+        if ($request->filter && isset($request->filter['product_filter']) ) {
+            $extras =  $extras->ProductId($request->filter['product_filter']);
+        }
+        $extras = $extras->get();
 
-        $extras = $this->extras()->ProductFilter($request->filter)->get();
+
 
         $all += [ 'extras' =>  ExtraResource::collection($extras) ]  ;
 

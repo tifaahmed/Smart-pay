@@ -21,6 +21,7 @@ class AddressResource extends JsonResource
 
 
         $string_fields = [
+            'city_name',
             'address',
             'department',
             'house',

@@ -34,7 +34,7 @@ return new class extends Migration
             
             $table->string('coupon_title')->nullable();
             $table->string('coupon_code')->nullable();
-            $table->enum('coupon_discount_type', [ 'fixed','percent'])->default('fixed');
+            $table->enum('coupon_discount_type', [ 'fixed','percent'])->nullable();
             $table->float('coupon_discount')->default(0)->comment(' order_item_sub_totals - discount ');
             
 

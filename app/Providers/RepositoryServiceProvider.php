@@ -27,6 +27,7 @@ use App\Repository\Eloquent\FoodSectionRepository;use App\Repository\FoodSection
 use App\Repository\Eloquent\CartRepository;use App\Repository\CartRepositoryInterface;
 use App\Repository\Eloquent\CartExrtraRepository;use App\Repository\CartExrtraRepositoryInterface;
 use App\Repository\Eloquent\SubscriptionRepository;use App\Repository\SubscriptionRepositoryInterface;
+use App\Repository\Eloquent\RoleRepository;use App\Repository\RoleRepositoryInterface;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -67,8 +68,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CartRepositoryInterface::class,CartRepository::class);
         $this->app->bind(CartExrtraRepositoryInterface::class,CartExrtraRepository::class);
         $this->app->bind(SubscriptionRepositoryInterface::class,SubscriptionRepository::class);
+        $this->app->bind(RoleRepositoryInterface::class,RoleRepository::class);
         
-        
+
     }
 
     /**

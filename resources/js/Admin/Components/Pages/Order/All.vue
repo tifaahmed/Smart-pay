@@ -111,7 +111,7 @@ export default {
         SingleTableRows : {},
 
         Columns :  [],       
-        controller_buttons   : [ 'edit','delete','show' ] ,
+        controller_buttons   : ['delete','show' ] ,
 
         PerPage  : 5
     } },
@@ -133,23 +133,19 @@ export default {
                     default : null
                 } ,
                 { 
-                    type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
+                    type: 'MultiSelectForloopModal'   ,header : 'stores' , name : 'order_stores'            , 
                     loopOnColumn:[
-                        { name : 'id' , type: 'String'   } ,
-                        { name : 'avatar' , type: 'Image'   }  ,
-                        { name : 'first_name' , type: 'String' } ,
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'order_status' , type: 'String'    } ,
+                        { name : 'store_title' , type: 'String'    } ,
                     ] ,
                 } ,
                 { 
+                    type: 'String'   ,header : 'order code'    , name : 'order_code'     ,
+                    default : null
+                } ,
+                { 
                     type: 'String'   ,header : 'total'    , name : 'total'     ,
-                    default : null
-                } ,
-                { 
-                    type: 'String'   ,header : 'order store sub totals'    , name : 'order_store_sub_totals'     ,
-                    default : null
-                } ,
-                { 
-                    type: 'String'   ,header : 'order status'    , name : 'order_status'     ,
                     default : null
                 } ,
                 { 

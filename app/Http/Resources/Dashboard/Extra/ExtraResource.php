@@ -23,7 +23,7 @@ class ExtraResource extends JsonResource
         $lang_array = config('app.lang_array') ;
 
         $string_fields = [
-            'price'
+            'price','status'
         ];
         $translated_string_fields = [
             'title'
