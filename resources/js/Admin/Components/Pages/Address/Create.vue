@@ -21,7 +21,7 @@
 
                                         <span v-for="( column_val , column_key ) in Columns" :key="column_key" >
                                                 <InputsFactory 
-                                                    v-if="column_val.translatable"
+                                                    v-if="column_val.translatable && !column_val.invisible"
                                                     :Factorylable="column_val.header + ' ('+ lang_val +') '+( column_val.validation.required ? '*' : ''  )"  :FactoryPlaceholder="column_val.placeholder"         
                                                     :FactoryType="column_val.type" :FactoryName="column_val.name+'['+lang_val+']'"  v-model ="RequestData[column_val.name][lang_val]"  
                                                     :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name+'.'+lang_val]  )  ) ?  ServerReaponse.errors[column_val.name+'.'+lang_val] : null" 
@@ -43,7 +43,7 @@
                         <div class="">
                             <span v-for="( column_val , column_key ) in Columns" :key="column_key" >
                                 <InputsFactory 
-                                    v-if="column_val.translatable == false"
+                                    v-if="column_val.translatable == false  && !column_val.invisible"
                                     :Factorylable="column_val.header"  :FactoryPlaceholder="column_val.placeholder"         
                                     :FactoryType="column_val.type" :FactoryName="column_val.name"  v-model ="RequestData[column_val.name]"  
                                     :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name]  )  ) ?  ServerReaponse.errors[column_val.name] : null" 
@@ -98,6 +98,7 @@
 import Model     from 'AdminModels/AddressModel';
 import LanguageModel    from 'AdminModels/LanguageModel';
 import UserModel            from 'AdminModels/UserModel';
+import CityModel     from 'AdminModels/CityModel';
 
 import DataService    from '../../DataService';
 
@@ -119,6 +120,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             // get data 
             Languages : [],
             all_users : {},
+            all_cities : {},
 
             // tabs
             hasNoneTranslatableFields : 0,
@@ -144,6 +146,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 // get data
                     await this.GetlLanguages();
                     await this.GetlAllUsers();
+                    await this.GetlAllCities();
                 // get data
 
                 this.Columns = [ 
@@ -153,21 +156,28 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         data_value :null  ,
                         validation:{required : true } ,
                         SelectOptions : this.all_users, 
-                        SelectStrings: ['id','first_name'] ,SelectForloopStrings:['first_name'],SelectForloopStringKeys:['ar','en'],
+                        SelectStrings: ['id','first_name'] ,SelectForloopStrings:['first_name'],SelectForloopStringKeys:this.Languages,
                         SelectImages: ['avatar'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
                     },
-
+                    { 
+                        type: 'select',placeholder:'',header :'city', name : 'city_id' ,
+                        translatable : false ,
+                        data_value :null  ,
+                        validation:{required : true } ,
+                        SelectOptions : this.all_cities, 
+                        SelectStrings: ['id'] ,SelectForloopStrings:['name'],SelectForloopStringKeys:this.Languages,
+                        SelectImages: [] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
                      
-                    // { 
-                    //     type: 'string',placeholder:null,header : 'city name', name : 'city_name' ,
-                    //     translatable : true ,
-                    //     data_value :null  ,
-                    //     validation:{required : true } 
-                    // },
+                    { 
+                        type: 'string',placeholder:null,header : 'city name', name : 'city_name' ,
+                        translatable : false , invisible : true  ,
+                        data_value : ' '  ,
+                        validation:{required : false } 
+                    },
                     { 
                         type: 'string'   ,placeholder:null, header : 'address'    , name : 'address'     ,
                         translatable : false ,
-                        data_value :null  ,
                         data_value :null  ,
                         validation:{required : true } 
                     } ,
@@ -175,13 +185,11 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         type: 'string'   ,placeholder:null, header : 'department'    , name : 'department'     ,
                         translatable : false ,
                         data_value :null  ,
-                        data_value :null  ,
                         validation:{required : false } 
                     } ,
                     { 
                         type: 'string'   ,placeholder:null, header : 'house'    , name : 'house'     ,
                         translatable : false ,
-                        data_value :null  ,
                         data_value :null  ,
                         validation:{required : false } 
                     } ,
@@ -196,27 +204,25 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         type: 'string'   ,placeholder:null, header : 'note'    , name : 'note'     ,
                         translatable : false ,
                         data_value :null  ,
-                        data_value :null  ,
                         validation:{required : false } 
                     } ,
+
                     { 
-                        type: 'string'   ,placeholder:null, header : 'type'    , name : 'type'     ,
-                        translatable : false ,
-                        data_value :null  ,
-                        data_value :null  ,
-                        validation:{required : false } 
-                    } ,
+                        type: 'Radio',placeholder:null,header : 'type', name : 'type' ,
+                        translatable : false , 
+                        SelectOptions :['home', 'work', 'rest' ,'mosque'],
+                        data_value : 'home'  ,
+                        validation:{required : true } 
+                    },
                     { 
                         type: 'number'   ,placeholder:null, header : 'latitude'    , name : 'latitude'     ,
                         translatable : false ,
-                        data_value :null  ,
                         data_value :null  ,
                         validation:{required : false } 
                     } ,
                     { 
                         type: 'number'   ,placeholder:null, header : 'longitude'    , name : 'longitude'     ,
                         translatable : false ,
-                        data_value :null  ,
                         data_value :null  ,
                         validation:{required : false } 
                     } ,
@@ -269,11 +275,17 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 async GetlAllUsers(){
                     this.all_users = (await this.AllUsers()).data.data;
                 },
+                async GetlAllCities(){
+                    this.all_cities = (await this.AllCities()).data.data;
+                },
             // get data
 
             // model 
                 AllUsers(){
                     return  (new UserModel).all()  ;
+                },
+                AllCities(){
+                    return  (new CityModel).all()  ;
                 },
                 AllLanguages(){
                     return  (new LanguageModel).all()  ;
@@ -289,6 +301,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                          this.SendData[key]        = this.RequestData[key] ;
                     }
                     this.SendData['user_id'] =  this.RequestData.user_id.id  ;
+                    this.SendData['city_id'] =  this.RequestData.city_id.id  ;
                 },
             //  Handle Data before call the server 
 

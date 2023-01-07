@@ -17,6 +17,7 @@ import SubscriptionRoutes from './SubscriptionRoutes';
 import CountryRoutes from './CountryRoutes';
 import GovernmentRoutes from './GovernmentRoutes';
 import AddressRoutes from './AddressRoutes';
+import CityRoutes from './CityRoutes';
 
 console.log('admin rout');
 
@@ -43,6 +44,7 @@ export default {
         SubscriptionRoutes,
         CountryRoutes,
         GovernmentRoutes,
-        AddressRoutes
+        AddressRoutes,
+        CityRoutes
     ]
 }
