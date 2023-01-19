@@ -24,10 +24,12 @@
 										</div><!-- invoice-header -->
 										<div class="row mg-t-20">
 											<div class="col-md-5">
-												<label class="tx-gray-600">Billed To</label>
+												<label class="tx-gray-600"> Order Information</label>
 												<div class="billed-to">
-													<h6>{{order_information.user_full_name}} </h6>
+													<h6><b>customer : </b>{{order_information.user_full_name}} </h6>
 													<p>
+                                                        <!-- <b>order information id: </b>  {{order_information.id}} , -->
+                                                        <br>
                                                         <b>address: </b>  {{order_information.address}} ,
                                                         <br>
                                                         <b>department: </b>{{order_information.department}},
@@ -51,7 +53,7 @@
 											<div class="col-md-7">
 												<label class="tx-gray-600">Invoice Information</label>
 												<p class="invoice-info-row"><span>Invoice No</span> <span>{{order.order_code}}</span></p>
-												<p class="invoice-info-row"><span>status</span> <span>{{order.order_status}}</span></p>
+												<!-- <p class="invoice-info-row"><span>status</span> <span>{{order.order_status}}</span></p> -->
 												<p class="invoice-info-row"><span>payment card status:</span> <span>{{order.payment_card_status}}</span></p>
 												<p class="invoice-info-row"><span>payment type:</span> <span>{{order.payment_type}}</span></p>
 												<p class="invoice-info-row"><span>created_at:</span> <span>{{order.created_at}}</span></p>
@@ -69,12 +71,14 @@
                                              v-for="( order_store    , order_store_key ) in order_stores " :key="order_store_key.id"
                                         >
                                             
-                                            <p class="tx-center"> store :  <b>{{order_store.store_title}}</b></p>
+                                            <p class="tx-center col-md-12"> store :  <b>{{order_store.store_title}}</b></p>
 
-                                            <div v-if="order_store.coupon_code" class="col-md-2">
-                                                <label class="tx-gray-600">store coupon</label>
+                                            <div   class="col-md-2">
+                                                <label class="tx-gray-600">order store </label>
                                                 <div class="billed-to">
                                                     <p>
+                                                        <!-- <b> order store id: </b>  {{order_store.id}} , -->
+                                                        <!-- <br> -->
                                                         <b> title: </b>  {{order_store.coupon_title}} ,
                                                         <br>
                                                         <b> code: </b>  {{order_store.coupon_code}} ,
@@ -83,16 +87,21 @@
                                                         <br>
                                                         <b> discount: </b>  {{order_store.coupon_discount}} ,
                                                         <br>
+                                                        <b> order_status: </b>  {{order_store.order_status}} ,
+                                                        <br>
+                                                        <!-- <b> store id: </b>  {{order_store.store_id}} , -->
+                                                        <!-- <br> -->
+                                                        
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <div class="table-responsive mg-t-40" :class="order_store.coupon_discount > 0 ?  'col-md-10':'col-md-12'" 
+                                            <div class="table-responsive mg-t-40 col-md-10" 
                                             >
                                                 <table class="table table-invoice border text-md-nowrap mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th class="tx-center">product_id</th>
+                                                            <!-- <th class="tx-center">product_id</th> -->
                                                             <th class="tx-center">product_title</th>
                                                             <th class="tx-center"> product_offer </th>
                                                             <th class="tx-center">product_price</th>
@@ -106,7 +115,7 @@
                                                         v-for="( order_store_item    , order_store_item_key ) in order_store.order_items " :key="order_store_item_key.id"
                                                     >
                                                         <tr>
-                                                            <td class="tx-center">{{order_store_item.product_id}}</td>
+                                                            <!-- <td class="tx-center">{{order_store_item.product_id}}</td> -->
                                                             <td class="tx-center">{{order_store_item.product_title}}</td>
                                                             <td class="tx-center">%{{order_store_item.product_offer}}</td>
                                                             <td class="tx-center">{{order_store_item.product_price}}</td>
@@ -118,7 +127,7 @@
                                                         <tr class="tx-center" :if="order_store_item.order_item_extras">
                                                             <!-- <thead> -->
                                                                 <tr   >
-                                                                    <th    class="tx-center">extra_id</th>
+                                                                    <!-- <th    class="tx-center">extra_id</th> -->
                                                                     <th     class="tx-center">extra_price</th>
                                                                     <th   class="tx-center">extra_title</th>
                                                                 </tr>
@@ -127,7 +136,7 @@
                                                                 <tr
                                                                     v-for="( order_item_extra    , order_item_extra_key ) in order_store_item.order_item_extras " :key="order_item_extra_key"
                                                                 >
-                                                                    <td   class="tx-center">{{order_item_extra.extra_id}}</td>
+                                                                    <!-- <td   class="tx-center">{{order_item_extra.extra_id}}</td> -->
                                                                     <td    class="tx-center">{{order_item_extra.extra_price}}</td>
                                                                     <td     class="tx-center">{{order_item_extra.extra_title}}</td>
                                                                 </tr>
@@ -235,7 +244,7 @@ export default {
         ColumsIndex
     },
     data( ) { return {
-        TableName :'',
+        TableName :'Order',
         TablePageName :'Order.All',
 
         Columns :  [],

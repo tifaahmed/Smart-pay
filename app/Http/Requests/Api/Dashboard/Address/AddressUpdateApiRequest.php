@@ -34,6 +34,8 @@ class AddressUpdateApiRequest extends FormRequest
         $all += [ 'house'                 =>  [ 'sometimes'  ] ]  ;
         $all += [ 'street'                 =>  [ 'sometimes'  ] ]  ;
         $all += [ 'note'                 =>  [ 'sometimes'  ] ]  ;
+        $all += [ 'floor'                 =>  [ 'sometimes' ,'integer' ] ]  ;
+
         $all += [ 'type'        =>  [ 'sometimes' ,Rule::in([
             'home', 'work', 'rest' ,'mosque'
         ]), ] ] ;

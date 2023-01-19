@@ -26,7 +26,7 @@ class ProductCategoryController extends Controller
 
     public function all(){
         try {
-            $modal =    $this->ModelRepository->filterAll()    ;
+            $modal =    $this->ModelRepository->all()    ;
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  
@@ -39,7 +39,7 @@ class ProductCategoryController extends Controller
 
     public function collection(Request $request){
         try {
-            $modal = $this->ModelRepository->filterPaginate( $request->per_page ? $request->per_page : $this->default_per_page);
+            $modal = $this->ModelRepository->collection( $request->per_page ? $request->per_page : $this->default_per_page);
             return new ModelCollection($modal);
         } catch (\Exception $e) {
             return $this -> MakeResponseErrors(  

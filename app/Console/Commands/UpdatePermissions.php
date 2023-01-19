@@ -6,6 +6,7 @@ use Route;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
 class UpdatePermissions extends Command
 {
@@ -40,7 +41,14 @@ class UpdatePermissions extends Command
      */
     public function handle()
     {
-        $this->info("Starting synchronizing...");
+        $this->createPermissions();
+        $this->createSuperAdminRole();
+    }  
+    
+    private function createPermissions(){
+
+
+        $this->info("Starting Permissions synchronizing...");
 
         $collection = Route::getRoutes();
 
@@ -62,7 +70,6 @@ class UpdatePermissions extends Command
 
                 $this->info('Synchronizing route ' . $routeName . '...');
 
-                $this->info('');
 
                 $bar->advance();
 
@@ -74,19 +81,22 @@ class UpdatePermissions extends Command
 
                     $action = $routePartials[1];
                     switch (true) {
-                        case in_array($action, ['all','index','show']):
+                        case in_array($action, ['all','index','show','collection']):
                             $permissions[$page . '_view'] = [
                                 'page' => $page,
                                 'action' => 'view',
-                                'name' => $page . ' view'
+                                'name' => $page . ' view',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
                             ];
                             break;
-
                         case in_array($action, ['create', 'store']):
                             $permissions[$page . '_create'] = [
                                 'page' => $page,
                                 'action' => 'create',
-                                'name' => $page . ' create'
+                                'name' => $page . ' create',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
                             ];
                             break;
 
@@ -94,44 +104,108 @@ class UpdatePermissions extends Command
                             $permissions[$page . '_edit'] = [
                                 'page' => $page,
                                 'action' => 'edit',
-                                'name' => $page . ' edit'
+                                'name' => $page . ' edit',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
                             ];
                             break;
 
-                        case in_array($action, ['destory']):
+                        case in_array($action, ['destroy','delete']):
                             $permissions[$page . '_delete'] = [
                                 'page' => $page,
                                 'action' => 'delete',
-                                'name' => $page . ' delete'
+                                'name' => $page . ' delete',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
                             ];
                             break;
-
-                        default:
-                            $permissions[$page . '_' . $action] = [
+                        case in_array($action, ['restore']):
+                            $permissions[$page . '_restore'] = [
                                 'page' => $page,
-                                'action' => $action,
-                                'name' => $page . ' ' . $action
+                                'action' => 'restore',
+                                'name' => $page . ' restore',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
                             ];
-                            break;
+                            break;  
+                        case in_array($action, ['premanently_delete']):
+                            $permissions[$page . '_premanently_delete'] = [
+                                'page' => $page,
+                                'action' => 'premanently_delete',
+                                'name' => $page . ' premanently_delete',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
+                            ];
+                            break;   
+                        case in_array($action, ['show_trash']):
+                            $permissions[$page . '_show_trash'] = [
+                                'page' => $page,
+                                'action' => 'show_trash',
+                                'name' => $page . ' show_trash',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
+                            ];
+                            break;     
+                        case in_array($action, ['collection_trash']):
+                            $permissions[$page . '_collection_trash'] = [
+                                'page' => $page,
+                                'action' => 'collection_trash',
+                                'name' => $page . ' collection_trash',
+                                'guard_name' => 'sanctum',
+                                // 'guard_name' => 'web',
+                            ];
+                            break;           
+                            
+                        // default:
+                        //     $permissions[$page . '_' . $action] = [
+                        //         'page' => $page,
+                        //         'action' => $action,
+                        //         'name' => $page . ' ' . $action,
+                        //         'guard_name' => 'sanctum',
+                        //         'guard_name' => 'web',
+                        //     ];
+                        //     break;
                     }
                     $routes[] = $routeName;
                 }
-            }else {
-                $this->info('not used route ' . $route->getPrefix() . '...');
-
             }
 
         }
 
         $bar->finish();
         foreach ($permissions as $permission) {
-            $check = Permission::where('page',$permission['page'])->first();
-            if (!$check) {
-                Permission::create($permission);
-            }
+            Permission::updateOrCreate(
+                [
+                    'name' => $permission['name'],
+                    'guard_name' => $permission['guard_name'],
+                ],
+                $permission
+            );
+
+
+
+
+            // $check = Permission::where('name',$permission['name'])->first();
+            // if (!$check) {
+
+            //     Permission::create($permission);
+            //     $this->info($permission['name']);
+            // }
+
         }
         $this->info('');
 
         $this->info('Synchronizing routes of admin portal finished successfully');
+    }
+    private function createSuperAdminRole()
+    {
+        $this->info("Starting Role synchronizing...");
+
+        $superAdmin = Role::updateOrCreate([
+            'name' => 'super admin',
+            'guard_name' => 'sanctum',
+        ]);
+
+        $superAdmin->syncPermissions(Permission::pluck('name')->toArray());
     }
 }

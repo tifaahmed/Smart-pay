@@ -21,8 +21,11 @@ class ProductCategoryResource extends JsonResource
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'title' =>   $this->title ]  ;
 
-        $product_items = $this->product_items()->StoreFilter($request->filter)->get();
-
+        $product_items = $this->product_items();
+        if ($request->filter && isset($request->filter['store_filter']) ) {
+            $product_items =  $product_items->RelateStore($request->filter['store_filter']);
+        }
+        $product_items = $product_items->get();
         $all += [ 'product_items' =>   ProductItemResource::collection($product_items) ]  ;
 
 

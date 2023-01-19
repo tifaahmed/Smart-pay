@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'verified' => \App\Http\Middleware\VerifiedMiddleware::class,
         'StoreRelated' => \App\Http\Middleware\StoreRelatedmiddleware::class,
         'CustomerRelated' => \App\Http\Middleware\CustomerRelatedmiddleware::class,
+        'PermissionHandler' => \App\Http\Middleware\PermissionHandlerMiddleware::class,
         
     ];
 }

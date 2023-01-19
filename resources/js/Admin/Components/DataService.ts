@@ -21,7 +21,8 @@ export default class DataService {
         }
         return DataService.FilterData;
     }
-    static  handleColumns(Columns,Languages){
+    static  handleColumns(Columns,Languages,RequestData  = {} ){
+        DataService.RequestData = RequestData;
         for (var key in Columns) {
             // this.$set( DataService.RequestData,  Columns[key].name ,1); 
             DataService.RequestData[Columns[key].name] = null;
@@ -39,13 +40,11 @@ export default class DataService {
                     : 
                     null ;
                     // [Column : [ ar : null en : null]]
-
                 }
             }else{
                 DataService.RequestData[Columns[key].name] = Columns[key].data_value;
                 // [ Column : null ]
             } 
-
         }
         return DataService.RequestData;
     }

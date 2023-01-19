@@ -88,16 +88,17 @@
 	</div>
 </template>
 <script>
-import Model     from 'AdminModels/OrderModel';
+import Model     from 'AdminModels/GovernmentModel';
+import CountryModel     from 'AdminModels/CountryModel';
 import LanguageModel    from 'AdminModels/LanguageModel';
 
 import DataService    from '../../DataService';
 
-import validation     from 'AdminValidations/FoodSectionValidation';
+import validation     from 'AdminValidations/GovernmentValidation';
 import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue'     ;
 
     export default {
-        name:'FoodSection'+'Edit',
+        name:'Government'+'Edit',
 
         components : { InputsFactory } ,
 
@@ -105,11 +106,11 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             this.start();
         },
         data( ) { return {
-            TableName :'FoodSection',
-            TablePageName :'FoodSection.All',
+            TableName :'Government',
+            TablePageName :'Government.All',
 
             Languages : [],
-            all_users : {},
+            all_countries : {},
 
             hasNoneTranslatableFields : 0,
             hasTranslatableFields : 0,
@@ -125,42 +126,32 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             RequestData : {},
             // collect data to send to server 
             SendData : {},
+
         } } ,
         methods : {
             async start(){
-                await this.GetlLanguages();
+                // get data
+                    await this.GetLanguages();
+                    await this.GetlAllCountries();
+                // get data
 
                 let receivedData =   await this.show( ) ;
                 this.Columns = [ 
- 
                     { 
-                        type: 'Radio',placeholder:'order status',header : 'order status', name : 'order_status' ,
-                        translatable : false , 
-                        SelectOptions :['not_confirmed','confirmed','shipping','delevered','canceled','ask_to_retrieve'],
-                        data_value :receivedData.order_status  ,
-                        validation:{required : true } 
-                    },
-                    { 
-                        type: 'Radio',placeholder:'payment card status',header : 'payment card status', name : 'payment_card_status' ,
-                        translatable : false , 
-                        SelectOptions :[ 'paid','pindding'],
-                        data_value :receivedData.payment_card_status  ,
-                        validation:{required : true } 
-                    },
-                    { 
-                        type: 'Radio',placeholder:'payment type',header : 'payment type', name : 'payment_type' ,
-                        translatable : false , 
-                        SelectOptions :[ 'paid','pindding'],
-                        data_value :receivedData.payment_type  ,
-                        validation:{required : true } 
-                    },
-                    { 
-                        type: 'string',placeholder:'order note',header : 'order note', name : 'order_note' ,
+                        type: 'string',placeholder:null,header : 'name', name : 'name' ,
                         translatable : true ,
-                        data_value :receivedData.order_note  ,
+                        data_value :receivedData.name  ,
                         validation:{required : true } 
                     },
-                    
+                    { 
+                        type: 'select',placeholder:'',header :'country', name : 'country_id' ,
+                        translatable : false ,
+                        data_value :receivedData.country  ,  
+                        validation:{required : true } ,
+                        SelectOptions : this.all_countries, 
+                        SelectStrings: ['id'] ,SelectForloopStrings:['name'],SelectForloopStringKeys:['ar','en'],
+                        SelectImages: ['image'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
                 ];
 
                 this.RequestData =  DataService.handleColumns(this.Columns,this.Languages);
@@ -172,11 +163,18 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         this.hasNoneTranslatableFields = 1;
                     }
                 });
-
-
             },
 
 
+            //  Handle Data before call the server 
+                HandleData(){
+                    for (var key in this.RequestData) {
+                         this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    this.SendData['country_id'] =  this.RequestData.country_id.id  ;
+
+                },
+            //  Handle Data before call the server 
 
             DeleteErrors(){
                 for (var key in this.ServerReaponse.errors) {
@@ -202,18 +200,14 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             },
 
 
-            async GetlLanguages(){
-                this.Languages  = ( await this.AllLanguages() ).data; // all languages
-            },
-
-            //  Handle Data before call the server 
-                HandleData(){
-                    for (var key in this.RequestData) {
-                         this.SendData[key]        = this.RequestData[key] ;
-                    }
+            // get data
+                async GetLanguages(){
+                    this.Languages  = ( await this.AllLanguages() ).data; // all languages
                 },
-            //  Handle Data before call the server 
-
+                async GetlAllCountries(){
+                    this.all_countries  = ( await this.AllCountries() ).data.data;
+                },
+            // get data
 
             async SubmetRowButton(){
                 this.ServerReaponse = null;
@@ -233,6 +227,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
 
             // modal
+                AllCountries(){
+                    return  (new CountryModel).all()  ;
+                },
                 AllLanguages(){
                     return  (new LanguageModel).all()  ;
                 },
@@ -240,7 +237,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },
                 update(){
-                    return (new Model).update(this.$route.params.id , this.SendDatap)  ;
+                    return (new Model).update(this.$route.params.id , this.SendData)  ;
                 }
             // modal
 

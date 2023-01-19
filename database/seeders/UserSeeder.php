@@ -22,7 +22,8 @@ class UserSeeder extends Seeder
     public function run()
     {
         try {
-            User::all()->delete();
+            User::where('email','admin@admin.com')->delete();
+            User::where('email','admin@admin.com')->forceDelete();
         } catch (\Exception $e) {
             User::query()->forceDelete();
         }

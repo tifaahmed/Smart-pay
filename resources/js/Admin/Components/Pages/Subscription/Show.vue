@@ -52,7 +52,7 @@ export default {
         ColumsIndex
     },
     data( ) { return {
-        TableName :'',
+        TableName :'Subscription',
         TablePageName :'Subscription.All',
 
         Columns :  [],

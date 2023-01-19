@@ -32,6 +32,26 @@ Route::group(['prefix' =>'mobile','middleware' => ['LocalizationMiddleware']], f
         Route::post( '/new-password'    ,  'Auth\ForgetPassword\NewPasswordController@new_password' )->name( 'password.new' ) ,  
 
     ]),
+    Route::group([], fn ( ) : array => [
+        // country
+        Route::name('country.')->prefix('/country')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'CountryController@all'                 )->name('all'),
+            Route::get('/{id}/show'                 ,   'CountryController@show'                )->name('show'),
+            Route::get('/collection'                ,   'CountryController@collection'          )->name('collection'),
+        ]),
+        // government
+        Route::name('government.')->prefix('/government')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'GovernmentController@all'                 )->name('all'),
+            Route::get('/{id}/show'                 ,   'GovernmentController@show'                )->name('show'),
+            Route::get('/collection'                ,   'GovernmentController@collection'          )->name('collection'),
+        ]),
+        // government
+        Route::name('city.')->prefix('/city')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'CityController@all'                 )->name('all'),
+            Route::get('/{id}/show'                 ,   'CityController@show'                )->name('show'),
+            Route::get('/collection'                ,   'CityController@collection'          )->name('collection'),
+        ]),
+    ]),
 
     
     // auth:sanctum // auth:sanctum

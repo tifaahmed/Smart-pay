@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('note')->nullable(); 
             $table->enum('type', ['home', 'work', 'rest' ,'mosque'])->default('home');
 
-            
+            $table->integer('floor')->nullable();   
             $table->string('latitude')->nullable();   
             $table->string('longitude')->nullable();   
 

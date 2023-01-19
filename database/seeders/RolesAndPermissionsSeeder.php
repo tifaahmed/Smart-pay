@@ -11,20 +11,16 @@ class RolesAndPermissionsSeeder extends Seeder {
 
     public function run( ) {
 
-        try {
-            Role::all()->delete();
-        } catch (\Exception $e) {
-            Role::query()->forceDelete();
-        }
 
 
-        app( )[ PermissionRegistrar::class ] -> forgetCachedPermissions( );
+        // app( )[ PermissionRegistrar::class ] -> forgetCachedPermissions( );
 
 
-        Role::create( [ 'id' => '1','name' => 'admin'       ,'guard_name' => 'web' ] )  ;
-        Role::create( [ 'id' => '2','name' => 'customer'      ,'guard_name' => 'web' ] )  ;
-        Role::create( [ 'id' => '3','name' => 'store'      ,'guard_name' => 'web' ] )  ;
-        
+        Role::updateOrCreate( [ 'id' => 1 , 'name' => 'admin' ,'guard_name' => 'sanctum',] )  ;
+        Role::updateOrCreate( [ 'id' => 2 , 'name' => 'customer' , 'guard_name' => 'sanctum',] )  ;
+        Role::updateOrCreate( [ 'id' => 3 , 'name' => 'store' , 'guard_name' => 'sanctum',] )  ;
+        Role::updateOrCreate( [ 'id' => 4 , 'name' => 'super admin' , 'guard_name' => 'sanctum',] )  ;
+
     }
 
 }

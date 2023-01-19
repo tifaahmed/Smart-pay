@@ -25,6 +25,8 @@ class AddressResource extends JsonResource
         $all += [ 'street' => $this->street ]  ;
         $all += [ 'note' => $this->note ]  ;
         $all += [ 'type' => $this->type ]  ;
+        $all += [ 'floor' => $this->floor ]  ;
+        
         $all += [ 'latitude' => $this->latitude ]  ;
         $all += [ 'longitude' => $this->longitude ]  ;
  

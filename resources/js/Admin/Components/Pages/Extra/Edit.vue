@@ -91,6 +91,7 @@
 import Model     from 'AdminModels/ExtraModel';
 import ExtraCategoryModel     from 'AdminModels/ExtraCategoryModel';
 import LanguageModel    from 'AdminModels/LanguageModel';
+import StoreModel               from 'AdminModels/StoreModel';
 
 import DataService    from '../../DataService';
 
@@ -111,6 +112,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
             Languages : [],
             all_extra_categories : {},
+            all_stores : {},
 
             hasNoneTranslatableFields : 0,
             hasTranslatableFields : 0,
@@ -132,9 +134,26 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             async start(){
                 await this.GetlLanguages();
                     await this.GetlExtraCategories();
+                    await this.GetlAllStores();
 
                 let receivedData =   await this.show( ) ;
                 this.Columns = [ 
+                    { 
+                        type: 'select',placeholder:'',header :'store', name : 'store_id' ,
+                        translatable : false ,
+                        data_value :receivedData.store  ,
+                        validation:{required : true } ,
+                        SelectOptions : this.all_stores, 
+                        SelectStrings: [] ,SelectForloopStrings:['title'],SelectForloopStringKeys:['ar','en'],
+                        SelectImages: ['image'] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
+                    { 
+                        type: 'Radio',placeholder:'status',header : 'status', name : 'status' ,
+                        translatable : false , 
+                        SelectOptions :['request_as_new','request_as_edit','active','deactivate','out_of_stock'],
+                        data_value :receivedData.status  ,
+                        validation:{required : true } 
+                    },
                     { 
                         type: 'string',placeholder:'title',header : 'title', name : 'title' ,
                         translatable : true ,
@@ -175,6 +194,8 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                     for (var key in this.RequestData) {
                          this.SendData[key]        = this.RequestData[key] ;
                     }
+                    this.SendData['store_id'] =  this.RequestData.store_id.id  ;
+
                     this.SendData['extra_category_id'] =  this.RequestData.extra_category_id.id  ;
                 },
             //  Handle Data before call the server 
@@ -204,6 +225,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
 
             // get data
+                async GetlAllStores(){
+                    this.all_stores = (await this.AllStores()).data.data;
+                },
                 async GetlExtraCategories(){
                     this.all_extra_categories = (await this.AllExtraCategories()).data.data;
                 },
@@ -230,6 +254,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
 
             // modal
+                AllStores(){
+                    return  (new StoreModel).all()  ;
+                },
                 AllExtraCategories(){
                     return  (new ExtraCategoryModel).all()  ;
                 },
@@ -242,6 +269,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 update(){
                     return (new Model).update(this.$route.params.id , this.SendData)  ;
                 }
+                
             // modal
 
 

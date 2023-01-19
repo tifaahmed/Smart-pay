@@ -48,7 +48,7 @@ class ProductItem extends Model
 
     // filter scopes
         public $scopes = [
-            'relate_auth_store','store_status','my_fav_products','subscripted_store'
+            'relate_auth_store','store_status','my_fav_products','subscripted_store','relate_store'
         ];
     //scope
         // relate_auth_store
@@ -57,6 +57,13 @@ class ProductItem extends Model
                 return $query->where('store_id','!=' ,Auth::user()->store->id);
             }
             return $query->where('store_id',Auth::user()->store->id);
+        }
+        // relate_store
+        public function scopeRelateStore($query,$filter){
+            if ($filter) {
+                return $query->where('store_id',$filter);
+            }
+            return $query;
         }
         // store_status
         public function scopeStoreStatus($query,$filter){

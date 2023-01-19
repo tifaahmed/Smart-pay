@@ -1,21 +1,5 @@
 <template>
     <div class="row row-sm">
-        
-        <div class="container-fluid row" > 
-            <a href="#">
-                 <i v-on:click="seen = !seen" class="fa fa-filter" aria-hidden="true"></i>
-            </a>
-
-            <b-row v-if="seen" align-v="stretch" align-h="around">
-                <b-col  xs="12" sm="6" md="5" lg="4" xl="3">
-                    <b-input-group prepend="id"   class="">
-                        <b-form-input   @change="initial()"  v-model="filter.id"  ></b-form-input>
-                    </b-input-group>
-                </b-col>
-            </b-row>
-
-        </div>
-
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
@@ -37,10 +21,10 @@
                             <tbody>
                                 <tr v-for="( row    , rowkey ) in TableRows.data " :key="rowkey" >
                                     <td  v-for="( column , key    )  in Columns" :key="key" class="teeee" 
-                                        v-if="!column.invisible"
+                                        v-if="column && !column.invisible"
                                     >
                                         <ColumsIndex  
-                                            :ValueColumn="row[column.name]"   
+                                            :ValueColumn="row[column.name] ? row[column.name] : column.default "   
                                             :typeColumn="column.type" 
                                             :LoopOnColumn="column.loopOnColumn"
                                             @SendRowData ="SendRowData(row)"  
@@ -48,6 +32,7 @@
                                     </td>
                                     <td>
                                         <TrashedControllers 
+                                            :controller_buttons = controller_buttons
                                             :RowId="row.id" 
                                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
                                             @SendRowData="SendRowData(row)"
@@ -68,14 +53,14 @@
                             :data="TableRows" 
                             @pagination-change-page="initial"
                          >
-                            <!-- eslint-disable -->
                             <span slot="prev-nav" >  < </span>
                             <span slot="next-nav" >  > </span>
-                            <!-- eslint-disable -->
                         </pagination>
                         <ModalIndex  
+                            :controller_buttons="controller_buttons" 
                             :Columns="Columns" 
                             :TableRows="TableRows" 
+                            :SingleTableRows="SingleTableRows" 
                             @DeleteRowButton="DeleteRowButton"
                             :CurrentPage="TableRows.meta ? TableRows.meta.current_page: 1" 
                         />
@@ -100,20 +85,18 @@ export default {
         pagination,ModalIndex,TrashedControllers,ColumsIndex
     },
 
+
     data( ) { return {
-        seen: false,   
         filter :{  id : null  },
 
         TableName :'Order',
         Languages : [],
 
         TableRows  : {},
+        SingleTableRows : {},
+
         Columns :  [],       
-        controller   : [
-            { type: 'edit'    ,  invisible : true } ,
-            { type: 'delete'  ,  invisible : true } ,
-            { type: 'show'    ,  invisible : true } ,
-        ] ,
+        controller_buttons   : [ 'edit','delete','show' ] ,
         PerPage  : 10
     } },
     mounted() {
@@ -126,31 +109,35 @@ export default {
             this.TableRows  = ( await this.Collection(page) ).data
         },
         async tableColumns(){
-            await this.GetlLanguages();
             this.Columns = [
                 { 
                     type: 'Router'    ,header : 'id'                , name : 'id'               ,
                     default : null
                 } ,
-
                 { 
-                    type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
+                    type: 'MultiSelectForloopModal'   ,header : 'stores' , name : 'order_stores'            , 
                     loopOnColumn:[
-                        { name : 'id' , type: 'String'   } ,
-                        { name : 'avatar' , type: 'Image'   }  ,
-                        { name : 'first_name' , type: 'String' } ,
+                        { name : 'id' , type: 'String'    } ,
+                        { name : 'order_status' , type: 'String'    } ,
+                        { name : 'store_title' , type: 'String'    } ,
                     ] ,
                 } ,
                 { 
-                    type: 'Forloop'   ,header : 'title'             , name : 'title'            , 
-                    loopOnColumn:this.Languages ,  default : null
-                } ,
-                { 
-                    type: 'String'   ,header : 'delevery fee'    , name : 'delevery_fee'     ,
+                    type: 'String'   ,header : 'order code'    , name : 'order_code'     ,
                     default : null
                 } ,
-
-
+                { 
+                    type: 'String'   ,header : 'total'    , name : 'total'     ,
+                    default : null
+                } ,
+                { 
+                    type: 'String'   ,header : 'payment card status' , name : 'payment_card_status'     ,
+                    default : null
+                } ,
+                { 
+                    type: 'String'   ,header : 'payment type' , name : 'payment_type'     ,
+                    default : null
+                } ,
                 { 
                     type: 'Date'      ,header : 'created'            , name : 'created_at'        ,
                      default : null
