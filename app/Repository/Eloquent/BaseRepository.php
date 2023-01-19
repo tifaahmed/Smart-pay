@@ -37,14 +37,12 @@ class BaseRepository implements EloquentRepositoryInterface
 		$fillable= $this->model->getFillable() ;
 		array_push($fillable,$keyName);
 
-		
 		$all_scopes = [];
 		if ($this->model->scopes) {
 			foreach ($this->model->scopes as $key => $value) {
 				array_push( $all_scopes , AllowedFilter::scope($value) );
 			}
 		}
-
 
 		return QueryBuilder::for($this->model->with($relations))
 		->allowedFilters($fillable )	

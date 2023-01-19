@@ -28,6 +28,7 @@ class AddressResource extends JsonResource
             'street',
             'note',
             'type',
+            'floor',
             'latitude',
             'longitude',
         ];

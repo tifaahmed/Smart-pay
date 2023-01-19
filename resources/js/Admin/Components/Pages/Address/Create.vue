@@ -206,6 +206,12 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         data_value :null  ,
                         validation:{required : false } 
                     } ,
+                    { 
+                        type: 'number'   ,placeholder:null, header : 'floor'    , name : 'floor'     ,
+                        translatable : false ,
+                        data_value :null  ,
+                        validation:{required : false } 
+                    } ,
 
                     { 
                         type: 'Radio',placeholder:null,header : 'type', name : 'type' ,

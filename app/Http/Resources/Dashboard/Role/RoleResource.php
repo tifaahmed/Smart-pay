@@ -43,7 +43,7 @@ class RoleResource extends JsonResource
         $all += resource_string($model,$string_fields);
 
         $all += resource_date($model,$date_fields);
-        $all += [ 'permissions' =>   PermissionResource::collection($this->permissions) ]  ;
+        $all += [ 'permissions' =>   PermissionResource::collection($this->permissions) ]  ;    
 
         return $all;
     }

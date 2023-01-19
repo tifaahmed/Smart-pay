@@ -201,6 +201,12 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : true } 
                     },
                     { 
+                        type: 'number'   ,placeholder:null, header : 'floor'    , name : 'floor'     ,
+                        translatable : false ,
+                        data_value :receivedData.floor  ,
+                        validation:{required : false } 
+                    } ,
+                    { 
                         type: 'number'   ,placeholder:null, header : 'latitude'    , name : 'latitude'     ,
                         translatable : false ,
                         data_value :receivedData.latitude  ,

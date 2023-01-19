@@ -42,6 +42,8 @@ class User extends Authenticatable
         SoftDeletes ,
         Notifiable
     ;
+    protected $guard_name = 'sanctum';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -25,6 +25,7 @@ class Address extends Model
         'house',  // string  ,nullable
         'street',  // string  ,nullable
         'note',  // text  ,nullable
+        'floor',  // number  ,nullable
         'type', // enum , 'home', 'work', 'rest' ,'mosque'
 
         'latitude',  // string  ,nullable

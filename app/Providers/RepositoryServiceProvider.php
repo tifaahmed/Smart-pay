@@ -28,6 +28,7 @@ use App\Repository\Eloquent\CartRepository;use App\Repository\CartRepositoryInte
 use App\Repository\Eloquent\CartExrtraRepository;use App\Repository\CartExrtraRepositoryInterface;
 use App\Repository\Eloquent\SubscriptionRepository;use App\Repository\SubscriptionRepositoryInterface;
 use App\Repository\Eloquent\RoleRepository;use App\Repository\RoleRepositoryInterface;
+use App\Repository\Eloquent\PermissionRepository;use App\Repository\PermissionRepositoryInterface;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -69,8 +70,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CartExrtraRepositoryInterface::class,CartExrtraRepository::class);
         $this->app->bind(SubscriptionRepositoryInterface::class,SubscriptionRepository::class);
         $this->app->bind(RoleRepositoryInterface::class,RoleRepository::class);
+        $this->app->bind(PermissionRepositoryInterface::class,PermissionRepository::class);
         
-
     }
 
     /**

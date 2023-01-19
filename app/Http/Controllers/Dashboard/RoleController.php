@@ -59,10 +59,10 @@ class RoleController extends Controller
     public function store(modelInsertRequest $request) {
         try {
             $model = $this->ModelRepository->create( $request->all() ) ;
-            $model->syncPermissions($request->permission_names);
+            $model->syncPermissions(     array_values($request->permission_names)    );
 
             return $this -> MakeResponseSuccessful( 
-                [ new ModelResource ( $model ) ],
+                [ 'Successful'  ],
                 'Successful'               ,
                 Response::HTTP_OK
             ) ;

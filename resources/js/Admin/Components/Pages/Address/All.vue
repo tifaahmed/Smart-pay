@@ -172,6 +172,7 @@ export default {
                     type: 'String'   ,header : 'city name'    , name : 'city_name'     ,
                     default : null,
                 } ,
+
                 { 
                     type: 'String'   ,header : 'address'    , name : 'address'     ,
                     default : null,
@@ -188,6 +189,11 @@ export default {
                     type: 'String'   ,header : 'street'    , name : 'street'     ,
                     default : null,
                 } ,
+                { 
+                    type: 'String'   ,header : 'floor'    , name : 'floor'     ,
+                    default : null,
+                } ,
+                
                 { 
                     type: 'String'   ,header : 'note'    , name : 'note'     ,
                     default : null,

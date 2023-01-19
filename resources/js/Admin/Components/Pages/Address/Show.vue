@@ -75,20 +75,63 @@ export default {
             this.Columns = [
                 { 
                     type: 'Router'    ,header : 'id'                , name : 'id'               ,
-                    default : null
+                    default : null , searchable : true
+                } ,
+                { 
+                    type: 'SelectForloop'   ,header : 'user' , name : 'user'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'   } ,
+                        { name : 'avatar' , type: 'Image'   }  ,
+                        { name : 'first_name' , type: 'String' } ,
+                    ] ,
+                } ,
+                { 
+                    type: 'SelectForloop'   ,header : 'city' , name : 'city'            , 
+                    loopOnColumn:[
+                        { name : 'id' , type: 'String'   } ,
+                        { name : 'name' , type: 'Forloop'  , secondLoopOnColumn :this.Languages }  ,
+                    ] ,
+                } ,
+                { 
+                    type: 'String'   ,header : 'city name'    , name : 'city_name'     ,
+                    default : null,
+                } ,
+
+                { 
+                    type: 'String'   ,header : 'address'    , name : 'address'     ,
+                    default : null,
+                } ,
+                { 
+                    type: 'String'   ,header : 'department'    , name : 'department'     ,
+                    default : null,
+                } ,
+                { 
+                    type: 'String'   ,header : 'house'    , name : 'house'     ,
+                    default : null,
+                } ,
+                { 
+                    type: 'String'   ,header : 'street'    , name : 'street'     ,
+                    default : null,
+                } ,
+                { 
+                    type: 'String'   ,header : 'floor'    , name : 'floor'     ,
+                    default : null,
                 } ,
                 
                 { 
-                    type: 'String'   ,header : 'phone_code'    , name : 'phone_code'     ,
+                    type: 'String'   ,header : 'note'    , name : 'note'     ,
                     default : null,
                 } ,
                 { 
-                    type: 'Forloop'   ,header : 'name'    , name : 'name'     ,
+                    type: 'String'   ,header : 'type'    , name : 'type'     ,
                     default : null,
-                    loopOnColumn:this.Languages 
                 } ,
                 { 
-                    type: 'Image'   ,header : 'image'    , name : 'image'     ,
+                    type: 'String'   ,header : 'latitude'    , name : 'latitude'     ,
+                    default : null,
+                } ,
+                { 
+                    type: 'String'   ,header : 'longitude'    , name : 'longitude'     ,
                     default : null,
                 } ,
                 { 

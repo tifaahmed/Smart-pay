@@ -15,7 +15,7 @@ trait SmsTwilioTrait {
     public function OtpSend(  $phone_number  ) :bool {
         
         $twilio_sid = "AC8b8993cbdb6e5c72141752d2fd8ba9da" ;
-        $auth_token = "4c2ea5b8e9f1b701080f183e71f12cf3" ;
+        $auth_token = "397045f27409dc1fa25b5c280802eb10" ;
         $twilio_verify_sid = "VA0276b4e49dca4e95e64bdd8e71fca04e" ;
 
         $twilio = new Client($twilio_sid, $auth_token);
@@ -31,7 +31,7 @@ trait SmsTwilioTrait {
     }
     public function OtpChecks(  $phone_number  , string $verification_code ):bool {
         $twilio_sid = "AC8b8993cbdb6e5c72141752d2fd8ba9da" ;
-        $auth_token = "4c2ea5b8e9f1b701080f183e71f12cf3" ;
+        $auth_token = "397045f27409dc1fa25b5c280802eb10" ;
         $twilio_verify_sid = "VA0276b4e49dca4e95e64bdd8e71fca04e" ;
 
         $twilio = new Client($twilio_sid, $auth_token);
