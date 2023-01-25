@@ -253,7 +253,14 @@ Route::group(['middleware' => ['LocalizationMiddleware','auth:sanctum','role:adm
             Route::DELETE('/{id}'                   ,   'PermissionController@destroy'             )->name('destroy'),
             Route::post('/{id}/update'              ,   'PermissionController@update'              )->name('update'),
         ]),
-    // Route::get('/roles-updatePermissions', 'RolesController@updatePermissions')->name('roles.updatePermissions')
+        Route::name('about_us.')->prefix('/about_us')->group( fn ( ) : array => [
+            Route::get('/'                          ,   'AboutUsController@all'                 )->name('all'),
+            Route::post(''                          ,   'AboutUsController@store'               )->name('store'),
+            Route::get('/{id}/show'                 ,   'AboutUsController@show'                )->name('show'),
+            Route::get('/collection'                ,   'AboutUsController@collection'          )->name('collection'),
+            Route::DELETE('/{id}'                   ,   'AboutUsController@destroy'             )->name('destroy'),
+            Route::post('/{id}/update'              ,   'AboutUsController@update'              )->name('update'),
+        ]),
     
 ]);
     

@@ -46,16 +46,16 @@
                                         :FactoryType="column_val.type" :FactoryName="column_val.name"  v-model ="RequestData[column_val.name]"  
                                         :FactoryErrors="( ServerReaponse && Array.isArray( ServerReaponse.errors[column_val.name]  )  ) ?  ServerReaponse.errors[column_val.name] : null" 
                                     
-                                        :FactorySelectOptions="column_val.SelectOptions ? column_val.SelectOptions : [] "  
+                                        :FactorySelectOptions="column_val.type  === 'select' || column_val.type  === 'multiSelect' || column_val.type === 'Radio' ?
+                                         column_val.SelectOptions : [] "  
 
-                                        :FactorySelectStrings="column_val.type === 'select'? column_val.SelectStrings : []"   
-                                        :FactorySelectForloopStrings="column_val.type === 'select'? column_val.SelectForloopStrings : []"   
-                                        :FactorySelectForloopStringKeys="column_val.type === 'select'? column_val.SelectForloopStringKeys : []"  
+                                        :FactorySelectStrings="column_val.type === 'select'  || column_val.type  === 'multiSelect'? column_val.SelectStrings : []"   
+                                        :FactorySelectForloopStrings="column_val.type === 'select'  || column_val.type  === 'multiSelect'? column_val.SelectForloopStrings : []"   
+                                        :FactorySelectForloopStringKeys="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopStringKeys : []"  
 
-                                        :FactorySelectImages="column_val.type === 'select'? column_val.SelectImages : []"   
-                                        :FactorySelectForloopImages="column_val.type === 'select'? column_val.SelectForloopImages : []"  
-                                        :FactorySelectForloopImageKeys="column_val.type === 'select'? column_val.SelectForloopImageKeys : []" 
-                                    
+                                        :FactorySelectImages="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectImages : []"   
+                                        :FactorySelectForloopImages="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopImages : []"  
+                                        :FactorySelectForloopImageKeys="column_val.type === 'select' || column_val.type  === 'multiSelect'? column_val.SelectForloopImageKeys : []" 
                                     />
                             </span> 
                         </div>
@@ -89,6 +89,8 @@
 </template>
 <script>
 import Model     from 'AdminModels/UserModel';
+import RoleModel     from 'AdminModels/RoleModel';
+
 import DataService    from '../../DataService';
 
 import validation     from 'AdminValidations/UserValidation';
@@ -107,6 +109,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
             TablePageName :'User.All',
 
             Languages : [],
+            all_rolrs : {},
 
             hasNoneTranslatableFields : 0,
             hasTranslatableFields : 0,
@@ -125,9 +128,20 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
         } } ,
         methods : {
             async start(){
- 
-                let receivedData =   await this.show( ) ;
+                 // get data
+                    await this.GetlAllRoles();
+                    let receivedData =   await this.show( ) ;
+                // get data
                 this.Columns = [
+                    { 
+                        type: 'multiSelect',placeholder:'',header :'roles', name : 'role_ids' ,
+                        translatable : false ,
+                        data_value :receivedData.roles_resourse  ,
+                        validation:{required : true } ,
+                        SelectOptions : this.all_rolrs, 
+                        SelectStrings: ['name'] ,SelectForloopStrings:[],SelectForloopStringKeys:[],
+                        SelectImages: [] ,SelectForloopImages:[],SelectForloopImageKeys:[],
+                    },
                     { 
                         type: 'string',placeholder:'first_name',header : 'first_name', name : 'first_name' ,
                         translatable : false ,
@@ -159,9 +173,21 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         validation:{required : true } 
                     },
                     { 
+                        type: 'datetime-local',placeholder:'email_verified_at',header : 'email_verified_at', name : 'email_verified_at' ,
+                        translatable : false , 
+                        data_value : receivedData.email_verified_at  ,
+                        validation:{required : false } 
+                    },
+                    { 
                         type: 'string',placeholder:'phone',header : 'phone', name : 'phone' ,
                         translatable : false ,
                         data_value : receivedData.phone  ,
+                        validation:{required : false } 
+                    },
+                                        { 
+                        type: 'datetime-local',placeholder:'phone verified',header : 'phone verified', name : 'email_verified_at' ,
+                        translatable : false , 
+                        data_value : receivedData.phone_verified_at  ,
                         validation:{required : false } 
                     },
                     { 
@@ -200,13 +226,7 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                         data_value : receivedData.birthdate  ,
                         validation:{required : false } 
                     },
-                    { 
-                        type: 'datetime-local',placeholder:'email_verified_at',header : 'email_verified_at', name : 'email_verified_at' ,
-                        translatable : false , 
-                        data_value : receivedData.email_verified_at  ,
-                        validation:{required : false } 
-                    },
-                    
+
                 ];
 
                 this.RequestData =  DataService.handleColumns(this.Columns,this.Languages);
@@ -247,14 +267,23 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
                 }
             },
 
-            async GetlLanguages(){
-                this.Languages  = ( await this.AllLanguages() ).data; // all languages
-            },
+            // get data
+                async GetlAllRoles(){
+                    this.all_rolrs = (await this.AllRoles()).data.data;
+                },
+            // get data
 
             //  Handle Data before call the server 
                 HandleData(){
                     for (var key in this.RequestData) {
                          this.SendData[key]        = this.RequestData[key] ;
+                    }
+                    if (this.RequestData.role_ids) {
+                        var arr_hold = [];
+                        for (var role_key in this.RequestData.role_ids) {
+                        arr_hold[role_key] = this.RequestData.role_ids[role_key].id  ;
+                        }
+                        this.SendData.role_ids  =arr_hold;
                     }
                 },
             //  Handle Data before call the server
@@ -277,6 +306,9 @@ import InputsFactory     from 'AdminPartials/Components/Inputs/InputsFactory.vue
 
 
             // modal
+                AllRoles(){
+                    return  (new RoleModel).all()  ;
+                },
                 async show( ) {
                     return ( await (new Model).show( this.$route.params.id) ).data.data[0] ;
                 },

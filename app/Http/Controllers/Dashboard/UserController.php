@@ -60,14 +60,6 @@ class UserController extends Controller
         try {
             $except_array = [] ;
             $all  = [] ;
-            if (count($this->translated_file_columns) > 0) {
-                $except_array = $this->translated_file_columns;
-                $all += $this->store_translated_files(
-                    $request,
-                    $this->folder_name,
-                    $this->translated_file_columns
-                );
-            }
             if (count($this->file_columns) > 0) {
                 $except_array = $this->file_columns;
                 $all += $this->store_files(
@@ -78,6 +70,8 @@ class UserController extends Controller
             }
 
             $model = $this->ModelRepository->create( Request()->except($except_array)+$all ) ;
+            $this->ModelRepository->attachRole( $request->role_ids , $model->id);
+
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],
                 'Successful'               ,
@@ -120,6 +114,7 @@ class UserController extends Controller
 
             $this->ModelRepository->update( $id,Request()->except($except_array)+$all) ;
             $model =  $this->ModelRepository->findById($id) ;
+            $this->ModelRepository->attachRole( $request->role_ids , $model->id);
 
             return $this -> MakeResponseSuccessful( 
                 [ new ModelResource ( $model ) ],

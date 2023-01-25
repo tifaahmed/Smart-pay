@@ -49,6 +49,7 @@ class UserResource extends JsonResource
 
         $all += [ 'id' =>   $this->id ]  ;
         $all += [ 'roles' =>  $this->roles->pluck('name') ]  ;
+        $all += [ 'roles_resourse' =>   RoleResource::collection($this->roles) ]  ;    
 
         $all += resource_string($model,$string_fields);
         $all += resource_image($model,$image_fields);
